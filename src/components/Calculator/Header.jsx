@@ -1,20 +1,31 @@
 import React from 'react';
+import leapforceLogo from '../../assets/leapforce-logo.png';
+import hubspotBadge from '../../assets/hubspot-platinum-badge.png';
 
-export function Header() {
+export const Header = () => {
   return (
-    <div className="text-center mb-12">
-      <h1 className="text-leapforce-orange text-2xl mb-4 font-helvetica">
-        Leapforce
-      </h1>
-      <h2 className="text-2xl font-helvetica font-light mb-2">
+    <div className="text-center">
+      <div className="flex justify-between items-center mb-8">
+        <img 
+          src={leapforceLogo} 
+          alt="Leapforce" 
+          className="h-12"
+        />
+        <img 
+          src={hubspotBadge} 
+          alt="HubSpot Platinum Solutions Partner" 
+          className="h-20"
+        />
+      </div>
+      <h1 className="text-4xl font-bold text-gray-900 mb-4">
         HubSpot Onboarding Calculator
-      </h2>
-      <p className="text-lg mb-2 font-helvetica">
-        Get Your HubSpot Onboarding Price in Minutes
-      </p>
-      <p className="text-leapforce-gray font-helvetica">
-        Choose your HubSpot hub, tier, and service model to see how we can help you get started with HubSpot.
+      </h1>
+      <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+        Start by selecting the HubSpot onboarding package that best fits your needs. 
+        Once you've submitted the form, you'll receive a tailored overview of what's included.
+        <br />
+        <em className="text-orange-600">*Enterprise onboardings are priced on request.</em>
       </p>
     </div>
   );
-}
+};
