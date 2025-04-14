@@ -37,6 +37,12 @@
               input.name = 'hubspot_standard_onboarding_key';
               $form.appendChild(input);
             }
+          },
+          onFormSubmit: function($form) {
+            // Additional handling for form submission if needed
+            console.log('Form submitted with package keys:', 
+              $form.querySelector('input[name="hubspot_standard_onboarding_key"]')?.value
+            );
           }
         });
       });
@@ -56,21 +62,9 @@
           }
         }
       });
-
-      // Handle form submission
-      window.addEventListener('message', event => {
-        if (event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormSubmit') {
-          // You can add any additional handling here
-          console.log('Form submitted with package keys:', 
-            document.querySelector('input[name="hubspot_standard_onboarding_key"]')?.value
-          );
-        }
-      });
     </script>
 
     <!-- HubSpot Tracking Code -->
-    <!-- Start of HubSpot Embed Code -->
     <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/7208949.js"></script>
-    <!-- End of HubSpot Embed Code -->
   </body>
 </html>
