@@ -1,112 +1,87 @@
 import React, { useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
 
-export const HubSpotFormModal = ({ isOpen, onClose, onSuccess, selectedPackages }) => {
+const HubSpotFormModal = ({ isOpen, onClose, selectedPackages }) => {
   useEffect(() => {
-    if (isOpen) {
-      // Wait for HubSpot form to be loaded
-      const checkFormInterval = setInterval(() => {
-        const form = document.querySelector('form.hs-form');
-        if (form) {
-          clearInterval(checkFormInterval);
-          
-          // Get package keys and join them with semicolons
-          const packageKeys = selectedPackages
-            .map(pkg => pkg.packageKey)
-            .join(';');
+    if (isOpen && window.hbspt) {
+      // Clear any existing form
+      const formContainer = document.getElementById('hubspotForm');
+      if (formContainer) {
+        formContainer.innerHTML = '';
+      }
 
-          // Try multiple methods to set the hidden field value
-          // 1. Try to find the hidden input directly
-          let hiddenField = form.querySelector('input[name="hubspot_standard_onboarding_key"]');
-          
-          // 2. If not found, look for the field wrapper
-          if (!hiddenField) {
-            const fieldWrapper = form.querySelector('.hs_hubspot_standard_onboarding_key');
-            if (fieldWrapper) {
-              hiddenField = fieldWrapper.querySelector('input');
-            }
-          }
+      // Generate package key string
+      const packageKeys = selectedPackages.map(pkg => {
+        const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
+        const hub = pkg.hub.toLowerCase().replace(/\s+/g, '_');
+        const tier = pkg.tier.toLowerCase().replace(/\s+/g, '_');
+        return `${model}_${hub}_${tier}`;
+      }).join(',');
 
-          // 3. If still not found, create the hidden input
-          if (!hiddenField) {
-            hiddenField = document.createElement('input');
-            hiddenField.type = 'hidden';
-            hiddenField.name = 'hubspot_standard_onboarding_key';
-            form.appendChild(hiddenField);
-          }
-
-          // Set the value and ensure it's set with both methods
+      // Create HubSpot form with the package keys
+      window.hbspt.forms.create({
+        region: "na1",
+        portalId: "2900440",
+        formId: "4b4d9f9c-1b86-4a2d-a847-3f1e337ced0b",
+        target: '#hubspotForm',
+        onFormReady: (form) => {
+          // Find the hidden field for package keys
+          const hiddenField = form.querySelector('input[name="hubspot_standard_onboarding_key"]');
           if (hiddenField) {
             hiddenField.value = packageKeys;
-            hiddenField.setAttribute('value', packageKeys);
-            
-            // Log for debugging
-            console.log('Hidden field value set:', packageKeys);
           }
+        },
+        onFormSubmit: (form) => {
+          console.log('Form submitted with package keys:', packageKeys);
+          setTimeout(() => {
+            onClose();
+          }, 2000);
         }
-      }, 500); // Check every 500ms
-
-      // Cleanup interval after 10 seconds if form never loads
-      setTimeout(() => clearInterval(checkFormInterval), 10000);
-
-      return () => {
-        clearInterval(checkFormInterval);
-      };
+      });
     }
   }, [isOpen, selectedPackages]);
 
-  // Function to handle form submission
-  const handleSubmit = () => {
-    // Double-check the hidden field value before submission
-    const form = document.querySelector('form.hs-form');
-    if (form) {
-      const hiddenField = form.querySelector('input[name="hubspot_standard_onboarding_key"]');
-      if (hiddenField) {
-        const packageKeys = selectedPackages
-          .map(pkg => pkg.packageKey)
-          .join(';');
-        hiddenField.value = packageKeys;
-      }
-    }
-    onSuccess();
-  };
-
   return (
-    <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-      
-      <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="mx-auto max-w-xl bg-white rounded-lg p-6">
-          <Dialog.Title className="text-2xl font-bold mb-4">
-            Complete Your Information
-          </Dialog.Title>
-          
-          <div className="mb-4">
-            <p className="text-gray-600">
-              Please fill out the form below to receive your detailed onboarding package information.
-            </p>
-          </div>
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      className="fixed inset-0 z-50 overflow-y-auto"
+    >
+      <div className="flex items-center justify-center min-h-screen">
+        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
-          <div id="hubspotForm" className="mb-6">
-            {/* HubSpot Form will be injected here */}
-          </div>
-
-          <div className="mt-6 flex justify-end space-x-4">
+        <div className="relative bg-white rounded-lg max-w-md w-full mx-4 p-6">
+          <div className="absolute top-4 right-4">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              className="text-gray-400 hover:text-gray-500"
             >
-              Cancel
-            </button>
-            <button
-              onClick={handleSubmit}
-              className="px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 font-semibold"
-            >
-              Submit
+              <span className="sr-only">Close</span>
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
             </button>
           </div>
-        </Dialog.Panel>
+
+          <Dialog.Title className="text-lg font-medium text-gray-900 mb-4">
+            Get Your Custom HubSpot Onboarding Quote
+          </Dialog.Title>
+
+          <div id="hubspotForm" className="hubspot-form-container">
+            {/* HubSpot form will be injected here */}
+          </div>
+        </div>
       </div>
     </Dialog>
   );
 };
+
+export default HubSpotFormModal;
