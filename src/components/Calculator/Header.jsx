@@ -43,3 +43,6 @@ export const Header = () => {
     </div>
   );
 };
+
+// Add both named and default exports
+export default Header;
