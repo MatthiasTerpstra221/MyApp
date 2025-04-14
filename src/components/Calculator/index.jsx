@@ -1,9 +1,4 @@
-import React, { useState } from 'react';
-import { Header } from './Header';
-import { SelectionInterface } from './SelectionInterface';
-import { ResultsDisplay } from './ResultsDisplay';
-import { HubSpotFormModal } from './HubSpotFormModal';
-
+// src/components/Calculator/index.jsx
 export function Calculator() {
   const [selectedHubs, setSelectedHubs] = useState([]);
   const [selectedTiers, setSelectedTiers] = useState({});
@@ -11,6 +6,7 @@ export function Calculator() {
   const [showHubSpotForm, setShowHubSpotForm] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [selectedPackages, setSelectedPackages] = useState([]);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleCalculatePrice = () => {
     const packageKeys = selectedHubs.map(hub => {
@@ -52,7 +48,7 @@ export function Calculator() {
           </div>
         </div>
 
-        {showResults && (
+        {formSubmitted && showResults && (
           <ResultsDisplay
             selectedPackages={selectedPackages}
           />
@@ -64,6 +60,7 @@ export function Calculator() {
           selectedPackages={selectedPackages}
           onSubmitSuccess={() => {
             setShowHubSpotForm(false);
+            setFormSubmitted(true);
             setShowResults(true);
           }}
         />
