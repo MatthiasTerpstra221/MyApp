@@ -44,4 +44,6 @@ const Header = () => {
   );
 };
 
+// Add both default and named exports
+export { Header };
 export default Header;
