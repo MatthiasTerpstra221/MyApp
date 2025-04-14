@@ -3,7 +3,7 @@ import { Dialog } from '@headlessui/react';
 
 const HubSpotFormModal = ({ isOpen, onClose, selectedPackages }) => {
   useEffect(() => {
-    if (isOpen && window.hbspt) {
+    if (isOpen) {
       // Clear any existing form
       const formContainer = document.getElementById('hubspotForm');
       if (formContainer) {
@@ -18,28 +18,53 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages }) => {
         return `${model}_${hub}_${tier}`;
       }).join(',');
 
-      // Create HubSpot form with the package keys
-      window.hbspt.forms.create({
-        region: "na1",
-        portalId: "2900440",
-        formId: "4b4d9f9c-1b86-4a2d-a847-3f1e337ced0b",
-        target: '#hubspotForm',
-        onFormReady: (form) => {
-          // Find the hidden field for package keys
-          const hiddenField = form.querySelector('input[name="hubspot_standard_onboarding_key"]');
-          if (hiddenField) {
+      // Create the form using the helper from index.html
+      if (window.hsFormHelper) {
+        window.hsFormHelper.createForm('hubspotForm', packageKeys);
+      } else {
+        // Fallback to direct creation if helper is not available
+        window.hbspt.forms.create({
+          portalId: "7208949",
+          formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
+          region: "na1",
+          target: '#hubspotForm',
+          onFormReady: function($form) {
+            // Find or create the hidden field
+            let hiddenField = $form.querySelector('input[name="hubspot_standard_onboarding_key"]');
+            if (!hiddenField) {
+              hiddenField = document.createElement('input');
+              hiddenField.type = 'hidden';
+              hiddenField.name = 'hubspot_standard_onboarding_key';
+              $form.appendChild(hiddenField);
+            }
+            // Set the package keys
             hiddenField.value = packageKeys;
+            console.log('Form ready with package keys:', packageKeys);
+          },
+          onFormSubmitted: function() {
+            console.log('Form submitted successfully');
+            setTimeout(() => {
+              onClose();
+            }, 2000);
           }
-        },
-        onFormSubmit: (form) => {
-          console.log('Form submitted with package keys:', packageKeys);
-          setTimeout(() => {
-            onClose();
-          }, 2000);
-        }
-      });
+        });
+      }
+
+      // Listen for form submission
+      const handleFormSubmit = () => {
+        setTimeout(() => {
+          onClose();
+        }, 2000);
+      };
+
+      window.addEventListener('hubspotFormSubmitted', handleFormSubmit);
+
+      // Cleanup
+      return () => {
+        window.removeEventListener('hubspotFormSubmitted', handleFormSubmit);
+      };
     }
-  }, [isOpen, selectedPackages]);
+  }, [isOpen, selectedPackages, onClose]);
 
   return (
     <Dialog
