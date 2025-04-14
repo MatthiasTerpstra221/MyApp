@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Header from './Header';
 import { SelectionInterface } from './SelectionInterface';
 import { ResultsDisplay } from './ResultsDisplay';
-import { HubSpotFormModal } from './HubSpotFormModal';
+import HubSpotFormModal from './HubSpotFormModal';
 
 // Rest of your Calculator component code remains the same...
 const Calculator = () => {  // Changed to const declaration
