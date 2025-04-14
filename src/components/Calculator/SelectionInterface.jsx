@@ -3,7 +3,7 @@ import React from 'react';
 export const SelectionInterface = ({
   selectedHubs,
   selectedTiers,
-  selectedModel,
+  selectedModels,
   onHubSelect,
   onTierSelect,
   onModelSelect
@@ -15,82 +15,94 @@ export const SelectionInterface = ({
   ];
 
   const tiers = ['Starter', 'Professional'];
-
+  
   const models = [
-    'Do It Yourself',
-    'Guided Implementation',
-    'Full Service'
+    'DIY - Do It Yourself',
+    'DWMe - Do It With Me',
+    'DIFMe - Do It For Me'
   ];
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Select Your HubSpot Hub(s)</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {hubs.map(hub => (
-            <label key={hub} className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                checked={selectedHubs.includes(hub)}
-                onChange={() => onHubSelect(hub)}
-                className="h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500"
-              />
-              <span className="text-gray-700">{hub}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {selectedHubs.length > 0 && (
+    <div className="max-w-4xl mx-auto">
+      <div className="grid grid-cols-3 gap-8 mb-8">
+        {/* Column 1: Hub Selection */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Select Tier for Each Hub</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {selectedHubs.map(hub => (
-              <div key={hub} className="space-y-2">
-                <p className="font-medium text-gray-700">{hub}</p>
-                <div className="flex flex-col space-y-2">
-                  {tiers.map(tier => (
-                    <label key={`${hub}-${tier}`} className="flex items-center space-x-3">
-                      <input
-                        type="radio"
-                        name={`tier-${hub}`}
-                        checked={selectedTiers[hub] === tier}
-                        onChange={() => onTierSelect(hub, tier)}
-                        className="h-4 w-4 text-orange-600 border-gray-300 focus:ring-orange-500"
-                      />
-                      <span className="text-gray-700">{tier}</span>
-                    </label>
-                  ))}
-                  <div className="flex items-center space-x-2 text-gray-500">
-                    <span>Enterprise*</span>
-                    <span className="text-sm italic">Contact us for pricing</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {Object.keys(selectedTiers).length > 0 && (
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Select Your Service Model</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {models.map(model => (
-              <label key={model} className="flex items-center space-x-3">
+          <h3 className="text-lg font-medium mb-4">1. Select Hub(s)</h3>
+          <div className="space-y-2">
+            {hubs.map(hub => (
+              <label key={hub} className="flex items-center space-x-3 p-3 bg-gray-100 rounded hover:bg-gray-200 cursor-pointer">
                 <input
-                  type="radio"
-                  name="service-model"
-                  checked={selectedModel === model}
-                  onChange={() => onModelSelect(model)}
-                  className="h-4 w-4 text-orange-600 border-gray-300 focus:ring-orange-500"
+                  type="checkbox"
+                  checked={selectedHubs.includes(hub)}
+                  onChange={() => onHubSelect(hub)}
+                  className="h-4 w-4 text-orange-500 rounded border-gray-300"
                 />
-                <span className="text-gray-700">{model}</span>
+                <span className="text-gray-800">{hub}</span>
               </label>
             ))}
           </div>
         </div>
-      )}
+
+        {/* Column 2: Tier Selection */}
+        <div>
+          <h3 className="text-lg font-medium mb-4">2. Select Tier(s)</h3>
+          {selectedHubs.map(hub => (
+            <div key={hub} className="mb-4">
+              <p className="text-gray-700 mb-2">{hub}</p>
+              <div className="space-y-2">
+                {tiers.map(tier => (
+                  <label key={`${hub}-${tier}`} className="flex items-center space-x-3 p-3 bg-gray-100 rounded hover:bg-gray-200 cursor-pointer">
+                    <input
+                      type="radio"
+                      name={`tier-${hub}`}
+                      checked={selectedTiers[hub] === tier}
+                      onChange={() => onTierSelect(hub, tier)}
+                      className="h-4 w-4 text-orange-500 border-gray-300"
+                    />
+                    <span className="text-gray-800">{tier}</span>
+                  </label>
+                ))}
+              </div>
+              <div className="text-sm text-gray-500 mt-2 italic">
+                * Enterprise solutions available upon request
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Column 3: Service Model Selection */}
+        <div>
+          <h3 className="text-lg font-medium mb-4">3. Select Service Model(s)</h3>
+          {selectedHubs.map(hub => (
+            selectedTiers[hub] && (
+              <div key={hub} className="mb-4">
+                <p className="text-gray-700 mb-2">{`${hub} (${selectedTiers[hub]})`}</p>
+                <div className="space-y-2">
+                  {models.map(model => (
+                    <label key={`${hub}-${model}`} className="flex items-center space-x-3 p-3 bg-gray-100 rounded hover:bg-gray-200 cursor-pointer">
+                      <input
+                        type="radio"
+                        name={`model-${hub}`}
+                        checked={selectedModels[hub] === model}
+                        onChange={() => onModelSelect(hub, model)}
+                        className="h-4 w-4 text-orange-500 border-gray-300"
+                      />
+                      <span className="text-gray-800">{model}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )
+          ))}
+        </div>
+      </div>
+
+      <button
+        onClick={() => {}} // This will be handled by the parent component
+        className="mx-auto block bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition-colors"
+      >
+        Calculate My Price
+      </button>
     </div>
   );
 };
