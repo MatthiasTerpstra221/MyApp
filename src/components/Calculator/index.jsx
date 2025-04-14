@@ -181,4 +181,91 @@ export const Calculator = () => {
         },
         'Professional': {
           'Do It Yourself': 'We coach you through more advanced service features—multiple ticket pipelines, routing rules, basic automation, knowledge base. You implement. Includes 3 coaching sessions.',
-          'Do It With Me': 'We collaborate on advanced workflows (SLAs, routing), knowledge base organization, maybe feedback surveys or chatbots. Some setup by us, some by you
+          'Do It With Me': 'We collaborate on advanced workflows (SLAs, routing), knowledge base organization, maybe feedback surveys or chatbots. Some setup by us, some by you. Includes 1 team training + 4 coaching sessions.',
+          'Do It For Me': 'We fully implement your Professional-level service environment: pipelines, automations, reporting dashboards, knowledge base structure, etc. Includes 2 team trainings + 4 coaching sessions.'
+        }
+      }
+    };
+
+    return scopeSummaries[hub]?.[tier]?.[model] || '';
+  };
+
+  const handleCalculatePrice = () => {
+    if (selectedHubs.length === 0 || 
+        Object.keys(selectedTiers).length === 0 || 
+        Object.keys(selectedModels).length === 0) {
+      alert('Please select at least one hub, its tier, and service model.');
+      return;
+    }
+
+    const packages = selectedHubs.map(hub => {
+      const tier = selectedTiers[hub];
+      const model = selectedModels[hub];
+      if (!tier || !model) return null;
+
+      const hours = calculatePackageHours(hub, tier, model);
+      const price = calculatePackagePrice(hub, tier, model);
+      const packageKey = generatePackageKey(hub, tier, model);
+
+      return {
+        hub,
+        tier,
+        model,
+        hours,
+        price,
+        packageKey,
+        scopeSummary: getScopeSummary(hub, tier, model)
+      };
+    }).filter(pkg => pkg !== null);
+
+    setSelectedPackages(packages);
+    setShowModal(true);
+  };
+
+  const handleFormSuccess = () => {
+    setShowModal(false);
+    setFormSubmitted(true);
+    setShowResults(true);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <Header />
+        
+        <div className="mt-10 bg-white rounded-lg shadow-lg p-6">
+          <SelectionInterface
+            selectedHubs={selectedHubs}
+            selectedTiers={selectedTiers}
+            selectedModels={selectedModels}
+            onHubSelect={handleHubSelection}
+            onTierSelect={handleTierSelection}
+            onModelSelect={handleModelSelection}
+          />
+
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={handleCalculatePrice}
+              className="bg-orange-600 text-white px-6 py-3 rounded-md hover:bg-orange-700 transition-colors duration-200 font-semibold"
+            >
+              Calculate My Price
+            </button>
+          </div>
+        </div>
+
+        {formSubmitted && showResults && (
+          <ResultsDisplay
+            packages={selectedPackages}
+          />
+        )}
+
+        <HubSpotFormModal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          onSuccess={handleFormSuccess}
+          selectedPackages={selectedPackages}
+        />
+      </div>
+    </div>
+  );
+};
