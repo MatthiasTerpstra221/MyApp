@@ -11,9 +11,7 @@ export const SelectionInterface = ({
   const hubs = [
     'Marketing Hub',
     'Sales Hub',
-    'Service Hub',
-    'Operations Hub',
-    'CMS Hub'
+    'Service Hub'
   ];
 
   const tiers = ['Starter', 'Professional'];
