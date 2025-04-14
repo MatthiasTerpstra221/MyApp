@@ -1,18 +1,16 @@
 import React from 'react';
-import leapforceLogo from '../../assets/leapforce-logo.png';
-import hubspotBadge from '../../assets/hubspot-platinum-badge.png';
 
 export const Header = () => {
   return (
     <div className="text-center">
       <div className="flex justify-between items-center mb-8">
         <img 
-          src={leapforceLogo} 
+          src="/leapforce-logo.png"
           alt="Leapforce" 
           className="h-12"
         />
         <img 
-          src={hubspotBadge} 
+          src="/hubspot-platinum-badge.png"
           alt="HubSpot Platinum Solutions Partner" 
           className="h-20"
         />
