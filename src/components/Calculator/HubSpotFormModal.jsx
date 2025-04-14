@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
 
 export const HubSpotFormModal = ({ isOpen, onClose, onSuccess, selectedPackages }) => {
+  useEffect(() => {
+    if (isOpen) {
+      const packageKeys = selectedPackages
+        .map(pkg => pkg.packageKey)
+        .join(';');
+
+      const hiddenField = document.querySelector('input[name="hubspot_standard_onboarding_key"]');
+      if (hiddenField) {
+        hiddenField.value = packageKeys;
+      }
+    }
+  }, [isOpen, selectedPackages]);
+
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
@@ -24,8 +37,8 @@ export const HubSpotFormModal = ({ isOpen, onClose, onSuccess, selectedPackages 
 
           <input 
             type="hidden" 
-            name="selected_packages" 
-            value={JSON.stringify(selectedPackages)} 
+            name="hubspot_standard_onboarding_key" 
+            value={selectedPackages.map(pkg => pkg.packageKey).join(';')} 
           />
 
           <div className="mt-6 flex justify-end space-x-4">
@@ -37,7 +50,7 @@ export const HubSpotFormModal = ({ isOpen, onClose, onSuccess, selectedPackages 
             </button>
             <button
               onClick={onSuccess}
-              className="px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
+              className="px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 font-semibold"
             >
               Submit
             </button>
