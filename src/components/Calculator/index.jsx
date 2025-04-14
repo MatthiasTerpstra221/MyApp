@@ -55,27 +55,205 @@ export const Calculator = () => {
     return `${hubKey}_${tierKey}_${modelKey}`;
   };
 
-  const calculatePackageHours = (hub, tier) => {
-    const baseHours = {
-      'Marketing Hub': { Starter: 20, Professional: 40, Enterprise: 80 },
-      'Sales Hub': { Starter: 15, Professional: 30, Enterprise: 60 },
-      'Service Hub': { Starter: 15, Professional: 30, Enterprise: 60 },
-      'Operations Hub': { Starter: 25, Professional: 50, Enterprise: 100 },
-      'CMS Hub': { Starter: 20, Professional: 40, Enterprise: 80 }
+  const calculatePackageHours = (hub, tier, model) => {
+    const packageHours = {
+      'Marketing Hub': {
+        'Starter': {
+          'Do It Yourself': 8,
+          'Guided Implementation': 12,
+          'Full Service': 16
+        },
+        'Professional': {
+          'Do It Yourself': 12,
+          'Guided Implementation': 20,
+          'Full Service': 32
+        }
+      },
+      'Sales Hub': {
+        'Starter': {
+          'Do It Yourself': 8,
+          'Guided Implementation': 12,
+          'Full Service': 16
+        },
+        'Professional': {
+          'Do It Yourself': 12,
+          'Guided Implementation': 20,
+          'Full Service': 32
+        }
+      },
+      'Service Hub': {
+        'Starter': {
+          'Do It Yourself': 8,
+          'Guided Implementation': 12,
+          'Full Service': 16
+        },
+        'Professional': {
+          'Do It Yourself': 12,
+          'Guided Implementation': 20,
+          'Full Service': 32
+        }
+      },
+      'Operations Hub': {
+        'Starter': {
+          'Do It Yourself': 8,
+          'Guided Implementation': 12,
+          'Full Service': 16
+        },
+        'Professional': {
+          'Do It Yourself': 12,
+          'Guided Implementation': 20,
+          'Full Service': 32
+        }
+      },
+      'CMS Hub': {
+        'Starter': {
+          'Do It Yourself': 8,
+          'Guided Implementation': 12,
+          'Full Service': 16
+        },
+        'Professional': {
+          'Do It Yourself': 12,
+          'Guided Implementation': 20,
+          'Full Service': 32
+        }
+      }
     };
 
-    const modelMultiplier = {
-      'Do It Yourself': 0.5,
-      'Guided Implementation': 1,
-      'Full Service': 1.5
-    };
-
-    return Math.round(baseHours[hub][tier] * modelMultiplier[selectedModel]);
+    return packageHours[hub]?.[tier]?.[model] || 0;
   };
 
-  const calculatePackagePrice = (hours) => {
-    const hourlyRate = 150;
-    return hours * hourlyRate;
+  const calculatePackagePrice = (hub, tier, model) => {
+    const packagePrices = {
+      'Marketing Hub': {
+        'Starter': {
+          'Do It Yourself': 1080,
+          'Guided Implementation': 1620,
+          'Full Service': 2160
+        },
+        'Professional': {
+          'Do It Yourself': 1620,
+          'Guided Implementation': 2700,
+          'Full Service': 4320
+        }
+      },
+      'Sales Hub': {
+        'Starter': {
+          'Do It Yourself': 1080,
+          'Guided Implementation': 1620,
+          'Full Service': 2160
+        },
+        'Professional': {
+          'Do It Yourself': 1620,
+          'Guided Implementation': 2700,
+          'Full Service': 4320
+        }
+      },
+      'Service Hub': {
+        'Starter': {
+          'Do It Yourself': 1080,
+          'Guided Implementation': 1620,
+          'Full Service': 2160
+        },
+        'Professional': {
+          'Do It Yourself': 1620,
+          'Guided Implementation': 2700,
+          'Full Service': 4320
+        }
+      },
+      'Operations Hub': {
+        'Starter': {
+          'Do It Yourself': 1080,
+          'Guided Implementation': 1620,
+          'Full Service': 2160
+        },
+        'Professional': {
+          'Do It Yourself': 1620,
+          'Guided Implementation': 2700,
+          'Full Service': 4320
+        }
+      },
+      'CMS Hub': {
+        'Starter': {
+          'Do It Yourself': 1080,
+          'Guided Implementation': 1620,
+          'Full Service': 2160
+        },
+        'Professional': {
+          'Do It Yourself': 1620,
+          'Guided Implementation': 2700,
+          'Full Service': 4320
+        }
+      }
+    };
+
+    return packagePrices[hub]?.[tier]?.[model] || 0;
+  };
+
+  const getScopeSummary = (hub, tier, model) => {
+    const scopeSummaries = {
+      'Marketing Hub': {
+        'Starter': {
+          'Do It Yourself': 'We guide you on basic portal "getting started" steps—tracking code, one lead-capture form, one email template—but you implement them. Includes 2 coaching sessions for Q&A and best practices.',
+          'Guided Implementation': 'We collaborate on the same starter setup (tracking code, forms, email templates) plus 2 simple automations and a basic reporting dashboard. We handle some tasks, you handle others. Includes 3 coaching sessions.',
+          'Full Service': 'We fully implement the basic portal setup (code installation, up to 3 forms, basic reporting, 2 simple automations). Includes 3 coaching sessions and 1 team training.'
+        },
+        'Professional': {
+          'Do It Yourself': 'We teach you how to configure more advanced marketing features—e.g. 2 automations (workflows), lead scoring basics, custom dashboards—and you carry them out. Includes 3 coaching sessions.',
+          'Guided Implementation': 'A joint effort setting up advanced features (3 automations, lead scoring, campaign setup, custom dashboards). We do part of the technical work while guiding you on the rest. Includes 1 team training + 4 coaching sessions.',
+          'Full Service': 'A full-service build-out of Pro features—3 automations, lead scoring, more sophisticated campaign setup, custom reporting, etc. We do nearly everything. Includes 1 team training + 5 coaching sessions.'
+        }
+      },
+      'Sales Hub': {
+        'Starter': {
+          'Do It Yourself': 'We advise you on configuring a basic sales pipeline, 1 deal stage workflow, and simple deal card fields. You do the actual HubSpot setup. Includes 2 coaching sessions.',
+          'Guided Implementation': 'We work together on pipeline setup, deal stage workflow, meeting link, basic automation. We do some config, you do the rest. Includes 1 team training + 3 coaching sessions.',
+          'Full Service': 'We handle the key Sales Starter tasks—pipeline setup, 2 simple automations, basic deal card customization—while you provide approvals. Includes 1 team training + 3 coaching sessions.'
+        },
+        'Professional': {
+          'Do It Yourself': 'We guide you on multiple deal stage workflows, advanced deal card customization, and basic sales reporting dashboards. You do all setup steps. Includes 3 coaching sessions.',
+          'Guided Implementation': 'A collaborative Pro-level build: advanced pipeline/workflows, meeting link setup, custom deal properties. We share tasks. Includes 1 team training + 4 coaching sessions.',
+          'Full Service': 'We fully implement advanced pipelines, automation/sequences, custom sales reporting, quotes setup. Minimal effort needed on your end. Includes 1 team training + 5 coaching sessions.'
+        }
+      },
+      'Service Hub': {
+        'Starter': {
+          'Do It Yourself': 'We instruct you on setting up your first ticket pipeline, basic routing rules, and simple email/snippet usage. You do the hands-on HubSpot configuration. Includes 2 coaching sessions.',
+          'Guided Implementation': 'We team up to configure the Service Starter features—ticket pipeline/routing, a simple knowledge base, chatflow, etc. Includes 1 team training + 3 coaching sessions.',
+          'Full Service': 'We take care of the full basic service setup: pipeline(s), routing, knowledge base structure, chatflows, etc. Includes 1 team training + 3 coaching sessions.'
+        },
+        'Professional': {
+          'Do It Yourself': 'We coach you through more advanced service features—multiple ticket pipelines, routing rules, basic automation, knowledge base. You implement. Includes 3 coaching sessions.',
+          'Guided Implementation': 'We collaborate on advanced workflows (SLAs, routing), knowledge base organization, maybe feedback surveys or chatbots. Some setup by us, some by you. Includes 1 team training + 4 coaching sessions.',
+          'Full Service': 'We fully implement your Professional-level service environment: pipelines, automations, reporting dashboards, knowledge base structure, etc. Includes 2 team trainings + 4 coaching sessions.'
+        }
+      },
+      'Operations Hub': {
+        'Starter': {
+          'Do It Yourself': 'We guide you through basic data sync setup and simple automation configuration. You handle the implementation. Includes 2 coaching sessions.',
+          'Guided Implementation': 'We collaborate on data sync setup, basic workflow automation, and initial reporting. Shared implementation effort. Includes 1 team training + 3 coaching sessions.',
+          'Full Service': 'We fully implement your basic Operations Hub setup including data syncs and essential automations. Includes 1 team training + 3 coaching sessions.'
+        },
+        'Professional': {
+          'Do It Yourself': 'We advise on advanced data management, custom workflow creation, and reporting. You implement the solutions. Includes 3 coaching sessions.',
+          'Guided Implementation': 'Joint implementation of advanced data operations, custom coded actions, and sophisticated reporting. Includes 1 team training + 4 coaching sessions.',
+          'Full Service': 'Complete implementation of your Operations Hub Professional features including custom coded actions and advanced reporting. Includes 1 team training + 5 coaching sessions.'
+        }
+      },
+      'CMS Hub': {
+        'Starter': {
+          'Do It Yourself': 'We guide you through website setup, theme selection, and basic content creation tools. You handle the implementation. Includes 2 coaching sessions.',
+          'Guided Implementation': 'We work together on website setup, theme customization, and initial content creation. Shared implementation effort. Includes 1 team training + 3 coaching sessions.',
+          'Full Service': 'We fully implement your basic CMS setup including theme customization and initial content structure. Includes 1 team training + 3 coaching sessions.'
+        },
+        'Professional': {
+          'Do It Yourself': 'We advise on advanced theme customization, custom modules, and content strategy. You implement the solutions. Includes 3 coaching sessions.',
+          'Guided Implementation': 'Joint implementation of custom themes, modules, and advanced content features. Includes 1 team training + 4 coaching sessions.',
+          'Full Service': 'Complete implementation of your CMS Professional features including custom theme development and advanced modules. Includes 1 team training + 5 coaching sessions.'
+        }
+      }
+    };
+
+    return scopeSummaries[hub]?.[tier]?.[model] || '';
   };
 
   const handleCalculatePrice = () => {
@@ -88,8 +266,8 @@ export const Calculator = () => {
       const tier = selectedTiers[hub];
       if (!tier) return null;
 
-      const hours = calculatePackageHours(hub, tier);
-      const price = calculatePackagePrice(hours);
+      const hours = calculatePackageHours(hub, tier, selectedModel);
+      const price = calculatePackagePrice(hub, tier, selectedModel);
       const packageKey = generatePackageKey(hub, tier, selectedModel);
 
       return {
@@ -98,7 +276,7 @@ export const Calculator = () => {
         hours,
         price,
         packageKey,
-        scopeSummary: `Complete ${hub} ${tier} onboarding package with ${selectedModel} support`
+        scopeSummary: getScopeSummary(hub, tier, selectedModel)
       };
     }).filter(pkg => pkg !== null);
 
@@ -107,4 +285,50 @@ export const Calculator = () => {
   };
 
   const handleFormSuccess = () => {
-    setShow
+    setShowModal(false);
+    setFormSubmitted(true);
+    setShowResults(true);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <Header />
+        
+        <div className="mt-10 bg-white rounded-lg shadow-lg p-6">
+          <SelectionInterface
+            selectedHubs={selectedHubs}
+            selectedTiers={selectedTiers}
+            selectedModel={selectedModel}
+            onHubSelect={handleHubSelection}
+            onTierSelect={handleTierSelection}
+            onModelSelect={handleModelSelection}
+          />
+
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={handleCalculatePrice}
+              className="bg-orange-600 text-white px-6 py-3 rounded-md hover:bg-orange-700 transition-colors duration-200 font-semibold"
+            >
+              Calculate My Price
+            </button>
+          </div>
+        </div>
+
+        {formSubmitted && showResults && (
+          <ResultsDisplay
+            packages={selectedPackages}
+            selectedModel={selectedModel}
+          />
+        )}
+
+        <HubSpotFormModal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          onSuccess={handleFormSuccess}
+          selectedPackages={selectedPackages}
+        />
+      </div>
+    </div>
+  );
+};
