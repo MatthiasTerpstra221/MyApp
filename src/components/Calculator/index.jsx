@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import { SelectionInterface } from './SelectionInterface';
 import { ResultsDisplay } from './ResultsDisplay';
@@ -56,9 +56,9 @@ const Calculator = () => {  // Changed to const declaration
   };
 
   const generatePackageKey = (hub, tier, model) => {
-    const hubKey = hub.toLowerCase().replace(' hub', '');  // Remove 'hub' from the key
+    const hubKey = hub.toLowerCase().replace(' hub', '');
     const tierKey = tier.toLowerCase();
-    const modelKey = getModelKeySuffix(model);
+    const modelKey = model.toLowerCase().replace(/\s+/g, '_');
     return `${hubKey}_${tierKey}_${modelKey}`;
   };
 
@@ -229,6 +229,28 @@ const Calculator = () => {  // Changed to const declaration
     setShowResults(true);
   };
 
+  useEffect(() => {
+    if (showModal) {
+      const handleFormSubmit = () => {
+        setTimeout(() => {
+          handleFormSuccess();
+        }, 2000);
+      };
+
+      window.addEventListener('hubspotFormSubmitted', handleFormSubmit);
+      return () => {
+        window.removeEventListener('hubspotFormSubmitted', handleFormSubmit);
+      };
+    }
+  }, [showModal, handleFormSuccess]);
+
+  const packageKeys = selectedPackages.map(pkg => {
+    const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
+    const hub = pkg.hub.toLowerCase().replace(' hub', '');
+    const tier = pkg.tier.toLowerCase();
+    return `${hub}_${tier}_${model}`;
+  }).join(';');
+
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
@@ -247,7 +269,7 @@ const Calculator = () => {  // Changed to const declaration
           <div className="mt-8 flex justify-center">
             <button
               onClick={handleCalculatePrice}
-              className="bg-orange-600 text-white px-6 py-3 rounded-md hover:bg-orange-700 transition-colors duration-200 font-semibold"
+              className="bg-orange-600 text-white px-6 py-3 rounded-md"
             >
               Calculate My Price
             </button>
@@ -263,8 +285,18 @@ const Calculator = () => {  // Changed to const declaration
         <HubSpotFormModal
           isOpen={showModal}
           onClose={() => setShowModal(false)}
-          onSuccess={handleFormSuccess}
           selectedPackages={selectedPackages}
+          onSuccess={handleFormSuccess}
+          onFormReady={function($form) {
+            let hiddenField = $form.querySelector('input[name="hubspot_standard_onboarding_key"]');
+            if (!hiddenField) {
+              hiddenField = document.createElement('input');
+              hiddenField.type = 'hidden';
+              hiddenField.name = 'hubspot_standard_onboarding_key';
+              $form.appendChild(hiddenField);
+            }
+            hiddenField.value = packageKeys;
+          }}
         />
       </div>
     </div>
