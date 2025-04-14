@@ -20,51 +20,41 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 
-    <!-- HubSpot Form Integration Script -->
-    <script>
-      window.addEventListener('load', function() {
-        // Initialize HubSpot Form
-        hbspt.forms.create({
-          portalId: "7208949",
-          formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
-          region: "na1",
-          target: "#hubspotForm",
-          onFormReady: function($form) {
-            // Create hidden field if it doesn't exist
-            if (!$form.querySelector('input[name="hubspot_standard_onboarding_key"]')) {
-              const input = document.createElement('input');
-              input.type = 'hidden';
-              input.name = 'hubspot_standard_onboarding_key';
-              $form.appendChild(input);
-            }
-          },
-          onFormSubmit: function($form) {
-            // Additional handling for form submission if needed
-            console.log('Form submitted with package keys:', 
-              $form.querySelector('input[name="hubspot_standard_onboarding_key"]')?.value
-            );
-          }
-        });
-      });
-
-      // Listen for HubSpot form events
-      window.addEventListener('message', event => {
-        if (event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormReady') {
-          const form = document.querySelector('form.hs-form');
-          if (form) {
-            // Create hidden field if it doesn't exist
-            if (!form.querySelector('input[name="hubspot_standard_onboarding_key"]')) {
-              const input = document.createElement('input');
-              input.type = 'hidden';
-              input.name = 'hubspot_standard_onboarding_key';
-              form.appendChild(input);
-            }
-          }
-        }
-      });
-    </script>
-
     <!-- HubSpot Tracking Code -->
     <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/7208949.js"></script>
+
+    <!-- HubSpot Form Helper -->
+    <script>
+      window.hsFormHelper = {
+        createForm: function(containerId, packageKeys) {
+          if (window.hbspt) {
+            window.hbspt.forms.create({
+              portalId: "7208949",
+              formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
+              region: "na1",
+              target: `#${containerId}`,
+              onFormReady: function($form) {
+                // Find or create the hidden field
+                let hiddenField = $form.querySelector('input[name="hubspot_standard_onboarding_key"]');
+                if (!hiddenField) {
+                  hiddenField = document.createElement('input');
+                  hiddenField.type = 'hidden';
+                  hiddenField.name = 'hubspot_standard_onboarding_key';
+                  $form.appendChild(hiddenField);
+                }
+                // Set the package keys
+                hiddenField.value = packageKeys;
+                console.log('Form ready with package keys:', packageKeys);
+              },
+              onFormSubmitted: function() {
+                console.log('Form submitted successfully');
+                // Dispatch a custom event that React can listen for
+                window.dispatchEvent(new CustomEvent('hubspotFormSubmitted'));
+              }
+            });
+          }
+        }
+      };
+    </script>
   </body>
 </html>
