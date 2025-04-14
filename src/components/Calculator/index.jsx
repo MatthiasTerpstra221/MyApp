@@ -92,30 +92,6 @@ export const Calculator = () => {
           'Guided Implementation': 20,
           'Full Service': 32
         }
-      },
-      'Operations Hub': {
-        'Starter': {
-          'Do It Yourself': 8,
-          'Guided Implementation': 12,
-          'Full Service': 16
-        },
-        'Professional': {
-          'Do It Yourself': 12,
-          'Guided Implementation': 20,
-          'Full Service': 32
-        }
-      },
-      'CMS Hub': {
-        'Starter': {
-          'Do It Yourself': 8,
-          'Guided Implementation': 12,
-          'Full Service': 16
-        },
-        'Professional': {
-          'Do It Yourself': 12,
-          'Guided Implementation': 20,
-          'Full Service': 32
-        }
       }
     };
 
@@ -149,30 +125,6 @@ export const Calculator = () => {
         }
       },
       'Service Hub': {
-        'Starter': {
-          'Do It Yourself': 1080,
-          'Guided Implementation': 1620,
-          'Full Service': 2160
-        },
-        'Professional': {
-          'Do It Yourself': 1620,
-          'Guided Implementation': 2700,
-          'Full Service': 4320
-        }
-      },
-      'Operations Hub': {
-        'Starter': {
-          'Do It Yourself': 1080,
-          'Guided Implementation': 1620,
-          'Full Service': 2160
-        },
-        'Professional': {
-          'Do It Yourself': 1620,
-          'Guided Implementation': 2700,
-          'Full Service': 4320
-        }
-      },
-      'CMS Hub': {
         'Starter': {
           'Do It Yourself': 1080,
           'Guided Implementation': 1620,
@@ -225,30 +177,6 @@ export const Calculator = () => {
           'Do It Yourself': 'We coach you through more advanced service features—multiple ticket pipelines, routing rules, basic automation, knowledge base. You implement. Includes 3 coaching sessions.',
           'Guided Implementation': 'We collaborate on advanced workflows (SLAs, routing), knowledge base organization, maybe feedback surveys or chatbots. Some setup by us, some by you. Includes 1 team training + 4 coaching sessions.',
           'Full Service': 'We fully implement your Professional-level service environment: pipelines, automations, reporting dashboards, knowledge base structure, etc. Includes 2 team trainings + 4 coaching sessions.'
-        }
-      },
-      'Operations Hub': {
-        'Starter': {
-          'Do It Yourself': 'We guide you through basic data sync setup and simple automation configuration. You handle the implementation. Includes 2 coaching sessions.',
-          'Guided Implementation': 'We collaborate on data sync setup, basic workflow automation, and initial reporting. Shared implementation effort. Includes 1 team training + 3 coaching sessions.',
-          'Full Service': 'We fully implement your basic Operations Hub setup including data syncs and essential automations. Includes 1 team training + 3 coaching sessions.'
-        },
-        'Professional': {
-          'Do It Yourself': 'We advise on advanced data management, custom workflow creation, and reporting. You implement the solutions. Includes 3 coaching sessions.',
-          'Guided Implementation': 'Joint implementation of advanced data operations, custom coded actions, and sophisticated reporting. Includes 1 team training + 4 coaching sessions.',
-          'Full Service': 'Complete implementation of your Operations Hub Professional features including custom coded actions and advanced reporting. Includes 1 team training + 5 coaching sessions.'
-        }
-      },
-      'CMS Hub': {
-        'Starter': {
-          'Do It Yourself': 'We guide you through website setup, theme selection, and basic content creation tools. You handle the implementation. Includes 2 coaching sessions.',
-          'Guided Implementation': 'We work together on website setup, theme customization, and initial content creation. Shared implementation effort. Includes 1 team training + 3 coaching sessions.',
-          'Full Service': 'We fully implement your basic CMS setup including theme customization and initial content structure. Includes 1 team training + 3 coaching sessions.'
-        },
-        'Professional': {
-          'Do It Yourself': 'We advise on advanced theme customization, custom modules, and content strategy. You implement the solutions. Includes 3 coaching sessions.',
-          'Guided Implementation': 'Joint implementation of custom themes, modules, and advanced content features. Includes 1 team training + 4 coaching sessions.',
-          'Full Service': 'Complete implementation of your CMS Professional features including custom theme development and advanced modules. Includes 1 team training + 5 coaching sessions.'
         }
       }
     };
