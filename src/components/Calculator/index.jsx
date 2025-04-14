@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Header from './Header';  // Changed to default import
+import Header from './Header';
 import { SelectionInterface } from './SelectionInterface';
 import { ResultsDisplay } from './ResultsDisplay';
 import { HubSpotFormModal } from './HubSpotFormModal';
