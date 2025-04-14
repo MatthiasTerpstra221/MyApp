@@ -1,6 +1,7 @@
 import React from 'react';
 
-const Header = () => {
+// Add named export
+export const Header = () => {
   return (
     <div className="bg-white">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -10,11 +11,13 @@ const Header = () => {
             src="/leapforce-logo.png"
             alt="Leapforce"
             className="h-12 w-auto"
+            loading="eager"
           />
           <img
             src="/hubspot-platinum-badge.png"
             alt="HubSpot Platinum Partner"
             className="h-20 w-auto"
+            loading="eager"
           />
         </div>
 
@@ -44,4 +47,5 @@ const Header = () => {
   );
 };
 
+// Keep the default export
 export default Header;
