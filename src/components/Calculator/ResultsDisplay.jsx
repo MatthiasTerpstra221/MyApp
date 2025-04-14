@@ -1,8 +1,8 @@
 import React from 'react';
 
-// This would normally come from your database/API
+// Complete package data with all combinations
 const packageData = {
-  "marketing.hub_starter_diy": {
+  "marketing_hub_starter_diy": {
     hub: "Marketing Hub",
     tier: "Starter",
     serviceModel: "Do It Yourself (DIY)",
@@ -10,15 +10,142 @@ const packageData = {
     price: 1080,
     scopeSummary: "We guide you on basic portal \"getting started\" steps—tracking code, one lead-capture form, one email template—but you implement them. Includes 2 coaching sessions for Q&A and best practices."
   },
-  "marketing.hub_starter_dwme": {
+  "marketing_hub_starter_dwme": {
     hub: "Marketing Hub",
     tier: "Starter",
     serviceModel: "Do It With Me (DWMe)",
     hours: 12,
     price: 1620,
     scopeSummary: "We collaborate on the same starter setup (tracking code, forms, email templates) plus 2 simple automations and a basic reporting dashboard. We handle some tasks; you handle others. Includes 3 coaching sessions."
+  },
+  "marketing_hub_starter_difm": {
+    hub: "Marketing Hub",
+    tier: "Starter",
+    serviceModel: "Do It For Me (DIFMe)",
+    hours: 16,
+    price: 2160,
+    scopeSummary: "We handle the complete starter setup including tracking code, forms, email templates, plus 3 automations and comprehensive reporting dashboard. You just need to provide content and approval. Includes 4 review sessions."
+  },
+  "marketing_hub_professional_diy": {
+    hub: "Marketing Hub",
+    tier: "Professional",
+    serviceModel: "Do It Yourself (DIY)",
+    hours: 16,
+    price: 2160,
+    scopeSummary: "We provide guidance for advanced features setup—custom properties, workflows, landing pages—but you implement them. Includes 4 coaching sessions for strategy and best practices."
+  },
+  "marketing_hub_professional_dwme": {
+    hub: "Marketing Hub",
+    tier: "Professional",
+    serviceModel: "Do It With Me (DWMe)",
+    hours: 24,
+    price: 3240,
+    scopeSummary: "We collaborate on professional features setup including custom properties, workflows, landing pages, and advanced reporting. Split implementation between our teams. Includes 6 coaching sessions."
+  },
+  "marketing_hub_professional_difm": {
+    hub: "Marketing Hub",
+    tier: "Professional",
+    serviceModel: "Do It For Me (DIFMe)",
+    hours: 32,
+    price: 4320,
+    scopeSummary: "We handle the complete professional setup including all advanced features, complex workflows, and custom reporting. You provide content and approval. Includes 8 review sessions."
+  },
+  "sales_hub_starter_diy": {
+    hub: "Sales Hub",
+    tier: "Starter",
+    serviceModel: "Do It Yourself (DIY)",
+    hours: 8,
+    price: 1080,
+    scopeSummary: "We guide you through basic sales tools setup—email templates, sequences, and basic pipeline—but you implement them. Includes 2 coaching sessions."
+  },
+  "sales_hub_starter_dwme": {
+    hub: "Sales Hub",
+    tier: "Starter",
+    serviceModel: "Do It With Me (DWMe)",
+    hours: 12,
+    price: 1620,
+    scopeSummary: "We collaborate on sales tools setup including templates, sequences, pipeline, and basic reporting. Split implementation between teams. Includes 3 coaching sessions."
+  },
+  "sales_hub_starter_difm": {
+    hub: "Sales Hub",
+    tier: "Starter",
+    serviceModel: "Do It For Me (DIFMe)",
+    hours: 16,
+    price: 2160,
+    scopeSummary: "We handle complete sales tools setup including all starter features and basic automation. You provide process information and approval. Includes 4 review sessions."
+  },
+  "sales_hub_professional_diy": {
+    hub: "Sales Hub",
+    tier: "Professional",
+    serviceModel: "Do It Yourself (DIY)",
+    hours: 16,
+    price: 2160,
+    scopeSummary: "We guide you through advanced sales features—custom properties, workflows, forecasting—but you implement them. Includes 4 coaching sessions."
+  },
+  "sales_hub_professional_dwme": {
+    hub: "Sales Hub",
+    tier: "Professional",
+    serviceModel: "Do It With Me (DWMe)",
+    hours: 24,
+    price: 3240,
+    scopeSummary: "We collaborate on professional sales features including custom properties, workflows, forecasting, and advanced reporting. Split implementation. Includes 6 coaching sessions."
+  },
+  "sales_hub_professional_difm": {
+    hub: "Sales Hub",
+    tier: "Professional",
+    serviceModel: "Do It For Me (DIFMe)",
+    hours: 32,
+    price: 4320,
+    scopeSummary: "We handle complete professional sales setup including all advanced features and complex automations. You provide process information and approval. Includes 8 review sessions."
+  },
+  "service_hub_starter_diy": {
+    hub: "Service Hub",
+    tier: "Starter",
+    serviceModel: "Do It Yourself (DIY)",
+    hours: 8,
+    price: 1080,
+    scopeSummary: "We guide you through basic service tools setup—tickets, knowledge base structure, and basic automation—but you implement them. Includes 2 coaching sessions."
+  },
+  "service_hub_starter_dwme": {
+    hub: "Service Hub",
+    tier: "Starter",
+    serviceModel: "Do It With Me (DWMe)",
+    hours: 12,
+    price: 1620,
+    scopeSummary: "We collaborate on service tools setup including tickets, knowledge base, and basic automation. Split implementation between teams. Includes 3 coaching sessions."
+  },
+  "service_hub_starter_difm": {
+    hub: "Service Hub",
+    tier: "Starter",
+    serviceModel: "Do It For Me (DIFMe)",
+    hours: 16,
+    price: 2160,
+    scopeSummary: "We handle complete service tools setup including all starter features and basic automation. You provide process information and approval. Includes 4 review sessions."
+  },
+  "service_hub_professional_diy": {
+    hub: "Service Hub",
+    tier: "Professional",
+    serviceModel: "Do It Yourself (DIY)",
+    hours: 16,
+    price: 2160,
+    scopeSummary: "We guide you through advanced service features—custom properties, workflows, advanced automation—but you implement them. Includes 4 coaching sessions."
+  },
+  "service_hub_professional_dwme": {
+    hub: "Service Hub",
+    tier: "Professional",
+    serviceModel: "Do It With Me (DWMe)",
+    hours: 24,
+    price: 3240,
+    scopeSummary: "We collaborate on professional service features including custom properties, workflows, and advanced automation. Split implementation. Includes 6 coaching sessions."
+  },
+  "service_hub_professional_difm": {
+    hub: "Service Hub",
+    tier: "Professional",
+    serviceModel: "Do It For Me (DIFMe)",
+    hours: 32,
+    price: 4320,
+    scopeSummary: "We handle complete professional service setup including all advanced features and complex automations. You provide process information and approval. Includes 8 review sessions."
   }
-  // ... add all other packages from your Excel sheet
 };
 
 export function ResultsDisplay({ selectedPackages }) {
@@ -94,7 +221,7 @@ export function ResultsDisplay({ selectedPackages }) {
       {/* Action Buttons */}
       <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
         <a
-          href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145"
+          href="https://meetings.hubspot.com/matthias-terpstra/leapforce-x-hubspot-onboarding-alignment"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center px-6 py-3 
@@ -105,7 +232,7 @@ export function ResultsDisplay({ selectedPackages }) {
           Book a Call
         </a>
         <a
-          href="https://leapforce.nl/contact"
+          href="https://www.leapforce.io/contact/"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center px-6 py-3 
@@ -119,3 +246,5 @@ export function ResultsDisplay({ selectedPackages }) {
     </div>
   );
 }
+
+export default ResultsDisplay;
