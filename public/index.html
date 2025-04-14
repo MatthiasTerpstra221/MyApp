@@ -25,10 +25,10 @@
       window.addEventListener('load', function() {
         // Initialize HubSpot Form
         hbspt.forms.create({
-          region: "na1",
           portalId: "7208949",
-          formId: "YOUR_FORM_ID",
-          target: "#699d6d6a-52b4-4439-b6ea-2584491b8baa",
+          formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
+          region: "na1",
+          target: "#hubspotForm",
           onFormReady: function($form) {
             // Create hidden field if it doesn't exist
             if (!$form.querySelector('input[name="hubspot_standard_onboarding_key"]')) {
@@ -69,8 +69,8 @@
     </script>
 
     <!-- HubSpot Tracking Code -->
-<!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/7208949.js"></script>
-<!-- End of HubSpot Embed Code -->    <script type="text/javascript" id="hs-script-loader" async defer src="//js.hsforms.net/forms/v2.js"></script>
+    <!-- Start of HubSpot Embed Code -->
+    <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/7208949.js"></script>
+    <!-- End of HubSpot Embed Code -->
   </body>
 </html>
