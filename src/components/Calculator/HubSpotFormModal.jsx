@@ -1,75 +1,49 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Dialog } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 
-export function HubSpotFormModal({ 
-  isOpen, 
-  onClose, 
-  selectedPackages,
-  onSubmitSuccess 
-}) {
-  useEffect(() => {
-    if (isOpen && window.hbspt) {
-      // Clear any existing form
-      const container = document.getElementById('hubspot-form-container');
-      if (container) {
-        container.innerHTML = '';
-      }
-
-      // Create new form
-      window.hbspt.forms.create({
-        portalId: "7208949",
-        formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
-        region: "na1",
-        target: "#hubspot-form-container",
-        onFormReady: (form) => {
-          // Add hidden field for package keys
-          const hiddenInput = document.createElement('input');
-          hiddenInput.type = 'hidden';
-          hiddenInput.name = 'hubspot_standard_onboarding_key';
-          hiddenInput.value = selectedPackages.join(';');
-          form.appendChild(hiddenInput);
-        },
-        onFormSubmitted: () => {
-          onSubmitSuccess();
-        }
-      });
-    }
-  }, [isOpen, selectedPackages, onSubmitSuccess]);
-
+export const HubSpotFormModal = ({ isOpen, onClose, onSuccess, selectedPackages }) => {
   return (
-    <Dialog
-      open={isOpen}
-      onClose={onClose}
-      className="fixed inset-0 z-10 overflow-y-auto"
-    >
-      <div className="flex items-center justify-center min-h-screen px-4">
-        <Dialog.Overlay 
-          className="fixed inset-0 bg-black/30" 
-        />
-        
-        <div className="relative bg-white rounded-lg max-w-md w-full mx-auto p-6">
-          <div className="absolute top-4 right-4">
-            <button
-              onClick={onClose}
-              className="text-leapforce-gray hover:text-leapforce-gray-dark"
-            >
-              <span className="sr-only">Close</span>
-              <XMarkIcon className="h-6 w-6" />
-            </button>
-          </div>
-
-          <Dialog.Title className="text-xl font-helvetica font-light mb-4">
-            Almost there!
+    <Dialog open={isOpen} onClose={onClose} className="relative z-50">
+      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <Dialog.Panel className="mx-auto max-w-xl bg-white rounded-lg p-6">
+          <Dialog.Title className="text-2xl font-bold mb-4">
+            Complete Your Information
           </Dialog.Title>
           
-          <p className="text-leapforce-gray mb-6">
-            Enter your email to see your personalized HubSpot onboarding price and scope.
-          </p>
+          <div className="mb-4">
+            <p className="text-gray-600">
+              Please fill out the form below to receive your detailed onboarding package information.
+            </p>
+          </div>
 
-          <div id="hubspot-form-container" />
-        </div>
+          <div id="hubspotForm">
+            {/* HubSpot Form will be injected here */}
+          </div>
+
+          <input 
+            type="hidden" 
+            name="selected_packages" 
+            value={JSON.stringify(selectedPackages)} 
+          />
+
+          <div className="mt-6 flex justify-end space-x-4">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onSuccess}
+              className="px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
+            >
+              Submit
+            </button>
+          </div>
+        </Dialog.Panel>
       </div>
     </Dialog>
   );
-}
+};
