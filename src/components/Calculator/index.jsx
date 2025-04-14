@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Header } from './Header';
+import Header from './Header';  // Changed to default import
 import { SelectionInterface } from './SelectionInterface';
 import { ResultsDisplay } from './ResultsDisplay';
 import { HubSpotFormModal } from './HubSpotFormModal';
 
-export const Calculator = () => {
+const Calculator = () => {  // Changed to const declaration
   const [selectedHubs, setSelectedHubs] = useState([]);
   const [selectedTiers, setSelectedTiers] = useState({});
   const [selectedModels, setSelectedModels] = useState({});
@@ -55,7 +55,7 @@ export const Calculator = () => {
   };
 
   const generatePackageKey = (hub, tier, model) => {
-    const hubKey = hub.toLowerCase();
+    const hubKey = hub.toLowerCase().replace(' hub', '');  // Remove 'hub' from the key
     const tierKey = tier.toLowerCase();
     const modelKey = getModelKeySuffix(model);
     return `${hubKey}_${tierKey}_${modelKey}`;
@@ -269,3 +269,7 @@ export const Calculator = () => {
     </div>
   );
 };
+
+// Add both named and default exports
+export { Calculator };
+export default Calculator;
