@@ -4,6 +4,7 @@ import { SelectionInterface } from './SelectionInterface';
 import { ResultsDisplay } from './ResultsDisplay';
 import { HubSpotFormModal } from './HubSpotFormModal';
 
+// Rest of your Calculator component code remains the same...
 const Calculator = () => {  // Changed to const declaration
   const [selectedHubs, setSelectedHubs] = useState([]);
   const [selectedTiers, setSelectedTiers] = useState({});
