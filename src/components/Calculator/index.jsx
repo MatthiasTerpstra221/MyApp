@@ -1,69 +1,142 @@
-// src/components/Calculator/index.jsx
-export function Calculator() {
-  const [selectedHubs, setSelectedHubs] = useState([]);
-  const [selectedTiers, setSelectedTiers] = useState({});
-  const [selectedModels, setSelectedModels] = useState({});
-  const [showHubSpotForm, setShowHubSpotForm] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [selectedPackages, setSelectedPackages] = useState([]);
-  const [formSubmitted, setFormSubmitted] = useState(false);
+import React from 'react';
 
-  const handleCalculatePrice = () => {
-    const packageKeys = selectedHubs.map(hub => {
-      const tier = selectedTiers[hub]?.toLowerCase() || '';
-      const model = selectedModels[hub]?.split(' - ')[0].toLowerCase() || '';
-      return `${hub.toLowerCase().replace(' ', '.')}_${tier}_${model}`;
-    });
-    
-    setSelectedPackages(packageKeys);
-    setShowHubSpotForm(true);
-  };
+export function SelectionInterface({
+  selectedHubs,
+  setSelectedHubs,
+  selectedTiers,
+  setSelectedTiers,
+  selectedModels,
+  setSelectedModels
+}) {
+  const hubs = ['Marketing Hub', 'Sales Hub', 'Service Hub'];
+  const tiers = ['Starter', 'Professional', 'Enterprise'];
+  const serviceModels = [
+    'DIY - Do It Yourself',
+    'DWMe - Do It With Me',
+    'DIFMe - Do It For Me'
+  ];
 
   return (
-    <div className="min-h-screen bg-leapforce-white">
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <Header />
-        
-        <div className="bg-white rounded-lg shadow-sm p-8 mb-12">
-          <SelectionInterface
-            selectedHubs={selectedHubs}
-            setSelectedHubs={setSelectedHubs}
-            selectedTiers={selectedTiers}
-            setSelectedTiers={setSelectedTiers}
-            selectedModels={selectedModels}
-            setSelectedModels={setSelectedModels}
-          />
-
-          <div className="mt-8 flex justify-center">
-            <button
-              onClick={handleCalculatePrice}
-              disabled={selectedHubs.length === 0}
-              className={`px-6 py-3 rounded-md text-white transition-colors duration-150
-                ${selectedHubs.length === 0 
-                  ? 'bg-leapforce-gray-light cursor-not-allowed'
-                  : 'bg-leapforce-orange hover:bg-leapforce-orange-dark'}`}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Hub Selection */}
+      <div>
+        <h3 className="text-lg font-helvetica font-light mb-4">
+          1. Select Hub(s)
+        </h3>
+        <div className="space-y-2">
+          {hubs.map(hub => (
+            <label
+              key={hub}
+              className="flex items-center p-3 bg-gray-50 rounded cursor-pointer hover:bg-gray-100"
             >
-              Calculate My Price
-            </button>
-          </div>
+              <input
+                type="checkbox"
+                checked={selectedHubs.includes(hub)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setSelectedHubs([...selectedHubs, hub]);
+                  } else {
+                    setSelectedHubs(selectedHubs.filter(h => h !== hub));
+                    const newTiers = { ...selectedTiers };
+                    const newModels = { ...selectedModels };
+                    delete newTiers[hub];
+                    delete newModels[hub];
+                    setSelectedTiers(newTiers);
+                    setSelectedModels(newModels);
+                  }
+                }}
+                className="mr-3"
+              />
+              <span className="font-helvetica">{hub}</span>
+            </label>
+          ))}
         </div>
+      </div>
 
-        {formSubmitted && showResults && (
-          <ResultsDisplay
-            selectedPackages={selectedPackages}
-          />
+      {/* Tier Selection */}
+      <div>
+        <h3 className="text-lg font-helvetica font-light mb-4">
+          2. Select Tier(s)
+        </h3>
+        {selectedHubs.length === 0 ? (
+          <p className="text-leapforce-gray-light italic">
+            Please select a hub first
+          </p>
+        ) : (
+          <div className="space-y-6">
+            {selectedHubs.map(hub => (
+              <div key={`tier-${hub}`}>
+                <h4 className="font-helvetica mb-2">{hub}</h4>
+                <div className="space-y-2">
+                  {tiers.map(tier => (
+                    <label
+                      key={`${hub}-${tier}`}
+                      className="flex items-center p-3 bg-gray-50 rounded cursor-pointer hover:bg-gray-100"
+                    >
+                      <input
+                        type="radio"
+                        name={`tier-${hub}`}
+                        checked={selectedTiers[hub] === tier}
+                        onChange={() => {
+                          setSelectedTiers({
+                            ...selectedTiers,
+                            [hub]: tier
+                          });
+                        }}
+                        className="mr-3"
+                      />
+                      <span className="font-helvetica">{tier}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         )}
+      </div>
 
-        <HubSpotFormModal
-          isOpen={showHubSpotForm}
-          onClose={() => setShowHubSpotForm(false)}
-          selectedPackages={selectedPackages}
-          onSubmitSuccess={() => {
-            setShowHubSpotForm(false);
-            setFormSubmitted(true);
-            setShowResults(true);
-          }}
-        />
+      {/* Service Model Selection */}
+      <div>
+        <h3 className="text-lg font-helvetica font-light mb-4">
+          3. Select Service Model(s)
+        </h3>
+        {selectedHubs.length === 0 ? (
+          <p className="text-leapforce-gray-light italic">
+            Please select a hub and tier first
+          </p>
+        ) : (
+          <div className="space-y-6">
+            {selectedHubs.map(hub => (
+              <div key={`model-${hub}`}>
+                <h4 className="font-helvetica mb-2">
+                  {hub} ({selectedTiers[hub] || 'No tier selected'})
+                </h4>
+                <div className="space-y-2">
+                  {serviceModels.map(model => (
+                    <label
+                      key={`${hub}-${model}`}
+                      className="flex items-center p-3 bg-gray-50 rounded cursor-pointer hover:bg-gray-100"
+                    >
+                      <input
+                        type="radio"
+                        name={`model-${hub}`}
+                        checked={selectedModels[hub] === model}
+                        onChange={() => {
+                          setSelectedModels({
+                            ...selectedModels,
+                            [hub]: model
+                          });
+                        }}
+                        className="mr-3"
+                      />
+                      <span className="font-helvetica">{model}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
