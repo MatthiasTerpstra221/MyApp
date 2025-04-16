@@ -4,10 +4,33 @@ import LeapforceButton from '../LeapforceButton';
 // Add named export
 export const Header = () => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        {/* Top Section with Logo and Badge */}
-        <div className="flex flex-wrap justify-between items-center mb-8">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden relative">
+      {/* Absolute positioned top-right buttons - Hidden on small devices */}
+      <div className="absolute top-0 right-0 hidden md:flex items-center space-x-3 z-10 p-4">
+        <a 
+          href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+        >
+          View HubSpot Profile
+        </a>
+        <LeapforceButton />
+        <img
+          src="/hubspot-platinum-badge.png"
+          alt="HubSpot Platinum Partner Badge"
+          className="h-12 w-auto"
+          loading="eager"
+          onError={(e) => {
+            console.error('Failed to load HubSpot badge');
+            e.target.style.display = 'none';
+          }}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 md:mt-8">
+        {/* Top Section with Logo */}
+        <div className="flex flex-wrap items-center mb-8">
           <div className="flex items-center space-x-4">
             <div className="flex-shrink-0">
               <img
@@ -24,34 +47,6 @@ export const Header = () => {
             <div className="hidden md:block">
               <h2 className="text-xl font-bold">Leapforce B.V.</h2>
               <p className="text-sm text-gray-500">HubSpot Platinum Solutions Partner</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <div className="hidden md:block">
-              <a 
-                href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-              >
-                View HubSpot Profile
-              </a>
-            </div>
-            <div className="hidden md:block">
-              <LeapforceButton />
-            </div>
-            <div className="flex-shrink-0">
-              <img
-                src="/hubspot-platinum-badge.png"
-                alt="HubSpot Platinum Partner Badge"
-                className="h-16 w-auto"
-                loading="eager"
-                onError={(e) => {
-                  console.error('Failed to load HubSpot badge');
-                  e.target.style.display = 'none';
-                }}
-              />
             </div>
           </div>
         </div>
@@ -121,7 +116,15 @@ export const Header = () => {
         </div>
 
         {/* Mobile View Button - Only visible on small screens */}
-        <div className="md:hidden flex justify-center mb-6">
+        <div className="md:hidden flex justify-center gap-2 mb-6">
+          <a 
+            href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+          >
+            View HubSpot Profile
+          </a>
           <LeapforceButton />
         </div>
 

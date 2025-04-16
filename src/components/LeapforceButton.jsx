@@ -14,7 +14,7 @@ const LeapforceButton = () => {
       <img 
         src="/leapforce-logo.png" 
         alt="Leapforce Logo" 
-        className="h-6"
+        className="h-5"
         onError={(e) => {
           e.target.onerror = null;
           e.target.style.display = 'none';
