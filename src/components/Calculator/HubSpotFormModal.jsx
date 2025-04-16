@@ -1,308 +1,160 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-  const [formLoading, setFormLoading] = useState(true);
-  const [formError, setFormError] = useState(false);
-  const [formInstance, setFormInstance] = useState(null);
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const formContainerRef = useRef(null);
+  const [submitted, setSubmitted] = useState(false);
 
-  // If not open, don't render anything
+  // If not open, don't render
   if (!isOpen) return null;
 
-  // Handle successful form submission
-  const handleSuccess = useCallback(() => {
-    console.log('Form submission successful, triggering success callback');
-    setFormSubmitted(true);
-    
-    // Ensure onSuccess is called
-    if (onSuccess) {
-      onSuccess();
-    }
-    
-    // Close the modal with a slight delay
-    setTimeout(() => {
-      onClose();
-    }, 1000);
-  }, [onSuccess, onClose]);
-
-  // For testing only - simulate form submission
-  const handleTestSubmit = () => {
-    console.log('Test submit triggered');
-    handleSuccess();
-  };
-
-  // Load HubSpot script dynamically
+  // Create and inject the HubSpot form when the modal is opened
   useEffect(() => {
-    const loadHubspotScript = () => {
-      if (!window.hbspt && !document.getElementById('hubspot-form-script')) {
-        const script = document.createElement('script');
-        script.id = 'hubspot-form-script';
-        script.src = 'https://js.hsforms.net/forms/v2.js';
-        script.async = true;
-        script.defer = true;
-        
-        script.onload = () => {
-          console.log('HubSpot script loaded successfully');
-          setScriptLoaded(true);
-          setFormLoading(false);
-        };
-        
-        script.onerror = () => {
-          console.error('Failed to load HubSpot script');
-          setFormError(true);
-          setFormLoading(false);
-        };
-        
-        document.head.appendChild(script);
-      } else if (window.hbspt) {
-        console.log('HubSpot script already exists');
-        setScriptLoaded(true);
-        setFormLoading(false);
+    if (!isOpen || !formContainerRef.current) return;
+
+    // Clear any existing content
+    formContainerRef.current.innerHTML = '';
+
+    // Wait for HubSpot script to be ready
+    const checkHubSpotLoaded = setInterval(() => {
+      if (window.hbspt) {
+        clearInterval(checkHubSpotLoaded);
+        createForm();
       }
+    }, 100);
+
+    // Cleanup interval on unmount
+    return () => {
+      clearInterval(checkHubSpotLoaded);
     };
+  }, [isOpen, formContainerRef.current]);
 
-    if (isOpen) {
-      loadHubspotScript();
-      // Reset form submitted state when reopening
-      setFormSubmitted(false);
-    }
-  }, [isOpen]);
+  // Create the HubSpot form
+  const createForm = () => {
+    if (!window.hbspt || !formContainerRef.current) return;
 
-  // Create form when modal is opened and script is loaded
-  useEffect(() => {
-    const createHubspotForm = () => {
-      if (!isOpen || !scriptLoaded || !window.hbspt) {
-        return;
-      }
+    // Prepare the package keys
+    const packageKeys = selectedPackages.map(pkg => {
+      // Format matches the spreadsheet: marketing_hub_starter_diy
+      const hub = pkg.hub.toLowerCase().replace(/\s+/g, '_');
+      const tier = pkg.tier.toLowerCase();
+      const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
+      
+      // Get model suffix (diy, dwme, difme)
+      let modelSuffix = '';
+      if (model.includes('yourself')) modelSuffix = 'diy';
+      else if (model.includes('with_me')) modelSuffix = 'dwme';
+      else if (model.includes('for_me')) modelSuffix = 'difme';
+      
+      return `${hub}_${tier}_${modelSuffix}`;
+    }).join(';');
 
-      // Clear any existing form
-      const formContainer = document.getElementById('hubspotForm');
-      if (formContainer) {
-        formContainer.innerHTML = '';
-      }
+    console.log('Creating form with package keys:', packageKeys);
 
-      setFormLoading(true);
-
-      try {
-        // Generate package key string
-        const packageKeys = selectedPackages.map(pkg => {
-          // Format matches the spreadsheet: marketing_hub_starter_diy
-          const hub = pkg.hub.toLowerCase().replace(/\s+/g, '_');
-          const tier = pkg.tier.toLowerCase();
-          const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
-          
-          // Get model suffix (diy, dwme, difme)
-          let modelSuffix = '';
-          if (model.includes('yourself')) modelSuffix = 'diy';
-          else if (model.includes('with_me')) modelSuffix = 'dwme';
-          else if (model.includes('for_me')) modelSuffix = 'difme';
-          
-          return `${hub}_${tier}_${modelSuffix}`;
-        }).join(';'); // Use semicolon as separator instead of comma
-
-        console.log('Creating HubSpot form with package keys:', packageKeys);
-        console.log('HubSpot object available:', !!window.hbspt);
-        console.log('Target element exists:', !!document.getElementById('hubspotForm'));
+    // Create the form
+    window.hbspt.forms.create({
+      portalId: "7208949",
+      formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
+      region: "na1",
+      target: "#hubspotFormContainer",
+      formData: {
+        hubspot_standard_onboarding_key: packageKeys
+      },
+      onFormSubmit: function($form, data) {
+        console.log("Form submitted with data:", data);
+      },
+      onFormSubmitted: function() {
+        console.log("Form successfully submitted");
+        setSubmitted(true);
         
-        // Create the form using hbspt
-        const form = window.hbspt.forms.create({
-          portalId: "7208949",
-          formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
-          region: "na1",
-          target: '#hubspotForm',
-          onFormReady: function($form) {
-            console.log('Form is ready');
-            
-            // Set hidden field value using the correct HubSpot approach after form is ready
-            try {
-              // Get the hidden field by name
-              const hiddenField = $form.find('input[name="hubspot_standard_onboarding_key"]');
-              
-              if (hiddenField.length) {
-                hiddenField.val(packageKeys);
-                console.log('Hidden field found and value set:', packageKeys);
-              } else {
-                console.error('Hidden field not found in the form');
-                
-                // Fallback: try to create the field if it doesn't exist
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'hubspot_standard_onboarding_key';
-                hiddenInput.value = packageKeys;
-                
-                // Find the form element within our container
-                const formElement = document.querySelector('#hubspotForm form');
-                if (formElement) {
-                  formElement.appendChild(hiddenInput);
-                  console.log('Added hidden field manually:', packageKeys);
-                }
-              }
+        // Show the results after a short delay
+        setTimeout(() => {
+          if (onSuccess) {
+            onSuccess();
+          }
+          onClose();
+        }, 1500);
+      }
+    });
 
-              // Add a listener for the default HubSpot submit button
-              const submitButton = $form.find('input[type="submit"]');
-              if (submitButton.length) {
-                // Monitor the submit event of the entire form
-                $form.on('submit', function() {
-                  console.log('Form submit detected');
-                  // We'll let HubSpot handle the actual submission
-                  // Just set a flag to remember that submit was clicked
-                  window.hsFormSubmitted = true;
-                });
+    // Add global event listener for form submit - extra safety measure
+    const originalSubmit = window.XMLHttpRequest.prototype.send;
+    window.XMLHttpRequest.prototype.send = function() {
+      // Watch for HubSpot form submissions
+      if (this._url && this._url.includes('hubspot') && this._url.includes('forms')) {
+        this.addEventListener('load', function() {
+          if (this.status >= 200 && this.status < 300) {
+            console.log("Detected successful form submission");
+            setSubmitted(true);
+            
+            // Show the results after a short delay
+            setTimeout(() => {
+              if (onSuccess) {
+                onSuccess();
               }
-            } catch (error) {
-              console.error('Error setting hidden field:', error);
-            }
-            
-            setFormLoading(false);
-            setFormInstance($form);
-          },
-          onFormSubmit: function($form, data) {
-            console.log('Form submitted with data:', data);
-            
-            // Double check that our field is included
-            const formData = $form.serializeArray();
-            const hasPackageKeys = formData.some(item => 
-              item.name === 'hubspot_standard_onboarding_key' && item.value === packageKeys
-            );
-            
-            if (!hasPackageKeys) {
-              console.warn('Package keys not found in form submission, attempting to add manually');
-              data.hubspot_standard_onboarding_key = packageKeys;
-            }
-          },
-          onFormSubmitted: function($form) {
-            console.log('Form submitted successfully');
-            // Handle success and show results
-            handleSuccess();
-          },
-          onFormError: function(error) {
-            console.error('Form error:', error);
-            setFormError(true);
-            setFormLoading(false);
+              onClose();
+            }, 1500);
           }
         });
-        
-        // Store the form instance
-        setFormInstance(form);
-      } catch (error) {
-        console.error('Error creating HubSpot form:', error);
-        setFormError(true);
-        setFormLoading(false);
       }
+      return originalSubmit.apply(this, arguments);
     };
-
-    // Small delay to ensure script is fully initialized
-    if (isOpen && scriptLoaded) {
-      const timer = setTimeout(() => {
-        createHubspotForm();
-      }, 500);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, selectedPackages, handleSuccess, scriptLoaded]);
-
-  const handleOpenInNewTab = () => {
-    // Direct link to HubSpot form
-    const url = `https://info.leapforce.nl/hubspot-onboarding-quote`;
-    window.open(url, '_blank');
-    
-    // Even if they use the external form, show the results
-    handleSuccess();
   };
 
-  // Handle clicking outside to close
-  const handleOverlayClick = (e) => {
-    if (e.target.classList.contains('modal-overlay')) {
-      onClose();
-    }
-  };
-
-  // Prevent scrolling when modal is open
+  // Prevent body scrolling when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     }
     return () => {
       document.body.style.overflow = 'auto';
+      
+      // Restore original XMLHttpRequest
+      if (window.originalSubmit) {
+        window.XMLHttpRequest.prototype.send = window.originalSubmit;
+      }
     };
   }, [isOpen]);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto modal-overlay" onClick={handleOverlayClick}>
-      <div className="flex items-center justify-center min-h-screen p-4">
-        <div className="fixed inset-0 bg-black opacity-30"></div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+      <div className="relative bg-white rounded-lg max-w-md w-full p-6 shadow-xl">
+        {/* Close button */}
+        <button 
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-400 hover:text-gray-500"
+          aria-label="Close"
+        >
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
 
-        <div className="relative bg-white rounded-lg max-w-md w-full mx-auto p-6 z-10">
-          <div className="absolute top-4 right-4">
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-500"
-              aria-label="Close"
-            >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
+        {/* Modal title */}
+        <h2 className="text-lg font-medium text-gray-900 mb-4">
+          Get Your Custom HubSpot Onboarding Quote
+        </h2>
+
+        {/* HubSpot form container */}
+        <div id="hubspotFormContainer" ref={formContainerRef} className="min-h-[250px]">
+          <div className="flex items-center justify-center py-8">
+            <svg className="animate-spin h-8 w-8 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className="ml-2 text-gray-600">Loading form...</span>
           </div>
+        </div>
 
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
-            Get Your Custom HubSpot Onboarding Quote
-          </h2>
-
-          {formError ? (
-            <div className="text-center py-6">
-              <p className="text-red-600 mb-4">We encountered an issue loading the form.</p>
-              <button
-                onClick={handleOpenInNewTab}
-                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-              >
-                Open Form in New Tab
-              </button>
-            </div>
-          ) : (
-            <div>
-              <div id="hubspotForm" className="hubspot-form-container min-h-[200px]">
-                {formLoading && (
-                  <div className="flex items-center justify-center py-10">
-                    <svg className="animate-spin h-8 w-8 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span className="ml-2 text-gray-600">Loading form...</span>
-                  </div>
-                )}
-              </div>
-              <div className="mt-4 text-center text-sm text-gray-500">
-                <p>Having trouble with the form? <button onClick={handleOpenInNewTab} className="text-orange-600 hover:text-orange-800 underline">Open in new tab</button></p>
-              </div>
-              
-              {/* For testing only - remove in production */}
-              <div className="mt-4 text-center hidden">
-                <button 
-                  onClick={handleTestSubmit}
-                  className="bg-orange-600 text-white px-4 py-2 rounded-md text-sm"
-                >
-                  Test Submit
-                </button>
-              </div>
-            </div>
-          )}
-          
-          <div className="mt-4 border-t pt-4 text-xs text-gray-500">
-            <p>Your selected package(s) will be automatically included in your request.</p>
-            {formSubmitted && (
-              <p className="mt-2 text-green-600 font-medium">Form submitted successfully! Showing your quote details...</p>
-            )}
+        {/* Form status message */}
+        {submitted && (
+          <div className="mt-4 p-3 bg-green-50 border border-green-100 rounded text-green-700 text-center">
+            Form submitted successfully! Showing your results...
           </div>
+        )}
+
+        {/* Footer note */}
+        <div className="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-500">
+          <p>Your selected package(s) will be included in your request.</p>
         </div>
       </div>
     </div>

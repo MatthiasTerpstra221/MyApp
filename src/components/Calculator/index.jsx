@@ -226,6 +226,7 @@ const Calculator = () => {  // Changed to const declaration
   };
 
   const handleFormSuccess = () => {
+    console.log("Form success called, showing results");
     setShowModal(false);
     setFormSubmitted(true);
     setShowResults(true);
@@ -258,12 +259,14 @@ const Calculator = () => {  // Changed to const declaration
 
         <AboutSection />
 
+        {/* Results section that appears after form submission */}
         {formSubmitted && showResults && (
-          <ResultsDisplay
-            packages={selectedPackages}
-          />
+          <div className="mt-10 animate-fadeIn">
+            <ResultsDisplay packages={selectedPackages} />
+          </div>
         )}
 
+        {/* HubSpot Form Modal */}
         <HubSpotFormModal
           isOpen={showModal}
           onClose={() => setShowModal(false)}
