@@ -1,6 +1,7 @@
 {
   "name": "myapp",
   "version": "1.0.0",
+  "homepage": ".",
   "main": "tailwind.config.js",
   "dependencies": {
     "@headlessui/react": "1.7.17",
@@ -717,7 +718,6 @@
   "bugs": {
     "url": "https://github.com/MatthiasTerpstra221/MyApp/issues"
   },
-  "homepage": "/",
   "description": "",
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.4",
