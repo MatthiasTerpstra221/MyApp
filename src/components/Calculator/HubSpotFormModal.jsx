@@ -68,19 +68,32 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
 
   // Create and inject the HubSpot form when the modal is opened and script is loaded
   useEffect(() => {
+    // Ensure modal is open, script is loaded, and the container ref is available
     if (!isOpen || !scriptLoaded || !formContainerRef.current) return;
     
     // Clear any existing content
     formContainerRef.current.innerHTML = '';
+    setFormLoading(true); // Reset loading state for potential retries
+    setFormError(false);  // Reset error state
     
     try {
-      console.log('Script loaded, creating form');
+      console.log('Dependencies met, creating form...');
       createForm();
     } catch (error) {
       console.error('Error creating form:', error);
       setFormError(true);
+      setFormLoading(false);
     }
-  }, [isOpen, scriptLoaded]);
+    
+    // Cleanup function to clear the form if the modal closes before submission
+    return () => {
+      if (formContainerRef.current) {
+        formContainerRef.current.innerHTML = '';
+      }
+    };
+  // Depend specifically on isOpen, scriptLoaded, and the ref's current value
+  // This ensures it re-runs if the ref becomes available after script load
+  }, [isOpen, scriptLoaded, formContainerRef.current]);
 
   // Create the HubSpot form
   const createForm = () => {
