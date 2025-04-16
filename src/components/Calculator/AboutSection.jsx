@@ -3,31 +3,31 @@ import React, { useState } from 'react';
 export const AboutSection = () => {
   const [activeTab, setActiveTab] = useState('general');
 
-  // Testimonials data inspired by the reviews in the image
+  // Real testimonials from the HubSpot partner page
   const testimonials = [
     {
       id: 1,
-      name: "Thomas K.",
-      company: "Marketing Agency",
+      name: "M. Doornenbal",
+      company: "Churned",
       rating: 5,
-      text: "Structured and fast integration thanks to Leapforce! Their step-by-step approach made the whole process clear and efficient. We're now getting much more out of HubSpot than we expected.",
-      date: "October 2023"
+      text: "We worked with Leapforce for our HubSpot implementation, and we're very happy with the results. The process was handled in a highly structured and efficient way. From day one, we had a clear to-do list with deadlines and responsibilities, which made it easy to stay on track.",
+      date: "April 9, 2025"
     },
     {
       id: 2,
-      name: "Sarah L.",
-      company: "Tech Startup",
+      name: "C. Stijlaart",
+      company: "",
       rating: 5, 
-      text: "A collaboration that feels like a true partnership. The team at Leapforce doesn't just implement HubSpot, they guide you through the entire journey and ensure you understand what they're doing and why.",
-      date: "December 2023"
+      text: "A collaboration that feels like a true partnership. They not only help me work in a structured way, but also provide valuable support in the areas of email marketing, CRM implementation and website development. Their broad expertise enables them to provide thoughtful and substantiated advice.",
+      date: "March 19, 2025"
     },
     {
       id: 3,
-      name: "Michael R.",
-      company: "E-commerce Business",
+      name: "D. Verberne",
+      company: "Rijnmond",
       rating: 5,
-      text: "Expert partner who significantly improved our commercial operations. The Leapforce team took the time to understand our business and tailored the HubSpot implementation to our specific needs.",
-      date: "February 2024"
+      text: "Working with Matthias is a joy. We have been working with Leapforce for over a year to optimize our HubSpot knowledge and realize our strategic goal-automation. Thanks to the cooperation with Leapforce, we have been able to really professionalize our sales team.",
+      date: "March 4, 2025"
     },
   ];
 
@@ -299,7 +299,7 @@ export const AboutSection = () => {
           
           <div className="mt-6 text-center">
             <a 
-              href="https://www.hubspot.com/agencies/leapforce#reviews" 
+              href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center text-orange-600 hover:text-orange-800"

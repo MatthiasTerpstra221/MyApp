@@ -29,7 +29,7 @@ export const Header = () => {
           <div className="flex items-center space-x-3">
             <div className="hidden md:block">
               <a 
-                href="https://www.hubspot.com/agencies/leapforce"
+                href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
@@ -73,7 +73,7 @@ export const Header = () => {
                 ))}
               </div>
               <div className="text-sm text-gray-500">
-                Based on 60+ reviews
+                Based on 53 reviews
               </div>
             </div>
             <div className="mt-2 md:mt-0">
