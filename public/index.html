@@ -15,13 +15,13 @@
     
     <!-- Minimal error handling and fallback -->
     <script>
-      // Redirect to fallback page if nothing loads within 5 seconds
+      // Redirect to fallback page if nothing loads within 3 seconds
       setTimeout(function() {
         if (!window.appLoaded) {
-          console.error("App failed to initialize within 5 seconds, redirecting to fallback page");
+          console.error("App failed to initialize within 3 seconds, redirecting to fallback page");
           window.location.href = '/fallback.html';
         }
-      }, 5000);
+      }, 3000);
 
       // Global error handler
       window.onerror = function(message, source, lineno, colno, error) {
@@ -87,7 +87,7 @@
       <div id="error-message">
         <p>There was an error loading the calculator.</p>
         <p>Please try our alternative page:</p>
-        <a href="/fallback.html" class="fallback-button">Go to Simplified Version</a>
+        <a href="fallback.html" class="fallback-button">Go to Simplified Version</a>
       </div>
     </div>
     
