@@ -12,13 +12,16 @@ try {
   );
   
   // Signal that React has initialized
-  window.onAppInit = true;
+  window.appLoaded = true;
   console.log("React app initialized successfully");
 } catch (error) {
   console.error("Error initializing React app:", error);
-  // Show fallback content if available
-  const fallbackContent = document.getElementById('fallback-content');
-  if (fallbackContent) {
-    fallbackContent.style.display = 'flex';
+  
+  // Show error message
+  if (document.getElementById('loading-spinner')) {
+    document.getElementById('loading-spinner').style.display = 'none';
+  }
+  if (document.getElementById('error-message')) {
+    document.getElementById('error-message').style.display = 'block';
   }
 }
