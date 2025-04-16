@@ -15,19 +15,27 @@
     
     <!-- Minimal error handling and fallback -->
     <script>
+      // Define direct fallback URL to avoid path issues
+      var fallbackUrl = window.location.origin + "/fallback.html";
+      console.log("Fallback URL:", fallbackUrl);
+      
       // Redirect to fallback page if nothing loads within 3 seconds
       setTimeout(function() {
         if (!window.appLoaded) {
           console.error("App failed to initialize within 3 seconds, redirecting to fallback page");
-          window.location.href = '/fallback.html';
+          window.location.href = fallbackUrl;
         }
       }, 3000);
 
       // Global error handler
       window.onerror = function(message, source, lineno, colno, error) {
         console.error('Caught error:', message, source, error);
-        document.getElementById('loading-spinner').style.display = 'none';
-        document.getElementById('error-message').style.display = 'block';
+        if (document.getElementById('loading-spinner')) {
+          document.getElementById('loading-spinner').style.display = 'none';
+        }
+        if (document.getElementById('error-message')) {
+          document.getElementById('error-message').style.display = 'block';
+        }
         return false;
       };
     </script>
@@ -87,7 +95,7 @@
       <div id="error-message">
         <p>There was an error loading the calculator.</p>
         <p>Please try our alternative page:</p>
-        <a href="fallback.html" class="fallback-button">Go to Simplified Version</a>
+        <a href="javascript:void(0)" onclick="window.location.href=fallbackUrl" class="fallback-button">Go to Simplified Version</a>
       </div>
     </div>
     
@@ -102,6 +110,7 @@
         for (const mutation of mutations) {
           if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
             window.appLoaded = true;
+            console.log("Root element populated, hiding loading screen");
             // Hide the loading screen
             document.getElementById('root-loading').style.display = 'none';
             observer.disconnect();

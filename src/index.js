@@ -5,6 +5,12 @@ import App from './App';
 
 console.log("React index.js initializing...");
 
+// Ensure fallbackUrl is defined
+let fallbackUrl = window.location.origin + "/fallback.html";
+if (window.fallbackUrl) {
+  fallbackUrl = window.fallbackUrl;
+}
+
 try {
   const root = ReactDOM.createRoot(document.getElementById('root'));
   
@@ -42,7 +48,7 @@ try {
   
   // After 3 seconds, redirect to fallback
   setTimeout(() => {
-    console.log("Redirecting to fallback page due to initialization error");
-    window.location.href = "fallback.html";
+    console.log("Redirecting to fallback page due to initialization error:", fallbackUrl);
+    window.location.href = fallbackUrl;
   }, 3000);
 }
