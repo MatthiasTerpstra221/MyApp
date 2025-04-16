@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Dialog } from '@headlessui/react';
 
 const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
@@ -6,6 +6,23 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
   const [formLoading, setFormLoading] = useState(true);
   const [formError, setFormError] = useState(false);
   const [formInstance, setFormInstance] = useState(null);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  // Handle successful form submission
+  const handleSuccess = useCallback(() => {
+    console.log('Form submission successful, triggering success callback');
+    setFormSubmitted(true);
+    
+    // Ensure onSuccess is called
+    if (onSuccess) {
+      onSuccess();
+    }
+    
+    // Close the modal with a slight delay
+    setTimeout(() => {
+      onClose();
+    }, 1000);
+  }, [onSuccess, onClose]);
 
   // Load HubSpot script dynamically
   useEffect(() => {
@@ -39,6 +56,8 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
 
     if (isOpen) {
       loadHubspotScript();
+      // Reset form submitted state when reopening
+      setFormSubmitted(false);
     }
   }, [isOpen]);
 
@@ -134,12 +153,8 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
           },
           onFormSubmitted: function() {
             console.log('Form submitted successfully');
-            if (onSuccess) {
-              setTimeout(() => {
-                onSuccess();
-                onClose();
-              }, 1000);
-            }
+            // Handle success and show results
+            handleSuccess();
           },
           onFormError: function(error) {
             console.error('Form error:', error);
@@ -165,13 +180,15 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
       
       return () => clearTimeout(timer);
     }
-  }, [isOpen, selectedPackages, onClose, onSuccess, scriptLoaded]);
+  }, [isOpen, selectedPackages, handleSuccess, scriptLoaded]);
 
   const handleOpenInNewTab = () => {
     // Direct link to HubSpot form
     const url = `https://info.leapforce.nl/hubspot-onboarding-quote`;
     window.open(url, '_blank');
-    onClose();
+    
+    // Even if they use the external form, show the results
+    handleSuccess();
   };
 
   return (
@@ -239,6 +256,9 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
           
           <div className="mt-4 border-t pt-4 text-xs text-gray-500">
             <p>Your selected package(s) will be automatically included in your request.</p>
+            {formSubmitted && (
+              <p className="mt-2 text-green-600 font-medium">Form submitted successfully! Showing your quote details...</p>
+            )}
           </div>
         </div>
       </div>
