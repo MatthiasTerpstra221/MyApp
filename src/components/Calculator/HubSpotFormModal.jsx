@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Dialog } from '@headlessui/react';
 
 const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -7,6 +6,9 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
   const [formError, setFormError] = useState(false);
   const [formInstance, setFormInstance] = useState(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  // If not open, don't render anything
+  if (!isOpen) return null;
 
   // Handle successful form submission
   const handleSuccess = useCallback(() => {
@@ -191,16 +193,29 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
     handleSuccess();
   };
 
-  return (
-    <Dialog
-      open={isOpen}
-      onClose={onClose}
-      className="fixed inset-0 z-50 overflow-y-auto"
-    >
-      <div className="flex items-center justify-center min-h-screen p-4">
-        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+  // Handle clicking outside to close
+  const handleOverlayClick = (e) => {
+    if (e.target.classList.contains('modal-overlay')) {
+      onClose();
+    }
+  };
 
-        <div className="relative bg-white rounded-lg max-w-md w-full mx-auto p-6">
+  // Prevent scrolling when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto modal-overlay" onClick={handleOverlayClick}>
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="fixed inset-0 bg-black opacity-30"></div>
+
+        <div className="relative bg-white rounded-lg max-w-md w-full mx-auto p-6 z-10">
           <div className="absolute top-4 right-4">
             <button
               onClick={onClose}
@@ -221,9 +236,9 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
             </button>
           </div>
 
-          <Dialog.Title className="text-lg font-medium text-gray-900 mb-4">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">
             Get Your Custom HubSpot Onboarding Quote
-          </Dialog.Title>
+          </h2>
 
           {formError ? (
             <div className="text-center py-6">
@@ -262,7 +277,7 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
           </div>
         </div>
       </div>
-    </Dialog>
+    </div>
   );
 };
 
