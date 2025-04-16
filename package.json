@@ -463,7 +463,6 @@
     "postcss-font-variant": "^5.0.0",
     "postcss-gap-properties": "^3.0.5",
     "postcss-image-set-function": "^4.0.7",
-    "postcss-import": "^15.1.0",
     "postcss-initial": "^4.0.1",
     "postcss-js": "^4.0.1",
     "postcss-lab-function": "^4.2.1",
@@ -473,7 +472,6 @@
     "postcss-media-minmax": "^5.0.0",
     "postcss-minify-gradients": "^5.1.1",
     "postcss-minify-params": "^5.1.4",
-    "postcss-nested": "^6.2.0",
     "postcss-nesting": "^10.2.0",
     "postcss-normalize": "^10.0.1",
     "postcss-normalize-positions": "^5.1.1",
@@ -722,8 +720,11 @@
   "homepage": "https://github.com/MatthiasTerpstra221/MyApp#readme",
   "description": "",
   "devDependencies": {
-    "autoprefixer": "10.4.21",
-    "postcss": "8.5.3",
-    "tailwindcss": "4.1.4"
+    "@tailwindcss/postcss": "4.1.4",
+    "autoprefixer": "10.4.16",
+    "postcss": "8.4.31",
+    "postcss-import": "16.1.0",
+    "postcss-nested": "6.0.1",
+    "tailwindcss": "3.3.5"
   }
 }
