@@ -103,7 +103,7 @@ export const Header = () => {
 
         {/* Expertise Badges Section */}
         <div className="flex flex-wrap justify-center gap-4 mb-8">
-          {['Marketing Hub', 'Sales Hub', 'Service Hub', 'CMS Hub', 'Operations Hub'].map(hub => (
+          {['Marketing Hub', 'Sales Hub', 'Service Hub', 'Content Hub', 'Operations Hub'].map(hub => (
             <div 
               key={hub} 
               className="px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-800 flex items-center"
