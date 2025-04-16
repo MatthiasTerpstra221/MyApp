@@ -703,8 +703,12 @@
     "build": "react-scripts build"
   },
   "overrides": {
-    "typescript": "^4.9.5",
-    "string-width-cjs": "npm:string-width@^4.2.3"
+    "typescript": "^4.9.5"
+  },
+  "resolutions": {
+    "string-width": "^4.2.3",
+    "strip-ansi": "^6.0.1",
+    "wrap-ansi": "^7.0.0"
   },
   "repository": {
     "type": "git",
