@@ -1,11 +1,9 @@
 {
   "version": 2,
-  "buildCommand": "npx npm@8 install && npm run build",
-  "installCommand": "npx npm@8 install",
-  "outputDirectory": "build",
-  "framework": "create-react-app",
+  "buildCommand": null,
+  "installCommand": null,
+  "outputDirectory": "static-build",
   "rewrites": [
-    { "source": "/fallback.html", "destination": "/fallback.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
