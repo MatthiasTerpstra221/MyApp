@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Header from './Header';
 import { SelectionInterface } from './SelectionInterface';
 import { ResultsDisplay } from './ResultsDisplay';
@@ -15,6 +15,20 @@ const Calculator = () => {  // Changed to const declaration
   const [showModal, setShowModal] = useState(false);
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [modalError, setModalError] = useState(false);
+
+  // Function to handle modal errors and provide recovery
+  const handleModalError = useCallback(() => {
+    console.error('Modal encountered an error');
+    setModalError(true);
+    // Close the problematic modal
+    setShowModal(false);
+  }, []);
+
+  // Recovery function to reset modal error state
+  const resetModalError = useCallback(() => {
+    setModalError(false);
+  }, []);
 
   const handleHubSelection = (hub) => {
     if (selectedHubs.includes(hub)) {
@@ -194,42 +208,147 @@ const Calculator = () => {  // Changed to const declaration
   };
 
   const handleCalculatePrice = () => {
-    if (selectedHubs.length === 0 || 
-        Object.keys(selectedTiers).length === 0 || 
-        Object.keys(selectedModels).length === 0) {
-      alert('Please select at least one hub, its tier, and service model.');
-      return;
+    try {
+      // Reset error state when starting fresh
+      setModalError(false);
+      
+      if (selectedHubs.length === 0 || 
+          Object.keys(selectedTiers).length === 0 || 
+          Object.keys(selectedModels).length === 0) {
+        alert('Please select at least one hub, its tier, and service model.');
+        return;
+      }
+
+      const packages = selectedHubs.map(hub => {
+        const tier = selectedTiers[hub];
+        const model = selectedModels[hub];
+        if (!tier || !model) return null;
+
+        const hours = calculatePackageHours(hub, tier, model);
+        const price = calculatePackagePrice(hub, tier, model);
+        const packageKey = generatePackageKey(hub, tier, model);
+
+        return {
+          hub,
+          tier,
+          model,
+          hours,
+          price,
+          packageKey,
+          scopeSummary: getScopeSummary(hub, tier, model)
+        };
+      }).filter(pkg => pkg !== null);
+
+      setSelectedPackages(packages);
+      
+      // Instead of just setting showModal to true, we'll create a safety timeout
+      // that will show results directly if the modal doesn't appear within 5 seconds
+      setShowModal(true);
+      
+      // Set a safety timeout that will bypass the modal if it causes problems
+      const safetyTimer = setTimeout(() => {
+        // If the modal is still showing but we haven't gotten to results yet, 
+        // we might be stuck in a white screen situation
+        if (showModal && !formSubmitted && !showResults) {
+          console.warn('Safety timeout triggered - modal may be stuck');
+          handleModalError();
+          // Skip directly to results as a fallback
+          setFormSubmitted(true);
+          setShowResults(true);
+        }
+      }, 5000);
+      
+      // Store the timer ID so we can clear it if the modal works normally
+      window.safetyTimer = safetyTimer;
+      
+    } catch (error) {
+      console.error('Error in handleCalculatePrice:', error);
+      // If any error occurs, show results directly
+      setModalError(true);
+      setFormSubmitted(true);
+      setShowResults(true);
     }
-
-    const packages = selectedHubs.map(hub => {
-      const tier = selectedTiers[hub];
-      const model = selectedModels[hub];
-      if (!tier || !model) return null;
-
-      const hours = calculatePackageHours(hub, tier, model);
-      const price = calculatePackagePrice(hub, tier, model);
-      const packageKey = generatePackageKey(hub, tier, model);
-
-      return {
-        hub,
-        tier,
-        model,
-        hours,
-        price,
-        packageKey,
-        scopeSummary: getScopeSummary(hub, tier, model)
-      };
-    }).filter(pkg => pkg !== null);
-
-    setSelectedPackages(packages);
-    setShowModal(true);
   };
 
   const handleFormSuccess = () => {
     console.log("Form success called, showing results");
+    // Clear the safety timer since we've successfully submitted
+    if (window.safetyTimer) {
+      clearTimeout(window.safetyTimer);
+    }
+    
     setShowModal(false);
     setFormSubmitted(true);
     setShowResults(true);
+    setModalError(false);
+  };
+
+  // Direct link fallback for users who might experience white screen
+  const handleDirectLinkFallback = () => {
+    // Create the HubSpot form URL with packages as query parameters
+    const packageKeys = selectedPackages.map(pkg => {
+      const hub = pkg.hub.toLowerCase().replace(/\s+/g, '_');
+      const tier = pkg.tier.toLowerCase();
+      const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
+      
+      let modelSuffix = '';
+      if (model.includes('yourself')) modelSuffix = 'diy';
+      else if (model.includes('with_me')) modelSuffix = 'dwme';
+      else if (model.includes('for_me')) modelSuffix = 'difme';
+      
+      return `${hub}_${tier}_${modelSuffix}`;
+    }).join(';');
+    
+    // Open HubSpot form in a new tab
+    const url = `https://info.leapforce.nl/hubspot-onboarding-quote?packages=${encodeURIComponent(packageKeys)}`;
+    window.open(url, '_blank');
+    
+    // Show results directly in current page
+    setFormSubmitted(true);
+    setShowResults(true);
+    setModalError(false);
+    
+    // Close modal if it's open
+    setShowModal(false);
+  };
+
+  // If we had an error with the modal, show the fallback UI with direct link option
+  const renderModalErrorFallback = () => {
+    if (!modalError) return null;
+    
+    return (
+      <div className="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-lg shadow-sm">
+        <div className="flex items-start">
+          <div className="flex-shrink-0">
+            <svg className="h-5 w-5 text-orange-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-orange-800">We noticed an issue with the HubSpot form</h3>
+            <div className="mt-2 text-sm text-orange-700">
+              <p>
+                You can continue to view your package details below, or use our direct link option to submit your information.
+              </p>
+              <div className="mt-3">
+                <button
+                  onClick={handleDirectLinkFallback}
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-orange-700 bg-orange-100 hover:bg-orange-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                >
+                  Open Direct Link Instead
+                </button>
+                <button
+                  onClick={resetModalError}
+                  className="ml-3 inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -255,24 +374,30 @@ const Calculator = () => {  // Changed to const declaration
               Calculate My Price
             </button>
           </div>
+          
+          {/* Modal error fallback UI */}
+          {renderModalErrorFallback()}
         </div>
 
         <AboutSection />
 
         {/* Results section that appears after form submission */}
-        {formSubmitted && showResults && (
+        {(formSubmitted || modalError) && showResults && (
           <div className="mt-10 animate-fadeIn">
             <ResultsDisplay packages={selectedPackages} />
           </div>
         )}
 
         {/* HubSpot Form Modal */}
-        <HubSpotFormModal
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
-          onSuccess={handleFormSuccess}
-          selectedPackages={selectedPackages}
-        />
+        {!modalError && (
+          <HubSpotFormModal
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+            onSuccess={handleFormSuccess}
+            onError={handleModalError}
+            selectedPackages={selectedPackages}
+          />
+        )}
 
         <Footer />
       </div>
