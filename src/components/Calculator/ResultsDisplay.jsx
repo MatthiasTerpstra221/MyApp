@@ -221,7 +221,7 @@ export function ResultsDisplay({ selectedPackages }) {
       {/* Action Buttons */}
       <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
         <a
-          href="https://meetings.hubspot.com/matthias-terpstra/leapforce-x-hubspot-onboarding-alignment"
+          href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center px-6 py-3 

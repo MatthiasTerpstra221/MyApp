@@ -16,7 +16,7 @@ export const Footer = () => {
           </div>
           <div className="mt-8 flex flex-shrink-0 lg:mt-0 lg:ml-8">
             <a
-              href="https://calendly.com/leapforce/hubspot-onboarding-call"
+              href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-md border border-transparent bg-white px-5 py-3 text-base font-medium text-orange-600 shadow-sm hover:bg-orange-50"
