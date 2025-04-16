@@ -4,11 +4,6 @@
   "installCommand": "npx npm@8 install",
   "outputDirectory": "build",
   "framework": "create-react-app",
-  "routes": [
-    { "src": "/fallback.html", "dest": "/fallback.html" },
-    { "handle": "filesystem" },
-    { "src": "/.*", "status": 404, "dest": "/fallback.html" }
-  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
