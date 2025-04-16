@@ -13,49 +13,37 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>HubSpot Onboarding Calculator | Leapforce</title>
     
-    <!-- Minimal error handling and fallback -->
-    <script>
-      // Define direct fallback URL to avoid path issues
-      var fallbackUrl = window.location.origin + "/fallback.html";
-      console.log("Fallback URL:", fallbackUrl);
-      
-      // Redirect to fallback page if nothing loads within 3 seconds
-      setTimeout(function() {
-        if (!window.appLoaded) {
-          console.error("App failed to initialize within 3 seconds, redirecting to fallback page");
-          window.location.href = fallbackUrl;
-        }
-      }, 3000);
-
-      // Global error handler
-      window.onerror = function(message, source, lineno, colno, error) {
-        console.error('Caught error:', message, source, error);
-        if (document.getElementById('loading-spinner')) {
-          document.getElementById('loading-spinner').style.display = 'none';
-        }
-        if (document.getElementById('error-message')) {
-          document.getElementById('error-message').style.display = 'block';
-        }
-        return false;
-      };
-    </script>
+    <!-- Preload fallback -->
+    <link rel="preload" href="fallback.html" as="document">
     
     <style>
-      #root-loading {
+      body, html {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+      }
+      #app-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      #loading-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        min-height: 100vh;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        height: 100vh;
         text-align: center;
         padding: 20px;
+        box-sizing: border-box;
       }
-      .loading-title {
+      .title {
         color: #ea580c;
-        margin-bottom: 20px;
+        font-size: 24px;
+        margin-bottom: 16px;
       }
-      #loading-spinner {
+      .spinner {
         width: 40px;
         height: 40px;
         border: 5px solid #f3f4f6;
@@ -64,63 +52,75 @@
         animation: spin 1s linear infinite;
         margin: 20px 0;
       }
-      #error-message {
-        display: none;
-        color: #ef4444;
-        margin: 20px 0;
-      }
       @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
-      .fallback-button {
+      .button {
         display: inline-block;
         background-color: #ea580c;
         color: white;
         padding: 10px 20px;
-        text-decoration: none;
         border-radius: 4px;
+        text-decoration: none;
         font-weight: 500;
+        margin-top: 20px;
       }
     </style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    
-    <!-- Loading state while React initializes -->
-    <div id="root-loading">
-      <h1 class="loading-title">HubSpot Onboarding Calculator</h1>
-      <p>Loading the calculator...</p>
-      <div id="loading-spinner"></div>
-      <div id="error-message">
-        <p>There was an error loading the calculator.</p>
-        <p>Please try our alternative page:</p>
-        <a href="javascript:void(0)" onclick="window.location.href=fallbackUrl" class="fallback-button">Go to Simplified Version</a>
+    <div id="app-container">
+      <!-- Initial loading state that's shown immediately -->
+      <div id="loading-container">
+        <h1 class="title">HubSpot Onboarding Calculator</h1>
+        <p>Loading the calculator...</p>
+        <div class="spinner"></div>
+        <p id="redirect-message" style="display: none; color: #ef4444;">
+          We're having trouble loading the calculator.<br>
+          Please use our simplified version instead:
+        </p>
+        <a id="fallback-button" href="fallback.html" class="button" style="display: none;">
+          Go to Simplified Version
+        </a>
       </div>
+      
+      <!-- React app will be mounted here -->
+      <div id="root"></div>
     </div>
     
-    <div id="root"></div>
-    
+    <!-- Inline script to handle loading -->
     <script>
-      // Mark the app as loaded when React initializes
+      console.log("Index page loading...");
+      
+      // Show fallback button after 3 seconds
+      setTimeout(function() {
+        console.log("Showing fallback button");
+        var redirectMessage = document.getElementById('redirect-message');
+        var fallbackButton = document.getElementById('fallback-button');
+        
+        if (redirectMessage) redirectMessage.style.display = 'block';
+        if (fallbackButton) fallbackButton.style.display = 'inline-block';
+        
+        // Auto-redirect after 5 more seconds
+        setTimeout(function() {
+          console.log("Auto-redirecting to fallback");
+          window.location.href = 'fallback.html';
+        }, 5000);
+      }, 3000);
+      
+      // Signal for React
       window.appLoaded = false;
       
-      // Listen for the root div being populated (a sign React has started)
-      const observer = new MutationObserver(function(mutations) {
-        for (const mutation of mutations) {
-          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-            window.appLoaded = true;
-            console.log("Root element populated, hiding loading screen");
-            // Hide the loading screen
-            document.getElementById('root-loading').style.display = 'none';
-            observer.disconnect();
-            break;
-          }
-        }
-      });
-      
-      // Start observing the root element for child additions
-      observer.observe(document.getElementById('root'), { childList: true, subtree: true });
+      // When app is loaded, hide loading container
+      function hideLoading() {
+        console.log("Hiding loading screen");
+        var loadingContainer = document.getElementById('loading-container');
+        if (loadingContainer) loadingContainer.style.display = 'none';
+        window.appLoaded = true;
+      }
     </script>
+    
+    <!-- Include the React app bundle -->
+    %PUBLIC_URL%/static/js/main.*.js
   </body>
 </html>
