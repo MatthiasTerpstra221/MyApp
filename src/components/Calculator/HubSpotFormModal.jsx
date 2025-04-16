@@ -1,9 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog } from '@headlessui/react';
 
 const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+
+  // Load HubSpot script dynamically
   useEffect(() => {
-    if (isOpen) {
+    if (!window.hbspt && !scriptLoaded) {
+      const script = document.createElement('script');
+      script.src = 'https://js.hsforms.net/forms/v2.js';
+      script.async = true;
+      script.onload = () => {
+        console.log('HubSpot script loaded successfully');
+        setScriptLoaded(true);
+      };
+      script.onerror = () => {
+        console.error('Failed to load HubSpot script');
+      };
+      document.head.appendChild(script);
+    } else if (window.hbspt) {
+      setScriptLoaded(true);
+    }
+  }, [scriptLoaded]);
+
+  // Create form when modal is opened and script is loaded
+  useEffect(() => {
+    if (isOpen && (window.hbspt || scriptLoaded)) {
       // Clear any existing form
       const formContainer = document.getElementById('hubspotForm');
       if (formContainer) {
@@ -26,32 +48,35 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
         return `${hub}_${tier}_${modelSuffix}`;
       }).join(';'); // Use semicolon as separator instead of comma
 
-      // Create the form directly
-      if (window.hbspt) {
-        window.hbspt.forms.create({
-          portalId: "7208949",
-          formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
-          region: "na1",
-          target: '#hubspotForm',
-          formData: {
-            hubspot_standard_onboarding_key: packageKeys
-          },
-          onFormSubmit: function($form, data) {
-            console.log('Form submitted with data:', data);
-          },
-          onFormSubmitted: function() {
-            console.log('Form submitted successfully');
-            setTimeout(() => {
-              if (onSuccess) onSuccess();
-              onClose();
-            }, 2000);
-          }
-        });
-      } else {
-        console.error("HubSpot forms script not loaded properly");
-      }
+      // Small delay to ensure script is fully initialized
+      setTimeout(() => {
+        if (window.hbspt) {
+          console.log('Creating HubSpot form with package keys:', packageKeys);
+          window.hbspt.forms.create({
+            portalId: "7208949",
+            formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
+            region: "na1",
+            target: '#hubspotForm',
+            formData: {
+              hubspot_standard_onboarding_key: packageKeys
+            },
+            onFormSubmit: function($form, data) {
+              console.log('Form submitted with data:', data);
+            },
+            onFormSubmitted: function() {
+              console.log('Form submitted successfully');
+              setTimeout(() => {
+                if (onSuccess) onSuccess();
+                onClose();
+              }, 2000);
+            }
+          });
+        } else {
+          console.error("HubSpot forms script not loaded properly or not available");
+        }
+      }, 500);
     }
-  }, [isOpen, selectedPackages, onClose, onSuccess]);
+  }, [isOpen, selectedPackages, onClose, onSuccess, scriptLoaded]);
 
   return (
     <Dialog
@@ -88,6 +113,11 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
           </Dialog.Title>
 
           <div id="hubspotForm" className="hubspot-form-container">
+            {!scriptLoaded && (
+              <div className="text-center py-4">
+                <p>Loading form...</p>
+              </div>
+            )}
             {/* HubSpot form will be injected here */}
           </div>
         </div>
