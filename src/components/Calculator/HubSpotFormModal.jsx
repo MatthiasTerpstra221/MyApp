@@ -6,6 +6,7 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
   const [formLoading, setFormLoading] = useState(true);
   const [formError, setFormError] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loadAttempts, setLoadAttempts] = useState(0);
 
   // If not open, don't render
   if (!isOpen) return null;
@@ -69,17 +70,17 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
   useEffect(() => {
     if (!isOpen || !scriptLoaded || !formContainerRef.current) return;
     
-    console.log('Script loaded, creating form');
     // Clear any existing content
     formContainerRef.current.innerHTML = '';
     
     try {
+      console.log('Script loaded, creating form');
       createForm();
     } catch (error) {
       console.error('Error creating form:', error);
       setFormError(true);
     }
-  }, [isOpen, scriptLoaded, formContainerRef.current]);
+  }, [isOpen, scriptLoaded]);
 
   // Create the HubSpot form
   const createForm = () => {
@@ -107,39 +108,69 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
     console.log('Creating form with package keys:', packageKeys);
 
     // Create the form
-    window.hbspt.forms.create({
-      portalId: "7208949",
-      formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
-      region: "na1",
-      target: "#hubspotFormContainer",
-      formData: {
-        hubspot_standard_onboarding_key: packageKeys
-      },
-      onFormReady: function($form) {
-        console.log('Form loaded successfully');
-        setFormLoading(false);
-      },
-      onFormSubmit: function($form, data) {
-        console.log("Form submitted with data:", data);
-      },
-      onFormSubmitted: function() {
-        console.log("Form successfully submitted");
-        setSubmitted(true);
-        
-        // Show the results after a short delay
-        setTimeout(() => {
-          if (onSuccess) {
-            onSuccess();
+    try {
+      window.hbspt.forms.create({
+        portalId: "7208949",
+        formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
+        region: "na1",
+        target: "#hubspotFormContainer",
+        formData: {
+          hubspot_standard_onboarding_key: packageKeys
+        },
+        inlineMessage: "Thank you! Your submission has been received.",
+        onFormReady: function($form, ctx) {
+          console.log('Form loaded successfully');
+          setFormLoading(false);
+          
+          // Prevent form from redirecting by handling the submit event
+          if ($form) {
+            // Add custom event handler for form submission
+            $form.find('form').on('submit', function(e) {
+              // Don't prevent default - let HubSpot handle the submission
+              // But set a flag to track that this was triggered
+              window.hsFormSubmitted = true;
+              console.log('Form submit detected via jQuery event');
+            });
           }
-          onClose();
-        }, 1500);
-      },
-      onFormError: function(error) {
-        console.error('Form error:', error);
-        setFormError(true);
-        setFormLoading(false);
+        },
+        onFormSubmit: function($form, data) {
+          console.log("Form submitted with data:", data);
+          // Ensure the package keys are included
+          if (!data.hubspot_standard_onboarding_key) {
+            data.hubspot_standard_onboarding_key = packageKeys;
+          }
+          return true; // Allow submission to continue
+        },
+        onFormSubmitted: function($form) {
+          console.log("Form successfully submitted");
+          setSubmitted(true);
+          
+          // Show the results after a short delay
+          setTimeout(() => {
+            if (onSuccess) {
+              onSuccess();
+            }
+            onClose();
+          }, 1500);
+        },
+        onFormError: function(error) {
+          console.error('Form error:', error);
+          setFormError(true);
+          setFormLoading(false);
+        },
+        cssRequired: '.hs-form-field { margin-bottom: 1rem; } .hs-form select, .hs-form input[type=text], .hs-form input[type=email], .hs-form input[type=tel] { width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; } .hs-form-required { color: #ef4444; } .hs-button.primary { background-color: #ea580c; color: white; padding: 0.5rem 1rem; border: none; border-radius: 0.375rem; cursor: pointer; } .hs-button.primary:hover { background-color: #c2410c; }'
+      });
+    } catch (e) {
+      console.error('Error during form creation:', e);
+      setFormError(true);
+      
+      // Try again if we haven't exceeded our attempts
+      if (loadAttempts < 2) {
+        console.log(`Retrying form creation (attempt ${loadAttempts + 1})...`);
+        setLoadAttempts(loadAttempts + 1);
+        setTimeout(createForm, 1000);
       }
-    });
+    }
 
     // Add global event listener for form submit - extra safety measure
     const originalSubmit = window.XMLHttpRequest.prototype.send;
@@ -148,7 +179,7 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
       if (this._url && this._url.includes('hubspot') && this._url.includes('forms')) {
         this.addEventListener('load', function() {
           if (this.status >= 200 && this.status < 300) {
-            console.log("Detected successful form submission");
+            console.log("Detected successful form submission via XHR");
             setSubmitted(true);
             
             // Show the results after a short delay
@@ -167,8 +198,22 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
   
   // Handler for opening the form in a new tab
   const handleOpenInNewTab = () => {
-    // Generate a URL to a dedicated HubSpot form page
-    const url = 'https://info.leapforce.nl/hubspot-onboarding-quote';
+    // Create a direct URL with the package keys appended as query parameters
+    const packageKeys = selectedPackages.map(pkg => {
+      const hub = pkg.hub.toLowerCase().replace(/\s+/g, '_');
+      const tier = pkg.tier.toLowerCase();
+      const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
+      
+      let modelSuffix = '';
+      if (model.includes('yourself')) modelSuffix = 'diy';
+      else if (model.includes('with_me')) modelSuffix = 'dwme';
+      else if (model.includes('for_me')) modelSuffix = 'difme';
+      
+      return `${hub}_${tier}_${modelSuffix}`;
+    }).join(';');
+    
+    // Build URL with package keys
+    const url = `https://info.leapforce.nl/hubspot-onboarding-quote?packages=${encodeURIComponent(packageKeys)}`;
     window.open(url, '_blank');
     
     // Close the modal and proceed to results
@@ -194,8 +239,8 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
   }, [isOpen]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
-      <div className="relative bg-white rounded-lg max-w-md w-full p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 overflow-y-auto sm:overflow-hidden">
+      <div className="relative bg-white rounded-lg max-w-md w-full p-6 shadow-xl max-h-[90vh] overflow-y-auto">
         {/* Close button */}
         <button 
           onClick={onClose}
