@@ -1,1 +1,699 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="./favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="HubSpot Onboarding Calculator by Leapforce - Calculate your HubSpot onboarding package"/><link rel="apple-touch-icon" href="./logo192.png"/><link rel="manifest" href="./manifest.json"/><title>HubSpot Onboarding Calculator | Leapforce</title><link rel="preload" href="fallback.html" as="document"><style>body,html{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}#app-container{display:flex;flex-direction:column;min-height:100vh}#loading-container{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;padding:20px;box-sizing:border-box}.title{color:#ea580c;font-size:24px;margin-bottom:16px}.spinner{width:40px;height:40px;border:5px solid #f3f4f6;border-top:5px solid #ea580c;border-radius:50%;animation:spin 1s linear infinite;margin:20px 0}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.button{display:inline-block;background-color:#ea580c;color:#fff;padding:10px 20px;border-radius:4px;text-decoration:none;font-weight:500;margin-top:20px}</style><script defer="defer" src="./static/js/main.bc4cd325.js"></script><link href="./static/css/main.942d8b64.css" rel="stylesheet"></head><body><div id="app-container"><div id="loading-container"><h1 class="title">HubSpot Onboarding Calculator</h1><p>Loading the calculator...</p><div class="spinner"></div><p id="redirect-message" style="display:none;color:#ef4444">We're having trouble loading the calculator.<br>Please use our simplified version instead:</p><a id="fallback-button" href="fallback.html" class="button" style="display:none">Go to Simplified Version</a></div><div id="root"></div></div><script>function hideLoading(){console.log("Hiding loading screen");var e=document.getElementById("loading-container");e&&(e.style.display="none"),window.appLoaded=!0}console.log("Index page loading..."),setTimeout((function(){console.log("Showing fallback button");var e=document.getElementById("redirect-message"),o=document.getElementById("fallback-button");e&&(e.style.display="block"),o&&(o.style.display="inline-block"),setTimeout((function(){console.log("Auto-redirecting to fallback"),window.location.href="fallback.html"}),5e3)}),3e3),window.appLoaded=!1</script>./static/js/main.*.js</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="HubSpot Onboarding Calculator by Leapforce - Calculate your HubSpot onboarding package">
+  <link rel="icon" href="./favicon.ico">
+  <title>HubSpot Onboarding Calculator | Leapforce</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f3f4f6;
+      color: #374151;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      color: #ea580c;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .card {
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #ea580c;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      text-decoration: none;
+      font-weight: 500;
+      text-align: center;
+      margin: 0 auto;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .btn:hover {
+      background-color: #c2410c;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .mt-4 {
+      margin-top: 1rem;
+    }
+    .mt-8 {
+      margin-top: 2rem;
+    }
+    /* Calculator styles */
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .step-indicator::before {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: #d1d5db;
+      z-index: 1;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #d1d5db;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .step.active .step-number {
+      background-color: #ea580c;
+      color: white;
+    }
+    .step.completed .step-number {
+      background-color: #059669;
+      color: white;
+    }
+    .step-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6b7280;
+    }
+    .step.active .step-title {
+      color: #ea580c;
+      font-weight: 600;
+    }
+    .step.completed .step-title {
+      color: #059669;
+    }
+    .calculator-section {
+      display: none;
+    }
+    .calculator-section.active {
+      display: block;
+    }
+    .selection-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .selection-card {
+      border: 2px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .selection-card:hover {
+      border-color: #9ca3af;
+    }
+    .selection-card.selected {
+      border-color: #ea580c;
+      background-color: rgba(234, 88, 12, 0.05);
+    }
+    .selection-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .selection-description {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    .prev-btn {
+      background-color: #6b7280;
+    }
+    .prev-btn:hover {
+      background-color: #4b5563;
+    }
+    .hidden {
+      display: none;
+    }
+    /* Results styles */
+    .results-container {
+      margin-top: 2rem;
+    }
+    .results-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .results-item:last-child {
+      border-bottom: none;
+    }
+    .results-label {
+      font-weight: 500;
+    }
+    .results-value {
+      font-weight: 600;
+    }
+    .total-price {
+      font-size: 1.25rem;
+      color: #ea580c;
+      font-weight: 700;
+    }
+    .mb-4 {
+      margin-bottom: 1.5rem;
+    }
+    /* HubSpot form styling */
+    .hubspot-form-container {
+      margin-top: 2rem;
+      display: none;
+    }
+    .hubspot-form-container.active {
+      display: block;
+    }
+    .hs-button.primary {
+      background-color: #ea580c !important;
+      border: none !important;
+      color: white !important;
+      padding: 0.75rem 1.5rem !important;
+      border-radius: 0.375rem !important;
+      font-weight: 500 !important;
+      font-size: 1rem !important;
+      cursor: pointer !important;
+    }
+    .hs-button.primary:hover {
+      background-color: #c2410c !important;
+    }
+    .hs-form-field label {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .hs-form-field input, .hs-form-field select, .hs-form-field textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      font-size: 1rem;
+    }
+    .hs-error-msgs {
+      color: #ef4444;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      padding-left: 0;
+      list-style: none;
+    }
+  </style>
+  <!-- HubSpot form script -->
+  <script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/embed/v2.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>HubSpot Onboarding Calculator</h1>
+      <p>Calculate your custom HubSpot onboarding package</p>
+    </div>
+    
+    <div class="card">
+      <h2>Calculate Your Custom Quote</h2>
+      
+      <!-- Step Indicator -->
+      <div class="step-indicator">
+        <div class="step active" id="step-1">
+          <div class="step-number">1</div>
+          <div class="step-title">Select Hubs</div>
+        </div>
+        <div class="step" id="step-2">
+          <div class="step-number">2</div>
+          <div class="step-title">Choose Tiers</div>
+        </div>
+        <div class="step" id="step-3">
+          <div class="step-number">3</div>
+          <div class="step-title">Service Model</div>
+        </div>
+        <div class="step" id="step-4">
+          <div class="step-number">4</div>
+          <div class="step-title">Your Quote</div>
+        </div>
+      </div>
+      
+      <!-- Step 1: Hub Selection -->
+      <div class="calculator-section active" id="section-1">
+        <h3>Step 1: Select the HubSpot Hubs you need</h3>
+        <p>Choose one or more hubs for your onboarding package:</p>
+        
+        <div class="selection-grid">
+          <div class="selection-card" data-value="marketing" onclick="toggleSelection(this, 'hubs')">
+            <div class="selection-title">Marketing Hub</div>
+            <div class="selection-description">Email marketing, landing pages, automation</div>
+          </div>
+          <div class="selection-card" data-value="sales" onclick="toggleSelection(this, 'hubs')">
+            <div class="selection-title">Sales Hub</div>
+            <div class="selection-description">Pipeline management, email sequences, deals</div>
+          </div>
+          <div class="selection-card" data-value="service" onclick="toggleSelection(this, 'hubs')">
+            <div class="selection-title">Service Hub</div>
+            <div class="selection-description">Ticketing, knowledge base, customer service</div>
+          </div>
+        </div>
+        
+        <div class="navigation-buttons">
+          <div></div> <!-- Empty div for spacing -->
+          <button class="btn" onclick="nextStep()">Continue</button>
+        </div>
+      </div>
+      
+      <!-- Step 2: Tier Selection -->
+      <div class="calculator-section" id="section-2">
+        <h3>Step 2: Select tiers for each Hub</h3>
+        <p>Choose the appropriate tier for each hub you selected:</p>
+        
+        <div id="tier-selection-container">
+          <!-- Dynamically filled based on hub selection -->
+        </div>
+        
+        <div class="navigation-buttons">
+          <button class="btn prev-btn" onclick="previousStep()">Back</button>
+          <button class="btn" onclick="nextStep()">Continue</button>
+        </div>
+      </div>
+      
+      <!-- Step 3: Service Model Selection -->
+      <div class="calculator-section" id="section-3">
+        <h3>Step 3: Choose your Service Model</h3>
+        <p>Select how you'd like to implement with our team:</p>
+        
+        <div class="selection-grid">
+          <div class="selection-card" data-value="diy" onclick="selectServiceModel(this)">
+            <div class="selection-title">Do It Yourself</div>
+            <div class="selection-description">We guide you, you implement</div>
+          </div>
+          <div class="selection-card" data-value="diwm" onclick="selectServiceModel(this)">
+            <div class="selection-title">Do It With Me</div>
+            <div class="selection-description">We collaborate on implementation</div>
+          </div>
+          <div class="selection-card" data-value="difm" onclick="selectServiceModel(this)">
+            <div class="selection-title">Do It For Me</div>
+            <div class="selection-description">We handle the full implementation</div>
+          </div>
+        </div>
+        
+        <div class="navigation-buttons">
+          <button class="btn prev-btn" onclick="previousStep()">Back</button>
+          <button class="btn" onclick="nextStep()">Get Your Quote</button>
+        </div>
+      </div>
+      
+      <!-- Step 4: Results -->
+      <div class="calculator-section" id="section-4">
+        <h3>Your Custom Quote</h3>
+        <p>Based on your selections, here's your estimated package:</p>
+        
+        <div class="results-container" id="results-summary">
+          <!-- Dynamically filled with results -->
+        </div>
+        
+        <div class="navigation-buttons">
+          <button class="btn prev-btn" onclick="previousStep()">Back</button>
+          <button class="btn" onclick="showForm()">Proceed to Form</button>
+        </div>
+      </div>
+      
+      <!-- HubSpot form container -->
+      <div id="hubspot-form-container" class="hubspot-form-container"></div>
+    </div>
+    
+    <div class="card">
+      <h2>How Our Onboarding Works</h2>
+      <p>We offer three service models for HubSpot onboarding:</p>
+      <ul>
+        <li><strong>Do It Yourself</strong> - We guide you, you implement</li>
+        <li><strong>Do It With Me</strong> - We collaborate on implementation</li>
+        <li><strong>Do It For Me</strong> - We handle the full implementation</li>
+      </ul>
+      <p>For each hub (Marketing, Sales, Service) and tier (Starter, Professional), we offer packages with different hours and pricing.</p>
+    </div>
+    
+    <div class="text-center mt-4">
+      <p>Having trouble? Contact us at <a href="mailto:info@leapforce.nl" style="color: #ea580c; text-decoration: underline;">info@leapforce.nl</a></p>
+    </div>
+  </div>
+
+  <!-- Calculator logic -->
+  <script>
+    // State management
+    const state = {
+      currentStep: 1,
+      hubs: [],
+      tiers: {},
+      serviceModel: '',
+      pricing: {
+        marketing: {
+          starter: { diy: 499, diwm: 999, difm: 1999, hours: { diy: 4, diwm: 8, difm: 16 } },
+          professional: { diy: 999, diwm: 1999, difm: 3999, hours: { diy: 8, diwm: 16, difm: 32 } }
+        },
+        sales: {
+          starter: { diy: 499, diwm: 999, difm: 1999, hours: { diy: 4, diwm: 8, difm: 16 } },
+          professional: { diy: 999, diwm: 1999, difm: 3999, hours: { diy: 8, diwm: 16, difm: 32 } }
+        },
+        service: {
+          starter: { diy: 499, diwm: 999, difm: 1999, hours: { diy: 4, diwm: 8, difm: 16 } },
+          professional: { diy: 999, diwm: 1999, difm: 3999, hours: { diy: 8, diwm: 16, difm: 32 } }
+        }
+      },
+      packageKeys: {
+        marketing: {
+          starter: { diy: 'ms_diy', diwm: 'ms_diwm', difm: 'ms_difm' },
+          professional: { diy: 'mp_diy', diwm: 'mp_diwm', difm: 'mp_difm' }
+        },
+        sales: {
+          starter: { diy: 'ss_diy', diwm: 'ss_diwm', difm: 'ss_difm' },
+          professional: { diy: 'sp_diy', diwm: 'sp_diwm', difm: 'sp_difm' }
+        },
+        service: {
+          starter: { diy: 'sers_diy', diwm: 'sers_diwm', difm: 'sers_difm' },
+          professional: { diy: 'serp_diy', diwm: 'serp_diwm', difm: 'serp_difm' }
+        }
+      }
+    };
+    
+    // Toggle selection for hubs
+    function toggleSelection(element, type) {
+      if (type === 'hubs') {
+        const value = element.getAttribute('data-value');
+        element.classList.toggle('selected');
+        
+        if (element.classList.contains('selected')) {
+          if (!state.hubs.includes(value)) {
+            state.hubs.push(value);
+          }
+        } else {
+          state.hubs = state.hubs.filter(hub => hub !== value);
+          // Also remove any tier selection for this hub
+          delete state.tiers[value];
+        }
+      }
+    }
+    
+    // Select tier for a hub
+    function selectTier(hubName, tierValue) {
+      const elements = document.querySelectorAll(`[data-hub="${hubName}"]`);
+      elements.forEach(el => {
+        if (el.getAttribute('data-tier') === tierValue) {
+          el.classList.add('selected');
+          state.tiers[hubName] = tierValue;
+        } else {
+          el.classList.remove('selected');
+        }
+      });
+    }
+    
+    // Select service model
+    function selectServiceModel(element) {
+      const value = element.getAttribute('data-value');
+      const elements = document.querySelectorAll('#section-3 .selection-card');
+      
+      elements.forEach(el => {
+        el.classList.remove('selected');
+      });
+      
+      element.classList.add('selected');
+      state.serviceModel = value;
+    }
+    
+    // Navigate to next step
+    function nextStep() {
+      // Validation for each step
+      if (state.currentStep === 1 && state.hubs.length === 0) {
+        alert('Please select at least one hub to continue.');
+        return;
+      }
+      
+      if (state.currentStep === 2) {
+        // Check if all selected hubs have a tier selected
+        const allTiersSelected = state.hubs.every(hub => state.tiers[hub]);
+        if (!allTiersSelected) {
+          alert('Please select a tier for each hub to continue.');
+          return;
+        }
+      }
+      
+      if (state.currentStep === 3 && !state.serviceModel) {
+        alert('Please select a service model to continue.');
+        return;
+      }
+      
+      // Update UI for next step
+      if (state.currentStep < 4) {
+        document.getElementById(`section-${state.currentStep}`).classList.remove('active');
+        document.getElementById(`step-${state.currentStep}`).classList.remove('active');
+        document.getElementById(`step-${state.currentStep}`).classList.add('completed');
+        
+        state.currentStep++;
+        
+        document.getElementById(`section-${state.currentStep}`).classList.add('active');
+        document.getElementById(`step-${state.currentStep}`).classList.add('active');
+        
+        // If moving to step 2, update tier selections
+        if (state.currentStep === 2) {
+          updateTierSelections();
+        }
+        
+        // If moving to step 4, calculate and display results
+        if (state.currentStep === 4) {
+          calculateResults();
+        }
+      }
+    }
+    
+    // Navigate to previous step
+    function previousStep() {
+      if (state.currentStep > 1) {
+        document.getElementById(`section-${state.currentStep}`).classList.remove('active');
+        document.getElementById(`step-${state.currentStep}`).classList.remove('active');
+        
+        state.currentStep--;
+        
+        document.getElementById(`section-${state.currentStep}`).classList.add('active');
+        document.getElementById(`step-${state.currentStep}`).classList.add('active');
+        document.getElementById(`step-${state.currentStep}`).classList.remove('completed');
+      }
+    }
+    
+    // Update tier selection UI based on selected hubs
+    function updateTierSelections() {
+      const container = document.getElementById('tier-selection-container');
+      container.innerHTML = '';
+      
+      state.hubs.forEach(hub => {
+        const hubTitle = hub.charAt(0).toUpperCase() + hub.slice(1);
+        
+        const hubSection = document.createElement('div');
+        hubSection.className = 'mb-4';
+        hubSection.innerHTML = `
+          <h4>${hubTitle} Hub Tier</h4>
+          <div class="selection-grid">
+            <div class="selection-card ${state.tiers[hub] === 'starter' ? 'selected' : ''}" 
+                 data-hub="${hub}" data-tier="starter" 
+                 onclick="selectTier('${hub}', 'starter')">
+              <div class="selection-title">Starter</div>
+              <div class="selection-description">Basic features and functionality</div>
+            </div>
+            <div class="selection-card ${state.tiers[hub] === 'professional' ? 'selected' : ''}" 
+                 data-hub="${hub}" data-tier="professional" 
+                 onclick="selectTier('${hub}', 'professional')">
+              <div class="selection-title">Professional</div>
+              <div class="selection-description">Advanced features and automation</div>
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(hubSection);
+      });
+    }
+    
+    // Calculate price and hours based on selections
+    function calculateResults() {
+      let totalPrice = 0;
+      let totalHours = 0;
+      const selectedPackages = [];
+      
+      // Only calculate if service model is selected
+      if (state.serviceModel) {
+        state.hubs.forEach(hub => {
+          const tier = state.tiers[hub];
+          if (tier) {
+            const price = state.pricing[hub][tier][state.serviceModel];
+            const hours = state.pricing[hub][tier].hours[state.serviceModel];
+            const packageKey = state.packageKeys[hub][tier][state.serviceModel];
+            
+            totalPrice += price;
+            totalHours += hours;
+            selectedPackages.push(packageKey);
+          }
+        });
+      }
+      
+      // Store for form submission
+      state.totalPrice = totalPrice;
+      state.totalHours = totalHours;
+      state.selectedPackages = selectedPackages;
+      
+      // Update the UI
+      const resultsContainer = document.getElementById('results-summary');
+      resultsContainer.innerHTML = '';
+      
+      // Add selected hubs and tiers
+      state.hubs.forEach(hub => {
+        const tier = state.tiers[hub];
+        const hubTitle = hub.charAt(0).toUpperCase() + hub.slice(1);
+        const tierTitle = tier.charAt(0).toUpperCase() + tier.slice(1);
+        
+        const price = state.pricing[hub][tier][state.serviceModel];
+        const hours = state.pricing[hub][tier].hours[state.serviceModel];
+        
+        const resultItem = document.createElement('div');
+        resultItem.className = 'results-item';
+        resultItem.innerHTML = `
+          <div class="results-label">${hubTitle} Hub ${tierTitle}</div>
+          <div class="results-value">€${price} (${hours} hours)</div>
+        `;
+        
+        resultsContainer.appendChild(resultItem);
+      });
+      
+      // Add service model
+      const serviceModelTitle = {
+        'diy': 'Do It Yourself',
+        'diwm': 'Do It With Me',
+        'difm': 'Do It For Me'
+      }[state.serviceModel];
+      
+      const serviceModelItem = document.createElement('div');
+      serviceModelItem.className = 'results-item';
+      serviceModelItem.innerHTML = `
+        <div class="results-label">Service Model</div>
+        <div class="results-value">${serviceModelTitle}</div>
+      `;
+      resultsContainer.appendChild(serviceModelItem);
+      
+      // Add total hours
+      const hoursItem = document.createElement('div');
+      hoursItem.className = 'results-item';
+      hoursItem.innerHTML = `
+        <div class="results-label">Total Hours</div>
+        <div class="results-value">${totalHours} hours</div>
+      `;
+      resultsContainer.appendChild(hoursItem);
+      
+      // Add total price
+      const priceItem = document.createElement('div');
+      priceItem.className = 'results-item';
+      priceItem.innerHTML = `
+        <div class="results-label">Total Price</div>
+        <div class="results-value total-price">€${totalPrice}</div>
+      `;
+      resultsContainer.appendChild(priceItem);
+    }
+    
+    // Show HubSpot form with pre-populated data
+    function showForm() {
+      document.getElementById('section-4').classList.remove('active');
+      document.getElementById('hubspot-form-container').classList.add('active');
+      
+      // Create the HubSpot form with the selected package information
+      try {
+        if (window.hbspt) {
+          console.log("Creating HubSpot form with selected packages:", state.selectedPackages.join(','));
+          
+          hbspt.forms.create({
+            portalId: "7208949",
+            formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
+            region: "na1",
+            target: "#hubspot-form-container",
+            onFormReady: function($form) {
+              console.log("HubSpot form loaded successfully");
+              
+              // Customize submit button text
+              var submitButton = $form.find('.hs-button.primary');
+              if (submitButton.length) {
+                submitButton.val('Calculate My Price');
+              }
+              
+              // Set the hidden field for package keys
+              var packageKeysField = $form.find('input[name="hubspot_standard_onboarding_key"]');
+              if (packageKeysField.length) {
+                packageKeysField.val(state.selectedPackages.join(','));
+                console.log("Set package keys:", state.selectedPackages.join(','));
+              } else {
+                // Create hidden field if it doesn't exist
+                var hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = 'hubspot_standard_onboarding_key';
+                hiddenField.value = state.selectedPackages.join(',');
+                $form.append(hiddenField);
+                console.log("Created and set package keys:", state.selectedPackages.join(','));
+              }
+            }
+          });
+        } else {
+          console.error("HubSpot script not loaded");
+          document.getElementById('hubspot-form-container').innerHTML = 
+            '<div style="text-align: center; padding: 20px;">' +
+            '<p style="color: #ef4444;">We\'re having trouble loading the form.</p>' +
+            '<p>Please try the direct link instead:</p>' +
+            '<a href="https://share.hsforms.com/1TT_NNRvXTFSreef_Ga9WWQfm6sm" class="btn" target="_blank">Access HubSpot Form</a>' +
+            '</div>';
+        }
+      } catch (error) {
+        console.error("Error creating HubSpot form:", error);
+        document.getElementById('hubspot-form-container').innerHTML = 
+          '<div style="text-align: center; padding: 20px;">' +
+          '<p style="color: #ef4444;">We\'re having trouble loading the form.</p>' +
+          '<p>Please try the direct link instead:</p>' +
+          '<a href="https://share.hsforms.com/1TT_NNRvXTFSreef_Ga9WWQfm6sm" class="btn" target="_blank">Access HubSpot Form</a>' +
+          '</div>';
+      }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Calculator initialized');
+      // Log to console to verify the app is working
+      console.log('Calculator is ready');
+    });
+  </script>
+</body>
+</html>
