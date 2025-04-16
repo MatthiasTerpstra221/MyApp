@@ -1,4 +1,5 @@
 import React from 'react';
+import LeapforceButton from '../LeapforceButton';
 
 // Add named export
 export const Header = () => {
@@ -36,6 +37,9 @@ export const Header = () => {
               >
                 View HubSpot Profile
               </a>
+            </div>
+            <div className="hidden md:block">
+              <LeapforceButton />
             </div>
             <div className="flex-shrink-0">
               <img
@@ -114,6 +118,11 @@ export const Header = () => {
               {hub}
             </div>
           ))}
+        </div>
+
+        {/* Mobile View Button - Only visible on small screens */}
+        <div className="md:hidden flex justify-center mb-6">
+          <LeapforceButton />
         </div>
 
         {/* Separator Line */}
