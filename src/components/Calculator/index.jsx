@@ -1,64 +1,110 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import Header from './Header';
 import { SelectionInterface } from './SelectionInterface';
 import { ResultsDisplay } from './ResultsDisplay';
-import HubSpotFormModal from './HubSpotFormModal';
 import { AboutSection } from './AboutSection';
 import { Footer } from './Footer';
 
-// Rest of your Calculator component code remains the same...
-const Calculator = () => {  // Changed to const declaration
+const Calculator = () => {
   const [selectedHubs, setSelectedHubs] = useState([]);
   const [selectedTiers, setSelectedTiers] = useState({});
   const [selectedModels, setSelectedModels] = useState({});
   const [showResults, setShowResults] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [modalError, setModalError] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
+  const [formError, setFormError] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1); // Track user progress
+  
+  // References
+  const formContainerRef = useRef(null);
+  const resultsRef = useRef(null);
+  const selectionRef = useRef(null);
 
-  // Function to handle modal errors and provide recovery
-  const handleModalError = useCallback(() => {
-    console.error('Modal encountered an error');
-    setModalError(true);
-    // Close the problematic modal
-    setShowModal(false);
+  // Function to handle HubSpot script loading
+  const loadHubSpotScript = useCallback(async () => {
+    // Check if HubSpot script is already loaded
+    if (window.hbspt) return;
+    
+    // Check if script is already in the document
+    const existingScript = document.querySelector('script[src*="hsforms.net/forms"]');
+    if (existingScript) return;
+    
+    // Load the script
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = '//js.hsforms.net/forms/embed/v2.js';
+      script.charset = 'utf-8';
+      script.type = 'text/javascript';
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
   }, []);
 
-  // Recovery function to reset modal error state
-  const resetModalError = useCallback(() => {
-    setModalError(false);
-  }, []);
+  // Load HubSpot script when component mounts
+  useEffect(() => {
+    loadHubSpotScript().catch(error => {
+      console.error('Failed to load HubSpot script:', error);
+      setFormError(true);
+    });
+    
+    // Initialize the form when component mounts
+    createHubSpotForm([]);
+  }, [loadHubSpotScript]);
 
-  const handleHubSelection = (hub) => {
-    if (selectedHubs.includes(hub)) {
-      setSelectedHubs(selectedHubs.filter(h => h !== hub));
-      const updatedTiers = { ...selectedTiers };
-      const updatedModels = { ...selectedModels };
-      delete updatedTiers[hub];
-      delete updatedModels[hub];
-      setSelectedTiers(updatedTiers);
-      setSelectedModels(updatedModels);
+  // Update step based on user selections
+  useEffect(() => {
+    if (selectedHubs.length > 0) {
+      const allHubsHaveTier = selectedHubs.every(hub => selectedTiers[hub]);
+      const allHubsHaveModel = selectedHubs.every(hub => selectedModels[hub]);
+      
+      if (allHubsHaveTier && allHubsHaveModel) {
+        setCurrentStep(3); // Form step
+      } else if (allHubsHaveTier) {
+        setCurrentStep(2); // Model selection
+      } else {
+        setCurrentStep(1); // Hub and tier selection
+      }
     } else {
-      setSelectedHubs([...selectedHubs, hub]);
+      setCurrentStep(1);
     }
-  };
+  }, [selectedHubs, selectedTiers, selectedModels]);
 
-  const handleTierSelection = (hub, tier) => {
-    setSelectedTiers({
-      ...selectedTiers,
+  const handleHubSelection = useCallback((hub) => {
+    if (selectedHubs.includes(hub)) {
+      setSelectedHubs(prev => prev.filter(h => h !== hub));
+      setSelectedTiers(prev => {
+        const updated = { ...prev };
+        delete updated[hub];
+        return updated;
+      });
+      setSelectedModels(prev => {
+        const updated = { ...prev };
+        delete updated[hub];
+        return updated;
+      });
+    } else {
+      setSelectedHubs(prev => [...prev, hub]);
+    }
+  }, [selectedHubs]);
+
+  const handleTierSelection = useCallback((hub, tier) => {
+    setSelectedTiers(prev => ({
+      ...prev,
       [hub]: tier
-    });
-  };
+    }));
+  }, []);
 
-  const handleModelSelection = (hub, model) => {
-    setSelectedModels({
-      ...selectedModels,
+  const handleModelSelection = useCallback((hub, model) => {
+    setSelectedModels(prev => ({
+      ...prev,
       [hub]: model
-    });
-  };
+    }));
+  }, []);
 
-  const getModelKeySuffix = (model) => {
+  const getModelKeySuffix = useCallback((model) => {
     switch (model) {
       case 'Do It Yourself':
         return 'diy';
@@ -69,334 +115,566 @@ const Calculator = () => {  // Changed to const declaration
       default:
         return '';
     }
-  };
+  }, []);
 
-  const generatePackageKey = (hub, tier, model) => {
-    const hubKey = hub.toLowerCase().replace(' ', '_');  // Keep 'hub' in the key
+  const generatePackageKey = useCallback((hub, tier, model) => {
+    const hubKey = hub.toLowerCase().replace(' ', '_');
     const tierKey = tier.toLowerCase();
     const modelKey = getModelKeySuffix(model);
     return `${hubKey}_${tierKey}_${modelKey}`;
-  };
+  }, [getModelKeySuffix]);
 
-  const calculatePackageHours = (hub, tier, model) => {
-    const packageHours = {
-      'Marketing Hub': {
-        'Starter': {
-          'Do It Yourself': 8,
-          'Do It With Me': 12,
-          'Do It For Me': 16
+  // Use useMemo for package calculations to avoid recalculating unnecessarily
+  const packageData = useMemo(() => {
+    return {
+      hours: {
+        'Marketing Hub': {
+          'Starter': {
+            'Do It Yourself': 8,
+            'Do It With Me': 12,
+            'Do It For Me': 16
+          },
+          'Professional': {
+            'Do It Yourself': 12,
+            'Do It With Me': 20,
+            'Do It For Me': 32
+          }
         },
-        'Professional': {
-          'Do It Yourself': 12,
-          'Do It With Me': 20,
-          'Do It For Me': 32
+        'Sales Hub': {
+          'Starter': {
+            'Do It Yourself': 8,
+            'Do It With Me': 12,
+            'Do It For Me': 16
+          },
+          'Professional': {
+            'Do It Yourself': 12,
+            'Do It With Me': 20,
+            'Do It For Me': 32
+          }
+        },
+        'Service Hub': {
+          'Starter': {
+            'Do It Yourself': 8,
+            'Do It With Me': 12,
+            'Do It For Me': 16
+          },
+          'Professional': {
+            'Do It Yourself': 12,
+            'Do It With Me': 20,
+            'Do It For Me': 32
+          }
         }
       },
-      'Sales Hub': {
-        'Starter': {
-          'Do It Yourself': 8,
-          'Do It With Me': 12,
-          'Do It For Me': 16
+      prices: {
+        'Marketing Hub': {
+          'Starter': {
+            'Do It Yourself': 1080,
+            'Do It With Me': 1620,
+            'Do It For Me': 2160
+          },
+          'Professional': {
+            'Do It Yourself': 1620,
+            'Do It With Me': 2700,
+            'Do It For Me': 4320
+          }
         },
-        'Professional': {
-          'Do It Yourself': 12,
-          'Do It With Me': 20,
-          'Do It For Me': 32
+        'Sales Hub': {
+          'Starter': {
+            'Do It Yourself': 1080,
+            'Do It With Me': 1620,
+            'Do It For Me': 2160
+          },
+          'Professional': {
+            'Do It Yourself': 1620,
+            'Do It With Me': 2700,
+            'Do It For Me': 4320
+          }
+        },
+        'Service Hub': {
+          'Starter': {
+            'Do It Yourself': 1080,
+            'Do It With Me': 1620,
+            'Do It For Me': 2160
+          },
+          'Professional': {
+            'Do It Yourself': 1620,
+            'Do It With Me': 2700,
+            'Do It For Me': 4320
+          }
         }
       },
-      'Service Hub': {
-        'Starter': {
-          'Do It Yourself': 8,
-          'Do It With Me': 12,
-          'Do It For Me': 16
+      scopeSummaries: {
+        'Marketing Hub': {
+          'Starter': {
+            'Do It Yourself': 'We guide you on basic portal "getting started" steps—tracking code, one lead-capture form, one email template—but you implement them. Includes 2 coaching sessions for Q&A and best practices.',
+            'Do It With Me': 'We collaborate on the same starter setup (tracking code, forms, email templates) plus 2 simple automations and a basic reporting dashboard. We handle some tasks, you handle others. Includes 3 coaching sessions.',
+            'Do It For Me': 'We fully implement the basic portal setup (code installation, up to 3 forms, basic reporting, 2 simple automations). Includes 3 coaching sessions and 1 team training.'
+          },
+          'Professional': {
+            'Do It Yourself': 'We teach you how to configure more advanced marketing features—e.g. 2 automations (workflows), lead scoring basics, custom dashboards—and you carry them out. Includes 3 coaching sessions.',
+            'Do It With Me': 'A joint effort setting up advanced features (3 automations, lead scoring, campaign setup, custom dashboards). We do part of the technical work while guiding you on the rest. Includes 1 team training + 4 coaching sessions.',
+            'Do It For Me': 'A full-service build-out of Pro features—3 automations, lead scoring, more sophisticated campaign setup, custom reporting, etc. We do nearly everything. Includes 1 team training + 5 coaching sessions.'
+          }
         },
-        'Professional': {
-          'Do It Yourself': 12,
-          'Do It With Me': 20,
-          'Do It For Me': 32
+        'Sales Hub': {
+          'Starter': {
+            'Do It Yourself': 'We advise you on configuring a basic sales pipeline, 1 deal stage workflow, and simple deal card fields. You do the actual HubSpot setup. Includes 2 coaching sessions.',
+            'Do It With Me': 'We work together on pipeline setup, deal stage workflow, meeting link, basic automation. We do some config, you do the rest. Includes 1 team training + 3 coaching sessions.',
+            'Do It For Me': 'We handle the key Sales Starter tasks—pipeline setup, 2 simple automations, basic deal card customization—while you provide approvals. Includes 1 team training + 3 coaching sessions.'
+          },
+          'Professional': {
+            'Do It Yourself': 'We guide you on multiple deal stage workflows, advanced deal card customization, and basic sales reporting dashboards. You do all setup steps. Includes 3 coaching sessions.',
+            'Do It With Me': 'A collaborative Pro-level build: advanced pipeline/workflows, meeting link setup, custom deal properties. We share tasks. Includes 1 team training + 4 coaching sessions.',
+            'Do It For Me': 'We fully implement advanced pipelines, automation/sequences, custom sales reporting, quotes setup. Minimal effort needed on your end. Includes 1 team training + 5 coaching sessions.'
+          }
+        },
+        'Service Hub': {
+          'Starter': {
+            'Do It Yourself': 'We instruct you on setting up your first ticket pipeline, basic routing rules, and simple email/snippet usage. You do the hands-on HubSpot configuration. Includes 2 coaching sessions.',
+            'Do It With Me': 'We team up to configure the Service Starter features—ticket pipeline/routing, a simple knowledge base, chatflow, etc. Includes 1 team training + 3 coaching sessions.',
+            'Do It For Me': 'We take care of the full basic service setup: pipeline(s), routing, knowledge base structure, chatflows, etc. Includes 1 team training + 3 coaching sessions.'
+          },
+          'Professional': {
+            'Do It Yourself': 'We coach you through more advanced service features—multiple ticket pipelines, routing rules, basic automation, knowledge base. You implement. Includes 3 coaching sessions.',
+            'Do It With Me': 'We collaborate on advanced workflows (SLAs, routing), knowledge base organization, maybe feedback surveys or chatbots. Some setup by us, some by you. Includes 1 team training + 4 coaching sessions.',
+            'Do It For Me': 'We fully implement your Professional-level service environment: pipelines, automations, reporting dashboards, knowledge base structure, etc. Includes 2 team trainings + 4 coaching sessions.'
+          }
         }
       }
     };
+  }, []);
 
-    return packageHours[hub]?.[tier]?.[model] || 0;
-  };
+  const calculatePackageHours = useCallback((hub, tier, model) => {
+    return packageData.hours[hub]?.[tier]?.[model] || 0;
+  }, [packageData]);
 
-  const calculatePackagePrice = (hub, tier, model) => {
-    const packagePrices = {
-      'Marketing Hub': {
-        'Starter': {
-          'Do It Yourself': 1080,
-          'Do It With Me': 1620,
-          'Do It For Me': 2160
-        },
-        'Professional': {
-          'Do It Yourself': 1620,
-          'Do It With Me': 2700,
-          'Do It For Me': 4320
-        }
-      },
-      'Sales Hub': {
-        'Starter': {
-          'Do It Yourself': 1080,
-          'Do It With Me': 1620,
-          'Do It For Me': 2160
-        },
-        'Professional': {
-          'Do It Yourself': 1620,
-          'Do It With Me': 2700,
-          'Do It For Me': 4320
-        }
-      },
-      'Service Hub': {
-        'Starter': {
-          'Do It Yourself': 1080,
-          'Do It With Me': 1620,
-          'Do It For Me': 2160
-        },
-        'Professional': {
-          'Do It Yourself': 1620,
-          'Do It With Me': 2700,
-          'Do It For Me': 4320
-        }
-      }
-    };
+  const calculatePackagePrice = useCallback((hub, tier, model) => {
+    return packageData.prices[hub]?.[tier]?.[model] || 0;
+  }, [packageData]);
 
-    return packagePrices[hub]?.[tier]?.[model] || 0;
-  };
+  const getScopeSummary = useCallback((hub, tier, model) => {
+    return packageData.scopeSummaries[hub]?.[tier]?.[model] || '';
+  }, [packageData]);
 
-  const getScopeSummary = (hub, tier, model) => {
-    const scopeSummaries = {
-      'Marketing Hub': {
-        'Starter': {
-          'Do It Yourself': 'We guide you on basic portal "getting started" steps—tracking code, one lead-capture form, one email template—but you implement them. Includes 2 coaching sessions for Q&A and best practices.',
-          'Do It With Me': 'We collaborate on the same starter setup (tracking code, forms, email templates) plus 2 simple automations and a basic reporting dashboard. We handle some tasks, you handle others. Includes 3 coaching sessions.',
-          'Do It For Me': 'We fully implement the basic portal setup (code installation, up to 3 forms, basic reporting, 2 simple automations). Includes 3 coaching sessions and 1 team training.'
-        },
-        'Professional': {
-          'Do It Yourself': 'We teach you how to configure more advanced marketing features—e.g. 2 automations (workflows), lead scoring basics, custom dashboards—and you carry them out. Includes 3 coaching sessions.',
-          'Do It With Me': 'A joint effort setting up advanced features (3 automations, lead scoring, campaign setup, custom dashboards). We do part of the technical work while guiding you on the rest. Includes 1 team training + 4 coaching sessions.',
-          'Do It For Me': 'A full-service build-out of Pro features—3 automations, lead scoring, more sophisticated campaign setup, custom reporting, etc. We do nearly everything. Includes 1 team training + 5 coaching sessions.'
-        }
-      },
-      'Sales Hub': {
-        'Starter': {
-          'Do It Yourself': 'We advise you on configuring a basic sales pipeline, 1 deal stage workflow, and simple deal card fields. You do the actual HubSpot setup. Includes 2 coaching sessions.',
-          'Do It With Me': 'We work together on pipeline setup, deal stage workflow, meeting link, basic automation. We do some config, you do the rest. Includes 1 team training + 3 coaching sessions.',
-          'Do It For Me': 'We handle the key Sales Starter tasks—pipeline setup, 2 simple automations, basic deal card customization—while you provide approvals. Includes 1 team training + 3 coaching sessions.'
-        },
-        'Professional': {
-          'Do It Yourself': 'We guide you on multiple deal stage workflows, advanced deal card customization, and basic sales reporting dashboards. You do all setup steps. Includes 3 coaching sessions.',
-          'Do It With Me': 'A collaborative Pro-level build: advanced pipeline/workflows, meeting link setup, custom deal properties. We share tasks. Includes 1 team training + 4 coaching sessions.',
-          'Do It For Me': 'We fully implement advanced pipelines, automation/sequences, custom sales reporting, quotes setup. Minimal effort needed on your end. Includes 1 team training + 5 coaching sessions.'
-        }
-      },
-      'Service Hub': {
-        'Starter': {
-          'Do It Yourself': 'We instruct you on setting up your first ticket pipeline, basic routing rules, and simple email/snippet usage. You do the hands-on HubSpot configuration. Includes 2 coaching sessions.',
-          'Do It With Me': 'We team up to configure the Service Starter features—ticket pipeline/routing, a simple knowledge base, chatflow, etc. Includes 1 team training + 3 coaching sessions.',
-          'Do It For Me': 'We take care of the full basic service setup: pipeline(s), routing, knowledge base structure, chatflows, etc. Includes 1 team training + 3 coaching sessions.'
-        },
-        'Professional': {
-          'Do It Yourself': 'We coach you through more advanced service features—multiple ticket pipelines, routing rules, basic automation, knowledge base. You implement. Includes 3 coaching sessions.',
-          'Do It With Me': 'We collaborate on advanced workflows (SLAs, routing), knowledge base organization, maybe feedback surveys or chatbots. Some setup by us, some by you. Includes 1 team training + 4 coaching sessions.',
-          'Do It For Me': 'We fully implement your Professional-level service environment: pipelines, automations, reporting dashboards, knowledge base structure, etc. Includes 2 team trainings + 4 coaching sessions.'
-        }
-      }
-    };
+  // Calculate total price of selected packages
+  const totalPrice = useMemo(() => {
+    if (!selectedHubs.length) return 0;
+    
+    return selectedHubs.reduce((total, hub) => {
+      const tier = selectedTiers[hub];
+      const model = selectedModels[hub];
+      if (!tier || !model) return total;
+      
+      return total + calculatePackagePrice(hub, tier, model);
+    }, 0);
+  }, [selectedHubs, selectedTiers, selectedModels, calculatePackagePrice]);
 
-    return scopeSummaries[hub]?.[tier]?.[model] || '';
-  };
-
-  const handleCalculatePrice = () => {
+  // Create HubSpot form with package data
+  const createHubSpotForm = useCallback(async (packages = []) => {
+    if (!formContainerRef.current) return;
+    
     try {
-      // Reset error state when starting fresh
-      setModalError(false);
+      setFormLoading(true);
       
-      if (selectedHubs.length === 0 || 
-          Object.keys(selectedTiers).length === 0 || 
-          Object.keys(selectedModels).length === 0) {
-        alert('Please select at least one hub, its tier, and service model.');
-        return;
+      // Ensure HubSpot script is loaded
+      if (!window.hbspt) {
+        await loadHubSpotScript();
+        
+        // Wait for HubSpot to be available
+        await new Promise(resolve => {
+          const checkInterval = setInterval(() => {
+            if (window.hbspt) {
+              clearInterval(checkInterval);
+              resolve();
+            }
+          }, 100);
+          
+          // Add timeout after 5 seconds
+          setTimeout(() => {
+            clearInterval(checkInterval);
+            resolve();
+          }, 5000);
+        });
       }
-
-      const packages = selectedHubs.map(hub => {
-        const tier = selectedTiers[hub];
-        const model = selectedModels[hub];
-        if (!tier || !model) return null;
-
-        const hours = calculatePackageHours(hub, tier, model);
-        const price = calculatePackagePrice(hub, tier, model);
-        const packageKey = generatePackageKey(hub, tier, model);
-
-        return {
-          hub,
-          tier,
-          model,
-          hours,
-          price,
-          packageKey,
-          scopeSummary: getScopeSummary(hub, tier, model)
-        };
-      }).filter(pkg => pkg !== null);
-
-      setSelectedPackages(packages);
       
-      // Instead of just setting showModal to true, we'll create a safety timeout
-      // that will show results directly if the modal doesn't appear within 5 seconds
-      setShowModal(true);
+      // If HubSpot still not available, throw error
+      if (!window.hbspt) {
+        throw new Error('HubSpot script failed to load');
+      }
       
-      // Set a safety timeout that will bypass the modal if it causes problems
-      const safetyTimer = setTimeout(() => {
-        // If the modal is still showing but we haven't gotten to results yet, 
-        // we might be stuck in a white screen situation
-        if (showModal && !formSubmitted && !showResults) {
-          console.warn('Safety timeout triggered - modal may be stuck');
-          handleModalError();
-          // Skip directly to results as a fallback
+      // Generate the package keys string if packages are provided
+      const packageKeys = packages.length > 0 
+        ? packages.map(pkg => {
+            const hub = pkg.hub.toLowerCase().replace(/\s+/g, '_');
+            const tier = pkg.tier.toLowerCase();
+            const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
+            
+            let modelSuffix = '';
+            if (model.includes('yourself')) modelSuffix = 'diy';
+            else if (model.includes('with_me')) modelSuffix = 'dwme';
+            else if (model.includes('for_me')) modelSuffix = 'difme';
+            
+            return `${hub}_${tier}_${modelSuffix}`;
+          }).join(';')
+        : '';
+      
+      console.log('Creating form with package keys:', packageKeys);
+      
+      // Remove any existing form
+      formContainerRef.current.innerHTML = '';
+      
+      // Create the form
+      window.hbspt.forms.create({
+        portalId: "7208949",
+        formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
+        region: "na1",
+        target: "#hubspotFormContainer",
+        formData: packageKeys ? {
+          hubspot_standard_onboarding_key: packageKeys
+        } : {},
+        onFormReady: function($form) {
+          console.log('Form loaded successfully');
+          setFormLoading(false);
+          
+          // Customize the submit button to match the branding
+          const submitButton = $form.find('.hs-button.primary');
+          if (submitButton.length) {
+            submitButton.val('Calculate My Price');
+            submitButton.css({
+              'background-color': '#ea580c',
+              'color': 'white',
+              'padding': '0.75rem 1.5rem',
+              'border': 'none',
+              'border-radius': '0.375rem',
+              'font-weight': '600',
+              'font-size': '0.875rem',
+              'cursor': 'pointer',
+              'transition': 'all 0.2s ease-in-out'
+            });
+            
+            // Add hover effect through jQuery
+            submitButton.hover(
+              function() { $(this).css('background-color', '#c2410c'); },
+              function() { $(this).css('background-color', '#ea580c'); }
+            );
+          }
+          
+          // Add custom styles to form fields for better mobile experience
+          $form.find('input, select').css({
+            'font-size': '16px', // Prevents zoom on iOS
+            'max-width': '100%',
+            'box-sizing': 'border-box'
+          });
+          
+          // Add package selection summary above form if packages exist
+          if (packages.length > 0) {
+            const summaryHTML = `
+              <div class="mb-4 p-3 bg-orange-50 border border-orange-100 rounded-md">
+                <p class="text-sm font-medium text-orange-800">Selected Packages:</p>
+                <ul class="mt-2 pl-4 text-sm text-orange-700">
+                  ${packages.map(pkg => `
+                    <li>${pkg.hub} (${pkg.tier}) - ${pkg.model}</li>
+                  `).join('')}
+                </ul>
+                <p class="mt-2 text-sm font-medium text-orange-800">
+                  Estimated Total: €${totalPrice.toLocaleString()}
+                </p>
+              </div>
+            `;
+            
+            // Insert summary before the form
+            const summaryElement = document.createElement('div');
+            summaryElement.innerHTML = summaryHTML;
+            $form.before(summaryElement);
+          }
+        },
+        onFormSubmit: function($form, data) {
+          console.log("Form submitted with data:", data);
+          
+          // Get the user selections and calculate packages
+          try {
+            if (selectedHubs.length === 0 || 
+                Object.keys(selectedTiers).length === 0 || 
+                Object.keys(selectedModels).length === 0) {
+              alert('Please select at least one hub, its tier, and service model.');
+              return false; // Prevent submission
+            }
+
+            const packages = selectedHubs.map(hub => {
+              const tier = selectedTiers[hub];
+              const model = selectedModels[hub];
+              if (!tier || !model) return null;
+
+              const hours = calculatePackageHours(hub, tier, model);
+              const price = calculatePackagePrice(hub, tier, model);
+              const packageKey = generatePackageKey(hub, tier, model);
+
+              return {
+                hub,
+                tier,
+                model,
+                hours,
+                price,
+                packageKey,
+                scopeSummary: getScopeSummary(hub, tier, model)
+              };
+            }).filter(pkg => pkg !== null);
+
+            if (packages.length === 0) {
+              alert('Please select at least one valid package configuration.');
+              return false; // Prevent submission
+            }
+            
+            setSelectedPackages(packages);
+            
+            // Generate package keys for form submission
+            const packageKeys = packages.map(pkg => {
+              const hub = pkg.hub.toLowerCase().replace(/\s+/g, '_');
+              const tier = pkg.tier.toLowerCase();
+              const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
+              
+              let modelSuffix = '';
+              if (model.includes('yourself')) modelSuffix = 'diy';
+              else if (model.includes('with_me')) modelSuffix = 'dwme';
+              else if (model.includes('for_me')) modelSuffix = 'difme';
+              
+              return `${hub}_${tier}_${modelSuffix}`;
+            }).join(';');
+            
+            // Ensure the package keys are included
+            if (packageKeys && !data.hubspot_standard_onboarding_key) {
+              data.hubspot_standard_onboarding_key = packageKeys;
+            }
+            
+            return true; // Allow submission to continue
+            
+          } catch (error) {
+            console.error('Error processing selections:', error);
+            alert('There was an error processing your selections. Please try again.');
+            return false; // Prevent submission
+          }
+        },
+        onFormSubmitted: function() {
+          console.log("Form successfully submitted");
           setFormSubmitted(true);
           setShowResults(true);
-        }
-      }, 5000);
-      
-      // Store the timer ID so we can clear it if the modal works normally
-      window.safetyTimer = safetyTimer;
-      
+          
+          // Scroll to results section after a small delay to ensure rendering
+          setTimeout(() => {
+            if (resultsRef.current) {
+              resultsRef.current.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+              });
+            }
+          }, 500);
+        },
+        submitText: "Calculate My Price", // Set the submit button text
+        cssRequired: `
+          .hs-form-field { margin-bottom: 1.25rem; } 
+          .hs-form select, .hs-form input[type=text], .hs-form input[type=email], .hs-form input[type=tel] { 
+            width: 100%; 
+            padding: 0.625rem;
+            font-size: 1rem;
+            border: 1px solid #d1d5db; 
+            border-radius: 0.375rem;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+          }
+          .hs-form select:focus, .hs-form input:focus {
+            outline: none;
+            border-color: #ea580c;
+            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+          }
+          .hs-form label {
+            font-weight: 500;
+            margin-bottom: 0.375rem;
+            display: block;
+          }
+          .hs-form-required { color: #ef4444; } 
+          .hs-button.primary { 
+            background-color: #ea580c !important; 
+            color: white !important; 
+            padding: 0.75rem 1.5rem !important; 
+            border: none !important; 
+            border-radius: 0.375rem !important; 
+            font-weight: 600 !important;
+            font-size: 0.875rem !important;
+            cursor: pointer !important;
+            text-transform: none !important;
+            transition: all 0.2s ease-in-out !important;
+            width: 100% !important;
+            max-width: 300px !important;
+          } 
+          .hs-button.primary:hover { 
+            background-color: #c2410c !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+          }
+          .hs-error-msgs {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            color: #ef4444;
+          }
+          @media (max-width: 768px) {
+            .hs-form select, .hs-form input {
+              font-size: 16px !important; /* Prevents zoom on iOS */
+            }
+          }
+        `
+      });
     } catch (error) {
-      console.error('Error in handleCalculatePrice:', error);
-      // If any error occurs, show results directly
-      setModalError(true);
-      setFormSubmitted(true);
-      setShowResults(true);
+      console.error('Error creating HubSpot form:', error);
+      setFormLoading(false);
+      setFormError(true);
     }
-  };
+  }, [loadHubSpotScript, calculatePackageHours, calculatePackagePrice, getScopeSummary, generatePackageKey, totalPrice]);
 
-  const handleFormSuccess = () => {
-    console.log("Form success called, showing results");
-    // Clear the safety timer since we've successfully submitted
-    if (window.safetyTimer) {
-      clearTimeout(window.safetyTimer);
-    }
-    
-    setShowModal(false);
-    setFormSubmitted(true);
-    setShowResults(true);
-    setModalError(false);
-  };
-
-  // Direct link fallback for users who might experience white screen
-  const handleDirectLinkFallback = () => {
-    // Create the HubSpot form URL with packages as query parameters
-    const packageKeys = selectedPackages.map(pkg => {
-      const hub = pkg.hub.toLowerCase().replace(/\s+/g, '_');
-      const tier = pkg.tier.toLowerCase();
-      const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
-      
-      let modelSuffix = '';
-      if (model.includes('yourself')) modelSuffix = 'diy';
-      else if (model.includes('with_me')) modelSuffix = 'dwme';
-      else if (model.includes('for_me')) modelSuffix = 'difme';
-      
-      return `${hub}_${tier}_${modelSuffix}`;
-    }).join(';');
-    
-    // Open HubSpot form in a new tab
-    const url = `https://info.leapforce.nl/hubspot-onboarding-quote?packages=${encodeURIComponent(packageKeys)}`;
-    window.open(url, '_blank');
-    
-    // Show results directly in current page
-    setFormSubmitted(true);
-    setShowResults(true);
-    setModalError(false);
-    
-    // Close modal if it's open
-    setShowModal(false);
-  };
-
-  // If we had an error with the modal, show the fallback UI with direct link option
-  const renderModalErrorFallback = () => {
-    if (!modalError) return null;
-    
-    return (
-      <div className="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-lg shadow-sm">
-        <div className="flex items-start">
-          <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-orange-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <div className="ml-3">
-            <h3 className="text-sm font-medium text-orange-800">We noticed an issue with the HubSpot form</h3>
-            <div className="mt-2 text-sm text-orange-700">
-              <p>
-                You can continue to view your package details below, or use our direct link option to submit your information.
-              </p>
-              <div className="mt-3">
-                <button
-                  onClick={handleDirectLinkFallback}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-orange-700 bg-orange-100 hover:bg-orange-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-                >
-                  Open Direct Link Instead
-                </button>
-                <button
-                  onClick={resetModalError}
-                  className="ml-3 inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-                >
-                  Dismiss
-                </button>
+  // Render step indicator component
+  const StepIndicator = () => (
+    <div className="flex items-center justify-center mb-8">
+      <div className="flex items-center w-full max-w-2xl">
+        {[1, 2, 3].map((step) => (
+          <React.Fragment key={step}>
+            <div className="relative flex flex-col items-center">
+              <div
+                className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                  currentStep >= step
+                    ? 'bg-orange-600 text-white'
+                    : 'bg-gray-200 text-gray-500'
+                } transition-all duration-300`}
+              >
+                {step}
+              </div>
+              <div className="mt-2 text-xs font-medium text-center">
+                {step === 1 && 'Select Hub & Tier'}
+                {step === 2 && 'Choose Model'}
+                {step === 3 && 'Complete Form'}
               </div>
             </div>
-          </div>
-        </div>
+            {step < 3 && (
+              <div
+                className={`flex-1 h-1 mx-1 ${
+                  currentStep > step ? 'bg-orange-600' : 'bg-gray-200'
+                } transition-all duration-300`}
+              ></div>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Check if the user has made selections
+  const hasSelections = selectedHubs.length > 0 && 
+    selectedHubs.every(hub => selectedTiers[hub] && selectedModels[hub]);
+
+  // Get total estimated price for selected packages
+  const estimatedTotal = useMemo(() => {
+    if (!hasSelections) return null;
+    
+    return (
+      <div className="mt-6 p-4 bg-orange-50 border border-orange-100 rounded-lg">
+        <h4 className="text-lg font-medium text-orange-800">Estimated Total</h4>
+        <p className="mt-2 text-2xl font-bold text-orange-700">€{totalPrice.toLocaleString()}</p>
+        <p className="mt-1 text-xs text-orange-600">
+          Complete the form below to receive your detailed quote
+        </p>
       </div>
     );
-  };
+  }, [hasSelections, totalPrice]);
 
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <Header />
         
-        <div className="mt-10 bg-white rounded-lg shadow-lg p-6">
-          <SelectionInterface
-            selectedHubs={selectedHubs}
-            selectedTiers={selectedTiers}
-            selectedModels={selectedModels}
-            onHubSelect={handleHubSelection}
-            onTierSelect={handleTierSelection}
-            onModelSelect={handleModelSelection}
-          />
-
-          <div className="mt-8 flex justify-center">
-            <button
-              onClick={handleCalculatePrice}
-              className="bg-orange-600 text-white px-6 py-3 rounded-md hover:bg-orange-700"
-            >
-              Calculate My Price
-            </button>
+        <div className="mt-10 bg-white rounded-lg shadow-lg overflow-hidden">
+          {/* Step indicator */}
+          <div className="px-6 pt-6">
+            <StepIndicator />
           </div>
           
-          {/* Modal error fallback UI */}
-          {renderModalErrorFallback()}
+          <div className="p-6" ref={selectionRef}>
+            <SelectionInterface
+              selectedHubs={selectedHubs}
+              selectedTiers={selectedTiers}
+              selectedModels={selectedModels}
+              onHubSelect={handleHubSelection}
+              onTierSelect={handleTierSelection}
+              onModelSelect={handleModelSelection}
+            />
+            
+            {/* Display estimated total if selections are made */}
+            {estimatedTotal}
+          </div>
+          
+          {/* Embedded HubSpot Form Section */}
+          <div 
+            className="mt-2 p-6 pt-8 border-t border-gray-200 bg-gray-50 animate-fadeIn"
+            ref={formContainerRef}
+          >
+            <h3 className="text-xl font-medium text-gray-900 mb-2">
+              Get Your Custom HubSpot Onboarding Quote
+            </h3>
+            <p className="text-sm text-gray-600 mb-6">
+              Fill out the form below and we'll send you a detailed quote for your selected HubSpot packages.
+            </p>
+            
+            {formLoading && (
+              <div className="flex items-center justify-center py-8">
+                <svg className="animate-spin h-8 w-8 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span className="ml-2 text-gray-600">Loading form...</span>
+              </div>
+            )}
+            
+            {formError && (
+              <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-red-800">We had trouble loading the form</h3>
+                    <div className="mt-2 text-sm text-red-700">
+                      <p>Please try refreshing the page or contact us directly at info@leapforce.nl</p>
+                    </div>
+                    <div className="mt-2">
+                      <a
+                        href="https://share.hsforms.com/1TT_NNRvXTFSreef_Ga9WWQfm6sm"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                      >
+                        Open Form in New Tab
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div id="hubspotFormContainer" className="min-h-[250px]"></div>
+            
+            <div className="mt-4 pt-2 text-xs text-gray-500">
+              <p>Select your packages above, then click "Calculate My Price" to get your custom quote.</p>
+            </div>
+          </div>
         </div>
 
         <AboutSection />
 
         {/* Results section that appears after form submission */}
-        {(formSubmitted || modalError) && showResults && (
-          <div className="mt-10 animate-fadeIn">
+        {showResults && (
+          <div ref={resultsRef} className="mt-10 scroll-mt-8 animate-fadeIn">
             <ResultsDisplay packages={selectedPackages} />
           </div>
-        )}
-
-        {/* HubSpot Form Modal */}
-        {!modalError && (
-          <HubSpotFormModal
-            isOpen={showModal}
-            onClose={() => setShowModal(false)}
-            onSuccess={handleFormSuccess}
-            onError={handleModalError}
-            selectedPackages={selectedPackages}
-          />
         )}
 
         <Footer />
