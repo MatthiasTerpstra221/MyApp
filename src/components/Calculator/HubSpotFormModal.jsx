@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
 
-const HubSpotFormModal = ({ isOpen, onClose, selectedPackages }) => {
+const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
   useEffect(() => {
     if (isOpen) {
       // Clear any existing form
@@ -12,59 +12,46 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages }) => {
 
       // Generate package key string
       const packageKeys = selectedPackages.map(pkg => {
-        const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
+        // Format matches the spreadsheet: marketing_hub_starter_diy
         const hub = pkg.hub.toLowerCase().replace(/\s+/g, '_');
-        const tier = pkg.tier.toLowerCase().replace(/\s+/g, '_');
-        return `${model}_${hub}_${tier}`;
-      }).join(',');
+        const tier = pkg.tier.toLowerCase();
+        const model = pkg.model.toLowerCase().replace(/\s+/g, '_');
+        
+        // Get model suffix (diy, dwme, difme)
+        let modelSuffix = '';
+        if (model.includes('yourself')) modelSuffix = 'diy';
+        else if (model.includes('with_me')) modelSuffix = 'dwme';
+        else if (model.includes('for_me')) modelSuffix = 'difme';
+        
+        return `${hub}_${tier}_${modelSuffix}`;
+      }).join(';'); // Use semicolon as separator instead of comma
 
-      // Create the form using the helper from index.html
-      if (window.hsFormHelper) {
-        window.hsFormHelper.createForm('hubspotForm', packageKeys);
-      } else {
-        // Fallback to direct creation if helper is not available
+      // Create the form directly
+      if (window.hbspt) {
         window.hbspt.forms.create({
           portalId: "7208949",
           formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
           region: "na1",
           target: '#hubspotForm',
-          onFormReady: function($form) {
-            // Find or create the hidden field
-            let hiddenField = $form.querySelector('input[name="hubspot_standard_onboarding_key"]');
-            if (!hiddenField) {
-              hiddenField = document.createElement('input');
-              hiddenField.type = 'hidden';
-              hiddenField.name = 'hubspot_standard_onboarding_key';
-              $form.appendChild(hiddenField);
-            }
-            // Set the package keys
-            hiddenField.value = packageKeys;
-            console.log('Form ready with package keys:', packageKeys);
+          formData: {
+            hubspot_standard_onboarding_key: packageKeys
+          },
+          onFormSubmit: function($form, data) {
+            console.log('Form submitted with data:', data);
           },
           onFormSubmitted: function() {
             console.log('Form submitted successfully');
             setTimeout(() => {
+              if (onSuccess) onSuccess();
               onClose();
             }, 2000);
           }
         });
+      } else {
+        console.error("HubSpot forms script not loaded properly");
       }
-
-      // Listen for form submission
-      const handleFormSubmit = () => {
-        setTimeout(() => {
-          onClose();
-        }, 2000);
-      };
-
-      window.addEventListener('hubspotFormSubmitted', handleFormSubmit);
-
-      // Cleanup
-      return () => {
-        window.removeEventListener('hubspotFormSubmitted', handleFormSubmit);
-      };
     }
-  }, [isOpen, selectedPackages, onClose]);
+  }, [isOpen, selectedPackages, onClose, onSuccess]);
 
   return (
     <Dialog
