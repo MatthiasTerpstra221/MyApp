@@ -5,6 +5,7 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [formLoading, setFormLoading] = useState(true);
   const [formError, setFormError] = useState(false);
+  const [formInstance, setFormInstance] = useState(null);
 
   // Load HubSpot script dynamically
   useEffect(() => {
@@ -78,20 +79,58 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
         console.log('Target element exists:', !!document.getElementById('hubspotForm'));
         
         // Create the form using hbspt
-        window.hbspt.forms.create({
+        const form = window.hbspt.forms.create({
           portalId: "7208949",
           formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
           region: "na1",
           target: '#hubspotForm',
-          formData: {
-            hubspot_standard_onboarding_key: packageKeys
-          },
-          onFormReady: function() {
+          onFormReady: function($form) {
             console.log('Form is ready');
+            
+            // Set hidden field value using the correct HubSpot approach after form is ready
+            try {
+              // Get the hidden field by name
+              const hiddenField = $form.find('input[name="hubspot_standard_onboarding_key"]');
+              
+              if (hiddenField.length) {
+                hiddenField.val(packageKeys);
+                console.log('Hidden field found and value set:', packageKeys);
+              } else {
+                console.error('Hidden field not found in the form');
+                
+                // Fallback: try to create the field if it doesn't exist
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'hubspot_standard_onboarding_key';
+                hiddenInput.value = packageKeys;
+                
+                // Find the form element within our container
+                const formElement = document.querySelector('#hubspotForm form');
+                if (formElement) {
+                  formElement.appendChild(hiddenInput);
+                  console.log('Added hidden field manually:', packageKeys);
+                }
+              }
+            } catch (error) {
+              console.error('Error setting hidden field:', error);
+            }
+            
             setFormLoading(false);
+            setFormInstance($form);
           },
           onFormSubmit: function($form, data) {
             console.log('Form submitted with data:', data);
+            
+            // Double check that our field is included
+            const formData = $form.serializeArray();
+            const hasPackageKeys = formData.some(item => 
+              item.name === 'hubspot_standard_onboarding_key' && item.value === packageKeys
+            );
+            
+            if (!hasPackageKeys) {
+              console.warn('Package keys not found in form submission, attempting to add manually');
+              data.hubspot_standard_onboarding_key = packageKeys;
+            }
           },
           onFormSubmitted: function() {
             console.log('Form submitted successfully');
@@ -108,6 +147,9 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
             setFormLoading(false);
           }
         });
+        
+        // Store the form instance
+        setFormInstance(form);
       } catch (error) {
         console.error('Error creating HubSpot form:', error);
         setFormError(true);
@@ -194,6 +236,10 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
               </div>
             </div>
           )}
+          
+          <div className="mt-4 border-t pt-4 text-xs text-gray-500">
+            <p>Your selected package(s) will be automatically included in your request.</p>
+          </div>
         </div>
       </div>
     </Dialog>
