@@ -62,6 +62,7 @@ const Calculator = () => {
     try {
       // If the script is already globally available, return early
       if (window.hbspt) {
+        console.log("HubSpot script already available");
         setScriptLoaded(true);
         return Promise.resolve();
       }
@@ -69,9 +70,12 @@ const Calculator = () => {
       // Check if script is already in the document
       const existingScript = document.querySelector('script[src*="hsforms.net/forms"]');
       if (existingScript) {
+        console.log("HubSpot script already in DOM");
         setScriptLoaded(true);
         return Promise.resolve();
       }
+      
+      console.log("Dynamically loading HubSpot script...");
       
       return new Promise((resolve, reject) => {
         // Max time to wait for script load
@@ -96,7 +100,26 @@ const Calculator = () => {
         script.onerror = (err) => {
           clearTimeout(timeoutId);
           console.error("Error loading HubSpot script:", err);
-          reject(err);
+          
+          // Try alternative approach with a different URL format
+          console.log("Attempting alternative script load approach...");
+          const alternativeScript = document.createElement('script');
+          alternativeScript.src = 'https://js.hsforms.net/forms/v2.js';
+          alternativeScript.async = true;
+          alternativeScript.charset = 'utf-8';
+          
+          alternativeScript.onload = () => {
+            console.log("Alternative HubSpot script loaded successfully");
+            setScriptLoaded(true);
+            resolve();
+          };
+          
+          alternativeScript.onerror = (altErr) => {
+            console.error("Alternative script also failed:", altErr);
+            reject(altErr);
+          };
+          
+          document.head.appendChild(alternativeScript);
         };
         
         document.head.appendChild(script);
