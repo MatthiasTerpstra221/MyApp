@@ -350,10 +350,12 @@ const Calculator = () => {
   }, []);
 
   const calculatePackageHours = useCallback((hub, tier, model) => {
+    console.log('Function called with state:', JSON.stringify({ hub, tier, model }));
     return packageData.hours[hub]?.[tier]?.[model] || 0;
   }, [packageData]);
 
   const calculatePackagePrice = useCallback((hub, tier, model) => {
+    console.log('Function called with state:', JSON.stringify({ hub, tier, model }));
     return packageData.prices[hub]?.[tier]?.[model] || 0;
   }, [packageData]);
 
@@ -658,6 +660,7 @@ const Calculator = () => {
             `
           });
           console.log("HubSpot form creation initiated");
+          document.getElementById('form-loading').style.display = 'none';
         } catch (error) {
           console.error('Error in hbspt.forms.create:', error);
           setFormError(true);
