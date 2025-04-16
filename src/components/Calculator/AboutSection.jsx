@@ -119,7 +119,7 @@ export const AboutSection = () => {
                       </svg>
                       <h3 className="font-medium">Ongoing Support</h3>
                     </div>
-                    <p className="text-gray-600 text-sm">We provide continuous guidance and assistance even after implementation to ensure long-term success.</p>
+                    <p className="text-gray-600 text-sm">We offer continuous guidance beyond implementation for long-term partners. Even without a partnership, stay updated through our newsletters and webinars. We're always open to building lasting relationships.</p>
                   </div>
                 </div>
               </div>
