@@ -148,11 +148,25 @@ const packageData = {
   }
 };
 
-export function ResultsDisplay({ selectedPackages }) {
-  const packages = selectedPackages.map(key => packageData[key]).filter(Boolean);
-  const totalHours = packages.reduce((sum, pkg) => sum + (pkg.hours || 0), 0);
-  const totalPrice = packages.reduce((sum, pkg) => sum + (pkg.price || 0), 0);
-  const hasEnterprise = packages.some(pkg => pkg.tier === 'Enterprise');
+export function ResultsDisplay({ packages }) {
+  console.log("ResultsDisplay received packages:", packages);
+  
+  // Check if we received direct package objects or need to map from packageData
+  const displayPackages = packages.map(pkg => {
+    if (pkg.hub && pkg.tier && pkg.model) {
+      // Direct package object - use as is
+      return pkg;
+    } else if (typeof pkg === 'string') {
+      // Package key - map from packageData
+      return packageData[pkg];
+    }
+    return null;
+  }).filter(Boolean);
+
+  // Calculate totals
+  const totalHours = displayPackages.reduce((sum, pkg) => sum + (pkg.hours || 0), 0);
+  const totalPrice = displayPackages.reduce((sum, pkg) => sum + (pkg.price || 0), 0);
+  const hasEnterprise = displayPackages.some(pkg => pkg.tier === 'Enterprise');
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-8">
@@ -162,16 +176,16 @@ export function ResultsDisplay({ selectedPackages }) {
 
       {/* Individual Package Cards */}
       <div className="space-y-6 mb-8">
-        {packages.map(pkg => (
+        {displayPackages.map((pkg, index) => (
           <div 
-            key={`${pkg.hub}-${pkg.tier}-${pkg.serviceModel}`}
+            key={`${pkg.hub}-${pkg.tier}-${pkg.serviceModel || pkg.model}-${index}`}
             className="bg-[#f6f6f6] rounded-lg p-6"
           >
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-lg font-helvetica">
                 {pkg.hub} - {pkg.tier}
                 <span className="text-leapforce-gray ml-2">
-                  ({pkg.serviceModel})
+                  ({pkg.serviceModel || pkg.model})
                 </span>
               </h3>
             </div>
@@ -199,49 +213,38 @@ export function ResultsDisplay({ selectedPackages }) {
         ))}
       </div>
 
-      {/* Totals Section */}
-      <div className="bg-leapforce-gray-dark text-white rounded-lg p-6">
-        <h3 className="text-lg font-helvetica mb-4">Total</h3>
-        <div className="flex justify-between">
-          <div>
-            <p className="text-gray-300 mb-1">Total Hours</p>
-            <p className="text-2xl font-helvetica">
-              {hasEnterprise ? 'On request' : totalHours}
-            </p>
-          </div>
-          <div>
-            <p className="text-gray-300 mb-1">Total Price</p>
-            <p className="text-2xl font-helvetica">
-              {hasEnterprise ? 'On request' : `€${totalPrice}`}
-            </p>
-          </div>
+      {/* Total Section */}
+      <div className="border-t border-gray-200 pt-6">
+        <div className="flex justify-between mb-2">
+          <p className="text-lg font-medium">Total Hours:</p>
+          <p className="text-lg font-medium">{totalHours}</p>
         </div>
+        <div className="flex justify-between">
+          <p className="text-lg font-medium">Total Price:</p>
+          <p className="text-lg font-medium">€{totalPrice}</p>
+        </div>
+        {hasEnterprise && (
+          <p className="text-sm text-gray-500 mt-2">
+            * Enterprise pricing is custom. Please contact us for a detailed quote.
+          </p>
+        )}
       </div>
 
-      {/* Action Buttons */}
-      <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-        <a
-          href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-6 py-3 
-                   border border-leapforce-orange text-base font-helvetica 
-                   rounded-md text-leapforce-orange bg-white 
-                   hover:bg-leapforce-orange-light/10 transition-colors duration-150"
-        >
-          Book a Call
-        </a>
-        <a
-          href="https://www.leapforce.io/contact/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-6 py-3 
-                   border border-transparent text-base font-helvetica 
-                   rounded-md text-white bg-leapforce-orange 
-                   hover:bg-leapforce-orange-dark transition-colors duration-150"
-        >
-          Contact Leapforce
-        </a>
+      {/* Contact CTA */}
+      <div className="mt-8 border-t border-gray-200 pt-6">
+        <p className="text-center text-lg mb-4">
+          Ready to get started with your HubSpot onboarding?
+        </p>
+        <div className="flex justify-center">
+          <a
+            href="https://meetings.hubspot.com/leo-braak/leo-matthias"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700"
+          >
+            Schedule a Call
+          </a>
+        </div>
       </div>
     </div>
   );

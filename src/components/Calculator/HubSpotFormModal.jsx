@@ -26,6 +26,12 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
     }, 1000);
   }, [onSuccess, onClose]);
 
+  // For testing only - simulate form submission
+  const handleTestSubmit = () => {
+    console.log('Test submit triggered');
+    handleSuccess();
+  };
+
   // Load HubSpot script dynamically
   useEffect(() => {
     const loadHubspotScript = () => {
@@ -132,6 +138,18 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
                   console.log('Added hidden field manually:', packageKeys);
                 }
               }
+
+              // Add a listener for the default HubSpot submit button
+              const submitButton = $form.find('input[type="submit"]');
+              if (submitButton.length) {
+                // Monitor the submit event of the entire form
+                $form.on('submit', function() {
+                  console.log('Form submit detected');
+                  // We'll let HubSpot handle the actual submission
+                  // Just set a flag to remember that submit was clicked
+                  window.hsFormSubmitted = true;
+                });
+              }
             } catch (error) {
               console.error('Error setting hidden field:', error);
             }
@@ -153,7 +171,7 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
               data.hubspot_standard_onboarding_key = packageKeys;
             }
           },
-          onFormSubmitted: function() {
+          onFormSubmitted: function($form) {
             console.log('Form submitted successfully');
             // Handle success and show results
             handleSuccess();
@@ -265,6 +283,16 @@ const HubSpotFormModal = ({ isOpen, onClose, selectedPackages, onSuccess }) => {
               </div>
               <div className="mt-4 text-center text-sm text-gray-500">
                 <p>Having trouble with the form? <button onClick={handleOpenInNewTab} className="text-orange-600 hover:text-orange-800 underline">Open in new tab</button></p>
+              </div>
+              
+              {/* For testing only - remove in production */}
+              <div className="mt-4 text-center hidden">
+                <button 
+                  onClick={handleTestSubmit}
+                  className="bg-orange-600 text-white px-4 py-2 rounded-md text-sm"
+                >
+                  Test Submit
+                </button>
               </div>
             </div>
           )}
