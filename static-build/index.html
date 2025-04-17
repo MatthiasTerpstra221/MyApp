@@ -239,12 +239,18 @@
       </div>
       
       <!-- Results Section (hidden initially) -->
-      <div id="results-section" style="display: none;">
-        <h3 class="mt-8 mb-4">Your Custom Onboarding Package</h3>
-        <p>Based on your selections, we recommend the following HubSpot onboarding package:</p>
+      <div id="results-section" style="display: none;" class="fade-in">
+        <h3 class="mt-8 mb-4">Your HubSpot Onboarding Package</h3>
+        <p>Based on your selections, here is your detailed HubSpot onboarding package:</p>
         
-        <div class="results-container" id="results-summary">
+        <div class="results-container slide-up" id="results-summary">
           <!-- Dynamically filled with results -->
+        </div>
+        
+        <div class="results-highlight" id="total-price">€0</div>
+        
+        <div id="scope-details" class="mt-8 mb-4">
+          <!-- Package scope details will appear here -->
         </div>
         
         <div class="text-center mt-8">
@@ -519,114 +525,141 @@
     }
     
     // Calculate results based on form submissions
-    function calculateResults(formData) {
-      // Extract relevant data from form submission
-      const hubsData = formData.find(field => field.name === 'hubspot_hubs');
-      const tiersData = formData.find(field => field.name === 'hubspot_tiers');
-      const serviceModelData = formData.find(field => field.name === 'hubspot_service_model');
-      
-      if (hubsData && hubsData.value) {
-        state.hubs = hubsData.value.split(',');
-      }
-      
-      if (tiersData && tiersData.value) {
-        const tierPairs = tiersData.value.split(',');
-        tierPairs.forEach(pair => {
-          const [hub, tier] = pair.split(':');
-          if (hub && tier) {
-            state.tiers[hub] = tier;
-          }
-        });
-      }
-      
-      if (serviceModelData && serviceModelData.value) {
-        state.serviceModel = serviceModelData.value;
-      }
-      
-      // Calculate totals
+    function calculateResults(hubs, serviceModel) {
       let totalPrice = 0;
       let totalHours = 0;
-      const selectedPackages = [];
+      let resultHtml = '';
+      let scopeHtml = '';
       
-      // Only calculate if service model is selected
-      if (state.serviceModel) {
-        state.hubs.forEach(hub => {
-          const tier = state.tiers[hub];
-          if (tier) {
-            const price = state.pricing[hub][tier][state.serviceModel];
-            const hours = state.pricing[hub][tier].hours[state.serviceModel];
-            const packageKey = state.packageKeys[hub][tier][state.serviceModel];
-            
-            totalPrice += price;
-            totalHours += hours;
-            selectedPackages.push(packageKey);
-          }
-        });
-      }
-      
-      // Store for reference
-      state.totalPrice = totalPrice;
-      state.totalHours = totalHours;
-      state.selectedPackages = selectedPackages;
-      
-      // Update the UI
-      const resultsContainer = document.getElementById('results-summary');
-      resultsContainer.innerHTML = '';
-      
-      // Add selected hubs and tiers
-      state.hubs.forEach(hub => {
-        const tier = state.tiers[hub];
-        const hubTitle = hub.charAt(0).toUpperCase() + hub.slice(1);
-        const tierTitle = tier.charAt(0).toUpperCase() + tier.slice(1);
+      // Calculate totals
+      hubs.forEach(hub => {
+        totalPrice += hub.price;
+        totalHours += getHubHours(hub.name, hub.tier);
         
-        const price = state.pricing[hub][tier][state.serviceModel];
-        const hours = state.pricing[hub][tier].hours[state.serviceModel];
-        
-        const resultItem = document.createElement('div');
-        resultItem.className = 'results-item';
-        resultItem.innerHTML = `
-          <div class="results-label">${hubTitle} Hub ${tierTitle}</div>
-          <div class="results-value">€${price} (${hours} hours)</div>
+        resultHtml += `
+          <div class="tier-card" style="margin: 0.75rem 0;">
+            <h4>${hub.name} Hub - ${hub.tier}</h4>
+            <p><strong>€${hub.price}</strong> onboarding</p>
+            <p>Estimated implementation time: ${getHubHours(hub.name, hub.tier)} hours</p>
+          </div>
         `;
         
-        resultsContainer.appendChild(resultItem);
+        // Add scope details for each selected package
+        const scopeDetail = getScopeDetail(hub.name, hub.tier, serviceModel);
+        if (scopeDetail) {
+          scopeHtml += `
+            <div class="tier-card" style="margin: 1rem 0;">
+              <h4>${hub.name} Hub ${hub.tier} - ${getServiceModelFullName(serviceModel)}</h4>
+              <p><strong>Hours:</strong> ${getHubHours(hub.name, hub.tier)}</p>
+              <p><strong>Scope:</strong> ${scopeDetail}</p>
+            </div>
+          `;
+        }
       });
       
-      // Add service model
-      const serviceModelTitle = {
-        'diy': 'Do It Yourself',
-        'diwm': 'Do It With Me',
-        'difm': 'Do It For Me'
-      }[state.serviceModel];
+      // Apply service model multiplier
+      const multiplier = getServiceModelMultiplier(serviceModel);
+      totalPrice = Math.round(totalPrice * multiplier);
       
-      const serviceModelItem = document.createElement('div');
-      serviceModelItem.className = 'results-item';
-      serviceModelItem.innerHTML = `
-        <div class="results-label">Service Model</div>
-        <div class="results-value">${serviceModelTitle}</div>
-      `;
-      resultsContainer.appendChild(serviceModelItem);
+      // Build the results
+      const resultSummary = document.getElementById('results-summary');
+      if (resultSummary) {
+        resultSummary.innerHTML = `
+          <p class="mb-4"><strong>Selected Hubs:</strong> ${hubs.map(h => h.name + ' Hub').join(', ')}</p>
+          <p class="mb-4"><strong>Service Model:</strong> ${getServiceModelFullName(serviceModel)}</p>
+          ${resultHtml}
+          <div style="margin-top: 1.5rem;">
+            <p><strong>Estimated Implementation Time:</strong> ${totalHours} hours</p>
+          </div>
+        `;
+      }
       
-      // Add total hours
-      const hoursItem = document.createElement('div');
-      hoursItem.className = 'results-item';
-      hoursItem.innerHTML = `
-        <div class="results-label">Total Hours</div>
-        <div class="results-value">${totalHours} hours</div>
-      `;
-      resultsContainer.appendChild(hoursItem);
+      // Add scope details
+      const scopeDetails = document.getElementById('scope-details');
+      if (scopeDetails && scopeHtml) {
+        scopeDetails.innerHTML = `
+          <h4>Package Scope Details</h4>
+          ${scopeHtml}
+        `;
+      }
       
-      // Add total price
-      const priceItem = document.createElement('div');
-      priceItem.className = 'results-item';
-      priceItem.innerHTML = `
-        <div class="results-label">Total Price</div>
-        <div class="results-value total-price">€${totalPrice}</div>
-      `;
-      resultsContainer.appendChild(priceItem);
+      // Update total price display
+      const totalPriceElement = document.getElementById('total-price');
+      if (totalPriceElement) {
+        totalPriceElement.textContent = `€${totalPrice}`;
+      }
+    }
+    
+    // Get scope detail based on hub, tier, and service model
+    function getScopeDetail(hub, tier, serviceModel) {
+      const scopes = {
+        Marketing: {
+          Starter: {
+            'Do It Yourself': 'We guide you on basic portal "getting started" steps—tracking code, one lead-capture form, one email template—but you implement them. Includes 2 coaching sessions for Q&A and best practices.',
+            'Do It With Me': 'We collaborate on the same setup tasks, sharing responsibilities for 2 simple submissions and 1 email template. We handle some tasks, you handle others. Includes 3 coaching sessions.',
+            'Do It For Me': 'We fully implement the starter portal setup (code installation, up to 3 forms, basic reporting, 2 simple automations). Includes 3 coaching sessions and 1 team training.'
+          },
+          Professional: {
+            'Do It Yourself': 'We teach you how to configure more advanced marketing features—e.g. 2 automations (workflows), lead scoring basics, custom dashboards—and you carry them out. Includes 3 coaching sessions.',
+            'Do It With Me': 'A joint effort setting up advanced features (3 automations, lead scoring, campaign setup, custom dashboards). We do part of the technical work while guiding you on the rest. Includes 1 team training + 4 coaching sessions.',
+            'Do It For Me': 'A full-service build-out of Pro features—3 automations, lead scoring, more sophisticated campaign setup, custom reporting, etc. We do nearly everything. Includes 1 team training + 5 coaching sessions.'
+          },
+          Enterprise: {
+            'Do It Yourself': 'Guidance on enterprise-level marketing features setup with your team handling implementation.',
+            'Do It With Me': 'Collaborative approach for advanced marketing features with shared responsibility.',
+            'Do It For Me': 'Complete implementation of enterprise marketing features by our team.'
+          }
+        },
+        Sales: {
+          Starter: {
+            'Do It Yourself': 'We help you configure basic sales tools—basic CRM setup, email templates, simple sequences. You handle the key implementation. Includes 1 team training + 2 coaching sessions.',
+            'Do It With Me': 'We work together on pipeline setup, deal stage workflow, meeting link, basic automation. We do some config, you do the rest. Includes 1 team training + 3 coaching sessions.',
+            'Do It For Me': 'We handle the key Sales Starter implementation—basic deal setup, meeting management, basic automation—while you provide requirements. Includes 1 team training + 3 coaching sessions.'
+          },
+          Professional: {
+            'Do It Yourself': 'We guide you on multiple deal stage workflows, advanced deal card customization, and basic sales reporting dashboards. You do setup steps. Includes 3 coaching sessions.',
+            'Do It With Me': 'A collaborative Pro-level build: advanced quotes, sequences/workflows, meeting link setup, custom deal properties. We share the tasks. Includes 1 team training + 4 coaching sessions.',
+            'Do It For Me': 'We fully implement advanced pipelines, automation/sequences, custom sales reporting, quotes setup. Minimal effort needed on your end. Includes 1 team training + 5 coaching sessions.'
+          },
+          Enterprise: {
+            'Do It Yourself': 'Guidance on enterprise-level sales features setup with your team handling implementation.',
+            'Do It With Me': 'Collaborative implementation of advanced sales tools with shared responsibilities.',
+            'Do It For Me': 'Complete implementation of enterprise sales features by our team.'
+          }
+        },
+        Service: {
+          Starter: {
+            'Do It Yourself': 'We instruct you on setting up your first ticket pipeline, basic routing rules, and simple email/snippet usage. You do the hands-on HubSpot configuration. Includes 2 coaching sessions.',
+            'Do It With Me': 'We help you set up your Service Hub together—shared knowledge base structure, ticket forms, basic automations. Joint implementation approach. Includes 1 team training + 3 coaching sessions.',
+            'Do It For Me': 'We take care of the full basic service setup: pipeline(s), routing, knowledge base structure, chatflows. You provide requirements. Includes 1 team training + 3 coaching sessions.'
+          },
+          Professional: {
+            'Do It Yourself': 'We coach you through advanced service features implementation—multiple ticket pipelines, custom ticket properties, knowledge base setup. You handle configuration. Includes 2 coaching sessions.',
+            'Do It With Me': 'We collaborate on advanced workflows (SLAs, routing), knowledge base organization, service feedback surveys or chatbots. Some setup is on us, some on you. Includes 1 team training + 3 coaching sessions.',
+            'Do It For Me': 'We fully implement your Professional-level service environment: pipelines, automations, reporting dashboards, knowledge base structure, etc. Includes 2 team trainings + 4 coaching sessions.'
+          },
+          Enterprise: {
+            'Do It Yourself': 'Guidance on enterprise-level service features setup with your team handling implementation.',
+            'Do It With Me': 'Collaborative implementation of advanced service tools with shared responsibilities.',
+            'Do It For Me': 'Complete implementation of enterprise service features by our team.'
+          }
+        }
+      };
       
-      // Show results section
-      showResults();
+      return scopes[hub] && scopes[hub][tier] && scopes[hub][tier][serviceModel] 
+        ? scopes[hub][tier][serviceModel] 
+        : 'Custom implementation based on your specific requirements.';
+    }
+    
+    // Get full service model name
+    function getServiceModelFullName(model) {
+      const names = {
+        'Do It Yourself': 'Do It Yourself (DIY)',
+        'Do It With Me': 'Do It With Me (DIWM)',
+        'Do It For Me': 'Do It For Me (DIFM)'
+      };
+      
+      return names[model] || model;
     }
     
     // Initialize HubSpot form
