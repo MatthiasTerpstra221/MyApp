@@ -704,6 +704,20 @@
                     <span id="error-text">Please fill in all required fields.</span>
                 </div>
                 
+                <!-- Hidden fields for form submission -->
+                <div id="hidden-fields" style="display:none;">
+                    <input type="hidden" id="hub" name="hub" value="">
+                    <input type="hidden" id="package" name="package" value="">
+                    <input type="hidden" id="addons" name="addons" value="">
+                    <input type="hidden" id="total_price" name="total_price" value="">
+                    <input type="hidden" id="selection_json" name="selection_json" value="">
+                    <input type="hidden" id="marketing_hub_tier" name="marketing_hub_tier" value="">
+                    <input type="hidden" id="sales_hub_tier" name="sales_hub_tier" value="">
+                    <input type="hidden" id="service_hub_tier" name="service_hub_tier" value="">
+                    <input type="hidden" id="service_model" name="service_model" value="">
+                    <input type="hidden" id="hubspot_standard_onboarding_key" name="hubspot_standard_onboarding_key" value="">
+                </div>
+                
                 <!-- HubSpot Form will be inserted here -->
                 <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/embed/v2.js"></script>
                 <script>
@@ -898,5 +912,6 @@
     </div>
     
     <script src="calculator.js"></script>
+    <script src="hubspot-form-fix.js"></script>
 </body>
 </html> 

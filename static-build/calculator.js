@@ -294,15 +294,20 @@ const addOns = [
 
 // Initialize calculator when the page loads
 document.addEventListener('DOMContentLoaded', function() {
-    initCalculator();
-    attachNavigationListeners();
-    attachHubSelectionListeners();
+    initFromUrlParams();
+    
+    // Initialize the calculator if not already done by URL params
+    if (!state.selectedHub) {
+        initCalculator();
+    }
 });
 
 // Initialize the calculator
 function initCalculator() {
     renderProgressBar();
     renderStageContent();
+    attachHubSelectionListeners();
+    attachNavigationListeners();
 }
 
 // Render the progress bar based on current stage
@@ -568,6 +573,13 @@ function updateFormFields() {
     const totalPriceField = document.querySelector('input[name="total_price"]');
     const jsonField = document.querySelector('input[name="selection_json"]');
     
+    // Find specific HubSpot fields
+    const marketingTierField = document.querySelector('input[name="marketing_hub_tier"]');
+    const salesTierField = document.querySelector('input[name="sales_hub_tier"]');
+    const serviceTierField = document.querySelector('input[name="service_hub_tier"]');
+    const serviceModelField = document.querySelector('input[name="service_model"]');
+    const onboardingKeyField = document.querySelector('input[name="hubspot_standard_onboarding_key"]');
+    
     if (hubField || packageField || addonsField || totalPriceField || jsonField) {
         
         // Get selected hub and package names instead of IDs for better readability
@@ -597,6 +609,45 @@ function updateFormFields() {
             totalPriceField.value = state.totalPrice.toString();
         }
         
+        // Generate and set HubSpot tier values
+        if (selectedHub && selectedPackage) {
+            // Extract tier from package ID (e.g., "sales-professional" -> "professional")
+            const packageParts = selectedPackage.id.split('-');
+            const tier = packageParts.length > 1 ? packageParts[1] : '';
+            
+            // Clear all tier fields first
+            if (marketingTierField) marketingTierField.value = 'none';
+            if (salesTierField) salesTierField.value = 'none';
+            if (serviceTierField) serviceTierField.value = 'none';
+            
+            // Set the appropriate tier field based on hub
+            if (selectedHub.id === 'marketing' && marketingTierField) {
+                marketingTierField.value = tier;
+            } else if (selectedHub.id === 'sales' && salesTierField) {
+                salesTierField.value = tier;
+            } else if (selectedHub.id === 'service' && serviceTierField) {
+                serviceTierField.value = tier;
+            }
+            
+            // Set service model (use "difme" as default for all packages)
+            if (serviceModelField) {
+                serviceModelField.value = 'difme';
+            }
+            
+            // Generate onboarding key following format: "<hub>_hub_<tier>_difme"
+            // Example: "sales_hub_professional_difme"
+            if (onboardingKeyField) {
+                const onboardingKey = `${selectedHub.id}_hub_${tier}_difme`;
+                onboardingKeyField.value = onboardingKey;
+                
+                // Also store in session and local storage for the hubspot-form-fix.js script
+                sessionStorage.setItem('hubspot_standard_onboarding_key', onboardingKey);
+                localStorage.setItem('hubspot_standard_onboarding_key', onboardingKey);
+                
+                console.log('Generated onboarding key:', onboardingKey);
+            }
+        }
+        
         // Create JSON for all selections
         if (jsonField) {
             const jsonData = JSON.stringify({
@@ -618,7 +669,8 @@ function updateFormFields() {
             package: packageField?.value,
             addons: addonsField?.value,
             totalPrice: totalPriceField?.value,
-            selectionJson: jsonField?.value
+            selectionJson: jsonField?.value,
+            onboardingKey: onboardingKeyField?.value
         });
     }
     
@@ -848,7 +900,14 @@ function updateProgressBar() {
 }
 
 // Initialize from URL parameters if present
-window.addEventListener('DOMContentLoaded', initFromUrlParams);
+window.addEventListener('DOMContentLoaded', function() {
+    initFromUrlParams();
+    
+    // Initialize the calculator if not already done by URL params
+    if (!state.selectedHub) {
+        initCalculator();
+    }
+});
 
 // Function to initialize from URL parameters
 function initFromUrlParams() {
