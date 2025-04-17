@@ -773,7 +773,7 @@
         <a href="https://www.leapforce.nl" target="_blank" rel="noopener" aria-label="Leapforce homepage">
           <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" style="height: 40px;" onerror="this.onerror=null; this.src='https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.png';">
         </a>
-        <a href="https://www.hubspot.com/agencies/leapforce" target="_blank" rel="noopener" aria-label="HubSpot Platinum Partner Page" style="display: flex; align-items: center; margin-left: 15px;">
+        <a href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl" target="_blank" rel="noopener" aria-label="HubSpot Platinum Partner Page" style="display: flex; align-items: center; margin-left: 15px;">
           <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" style="height: 40px;" onerror="this.onerror=null; this.style.display='none';">
         </a>
       </div>
@@ -810,7 +810,7 @@
           <p>Find the perfect HubSpot onboarding package for your business needs</p>
         </div>
       </div>
-      <a href="https://www.hubspot.com/agencies/leapforce" target="_blank" rel="noopener" class="btn btn-secondary" aria-label="Visit the Leapforce HubSpot Partner Page">Visit Our HubSpot Partner Page</a>
+      <a href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl" target="_blank" rel="noopener" class="btn btn-secondary" aria-label="Visit the Leapforce HubSpot Partner Page">Visit Our HubSpot Partner Page</a>
     </div>
   </section>
   
@@ -2037,33 +2037,6 @@
       // Provide visual feedback
       showNotification('Calculator reset successfully', 'info');
     }
-    
-    // Get price for a hub and tier
-    function getHubPrice(hub, tier) {
-      const prices = {
-        marketing: { starter: 499, professional: 999, enterprise: 1999 },
-        sales: { starter: 499, professional: 999, enterprise: 1999 },
-        service: { starter: 499, professional: 999, enterprise: 1999 }
-      };
-      
-      return prices[hub] && prices[hub][tier.toLowerCase()] ? prices[hub][tier.toLowerCase()] : 0;
-    }
-    
-    // Get estimated hours for a hub and tier
-    function getHubHours(hub, tier) {
-      const hours = {
-        marketing: { starter: 10, professional: 20, enterprise: 40 },
-        sales: { starter: 8, professional: 16, enterprise: 32 },
-        service: { starter: 8, professional: 16, enterprise: 32 }
-      };
-      
-      return hours[hub] && hours[hub][tier.toLowerCase()] ? hours[hub][tier.toLowerCase()] : 0;
-    }
-    
-    // Get multiplier based on service model
-    function getServiceModelMultiplier(model) {
-      const multipliers = {
-        'Do It Yourself': 0.8,
         'Do It With Me': 1.0,
         'Do It For Me': 1.2
       };
