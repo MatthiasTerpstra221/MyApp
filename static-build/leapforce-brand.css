@@ -1,0 +1,221 @@
+:root {
+  /* Leapforce Brand Colors */
+  --leapforce-orange: #ee7624; /* Primary Orange */
+  --dark-orange: #b7530e; /* Secondary/Dark Orange */
+  --light-orange: #f4ac7b; /* Tertiary/Light Orange */
+  --leapforce-grey: #54565b; /* Primary Grey */
+  --dark-grey: #2f3033; /* Dark Grey */
+  --light-grey: #a9aaad; /* Light Grey */
+  --white: #ebebeb; /* Off-white */
+  
+  /* Aliases for ease of use */
+  --primary: var(--leapforce-orange);
+  --secondary: var(--dark-orange);
+  
+  /* UI Colors */
+  --bg-color: #ffffff;
+  --card-bg: #ffffff;
+  --text-color: var(--leapforce-grey);
+  --border-color: #e5e7eb;
+  --muted-text: var(--light-grey);
+  
+  /* State Colors */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  --success: #22c55e;
+  --warning: #eab308;
+  --error: #ef4444;
+  --info: #3b82f6;
+}
+
+/* Base Typography */
+body {
+  font-family: "Helvetica Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  color: var(--text-color);
+  line-height: 1.5;
+  background-color: var(--bg-color);
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--leapforce-grey);
+  font-weight: 400;
+  margin-top: 0;
+}
+
+a {
+  color: var(--leapforce-orange);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--dark-orange);
+  text-decoration: underline;
+}
+
+/* Buttons */
+.btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background-color: var(--secondary);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+}
+
+.btn-secondary:hover {
+  background-color: #95420b;
+}
+
+/* Navbar */
+.navbar {
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Notifications */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: white;
+  font-weight: 500;
+  z-index: 1000;
+  animation: fadeInOut 3s forwards;
+}
+
+.notification.success {
+  background-color: var(--success);
+}
+
+.notification.error {
+  background-color: var(--error);
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Links */
+.leapforce-link {
+  color: var(--leapforce-orange);
+  transition: color 0.2s;
+  font-weight: 400;
+}
+
+.leapforce-link:hover {
+  color: var(--dark-orange);
+}
+
+/* Containers */
+.leapforce-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Forms */
+.leapforce-form input, 
+.leapforce-form select, 
+.leapforce-form textarea {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-family: inherit;
+  color: var(--text-color);
+}
+
+.leapforce-form input:focus, 
+.leapforce-form select:focus, 
+.leapforce-form textarea:focus {
+  outline: none;
+  border-color: var(--leapforce-orange);
+  box-shadow: 0 0 0 2px rgba(238, 118, 36, 0.2);
+}
+
+.leapforce-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+  color: var(--leapforce-grey);
+}
+
+/* Utility classes */
+.text-primary {
+  color: var(--leapforce-orange);
+}
+
+.text-secondary {
+  color: var(--dark-orange);
+}
+
+.text-grey {
+  color: var(--leapforce-grey);
+}
+
+.text-light-grey {
+  color: var(--light-grey);
+}
+
+.bg-primary {
+  background-color: var(--leapforce-orange);
+}
+
+.bg-secondary {
+  background-color: var(--dark-orange);
+}
+
+.bg-light-orange {
+  background-color: var(--light-orange);
+}
+
+.border-primary {
+  border-color: var(--leapforce-orange);
+}
+
+.border-secondary {
+  border-color: var(--dark-orange);
+}
+
+/* Custom dividers */
+.leapforce-divider {
+  width: 180px;
+  height: 4px;
+  background-color: var(--leapforce-orange);
+  margin: 1.5rem auto;
+  border-radius: 2px;
+} 
