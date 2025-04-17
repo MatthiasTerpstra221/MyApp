@@ -660,25 +660,7 @@
     
     /* Scarcity box styling */
     .scarcity-box {
-      background: linear-gradient(45deg, rgba(249, 168, 38, 0.05) 0%, rgba(249, 168, 38, 0.1) 100%);
-      border: 1px solid rgba(249, 168, 38, 0.2);
-      border-radius: 0.75rem;
-      padding: 1.25rem;
-      margin: 2rem 0;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .scarcity-box::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, transparent 50%, rgba(249, 168, 38, 0.1) 50%);
+      display: none; /* Hide the scarcity box */
     }
     
     /* Form popup styling */
@@ -1055,9 +1037,8 @@
           <!-- Package scope details will appear here -->
         </div>
         
-        <div class="scarcity-box" style="background-color: #f8fafc; border: 1px solid #e5e7eb; border-radius: 6px; padding: 1rem; margin: 2rem 0; text-align: center;">
-          <div style="font-weight: 600; color: var(--primary);">Limited Time Offer</div>
-          <p style="margin: 0.5rem 0;">Book a call within the next 48 hours and receive a <strong>free HubSpot technical audit</strong> (valued at €500)</p>
+        <div class="scarcity-box" style="background-color: #f8fafc; border: 1px solid #e5e7eb; border-radius: 6px; padding: 1rem; margin: 2rem 0; text-align: center; display: none;">
+          <!-- Limited Time Offer removed -->
         </div>
         
         <div class="text-center mt-8">
@@ -1186,14 +1167,14 @@
     </div>
     
     <!-- HubSpot Form Popup (hidden by default) -->
-    <div id="form-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;" role="dialog" aria-labelledby="form-popup-title" aria-modal="true">
-      <div style="background-color: white; max-width: 600px; width: 90%; border-radius: 8px; padding: 2rem; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-        <button id="close-form-popup" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;" aria-label="Close form">&times;</button>
-        <h3 id="form-popup-title" style="color: var(--primary); margin-bottom: 1rem;">Get Your HubSpot Onboarding Package</h3>
-        <p style="margin-bottom: 1.5rem;">Complete the form below to receive your personalized HubSpot onboarding package.</p>
+    <div id="form-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;" role="dialog" aria-labelledby="form-popup-title" aria-modal="true">
+      <div style="background-color: white; max-width: 600px; width: 90%; border-radius: 12px; padding: 2.5rem; position: relative; box-shadow: 0 15px 30px rgba(0,0,0,0.25);">
+        <button id="close-form-popup" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-500); transition: all 0.2s;" aria-label="Close form">&times;</button>
+        <h3 id="form-popup-title" style="color: var(--primary); margin-bottom: 1.25rem; font-size: 1.75rem; text-align: center;">Get Your HubSpot Onboarding Package</h3>
+        <p style="margin-bottom: 1.5rem; text-align: center; color: var(--gray-600);">Complete the form below to receive your personalized HubSpot onboarding package.</p>
         
         <!-- HubSpot Form Container -->
-        <div id="hubspot-form-container">
+        <div id="hubspot-form-container" style="border-radius: 8px; overflow: hidden;">
           <div id="form-loading" style="text-align: center; padding: 2rem;">
             <p>Loading form...</p>
             <div style="width: 40px; height: 40px; border: 5px solid #f3f4f6; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto;"></div>
@@ -1712,7 +1693,59 @@
               var submitButton = $form.find('.hs-button.primary');
               if (submitButton.length) {
                 submitButton.val('Get My Onboarding Package');
+                // Add custom styling to the submit button
+                submitButton.css({
+                  'background-color': 'var(--primary)',
+                  'color': 'white',
+                  'padding': '12px 24px',
+                  'font-size': '16px',
+                  'font-weight': '600',
+                  'border-radius': '6px',
+                  'border': 'none',
+                  'cursor': 'pointer',
+                  'transition': 'all 0.2s ease',
+                  'width': '100%',
+                  'text-align': 'center',
+                  'margin-top': '15px',
+                  'box-shadow': '0 2px 4px rgba(0, 0, 0, 0.1)'
+                });
+                
+                // Add hover effect
+                submitButton.hover(
+                  function() { 
+                    $(this).css('background-color', 'var(--primary-dark)');
+                    $(this).css('transform', 'translateY(-2px)');
+                    $(this).css('box-shadow', '0 4px 6px rgba(0, 0, 0, 0.15)');
+                  }, 
+                  function() { 
+                    $(this).css('background-color', 'var(--primary)');
+                    $(this).css('transform', 'translateY(0)');
+                    $(this).css('box-shadow', '0 2px 4px rgba(0, 0, 0, 0.1)');
+                  }
+                );
               }
+              
+              // Apply custom styles to form fields
+              $form.find('.hs-input').css({
+                'border': '1px solid var(--gray-300)',
+                'border-radius': '6px',
+                'padding': '12px',
+                'font-size': '16px',
+                'width': '100%',
+                'margin-bottom': '10px',
+                'transition': 'border-color 0.2s ease'
+              });
+              
+              // Add focus styles to form fields
+              $form.find('.hs-input').focus(function() {
+                $(this).css('border-color', 'var(--primary)');
+                $(this).css('box-shadow', '0 0 0 3px rgba(0, 122, 140, 0.1)');
+              });
+              
+              $form.find('.hs-input').blur(function() {
+                $(this).css('border-color', 'var(--gray-300)');
+                $(this).css('box-shadow', 'none');
+              });
               
               // Apply custom styles to form
               const formContainer = document.querySelector('.hs-form-container');
