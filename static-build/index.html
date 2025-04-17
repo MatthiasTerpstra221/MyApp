@@ -8,34 +8,34 @@
   <link rel="icon" href="favicon.ico">
   <title>HubSpot Onboarding Calculator | Leapforce</title>
   <style>
-    /* CSS Variables for consistency */
+    /* CSS Variables for consistency - Updated with Leapforce brand colors */
     :root {
-      --primary: #007A8C;
-      --primary-dark: #00636F;
-      --primary-light: #33919E;
-      --secondary: #FF6B35; /* Orange accent color */
-      --secondary-light: #FF8A5E;
-      --secondary-dark: #E55A2B;
-      --accent: #F9A826; /* Yellow accent */
-      --accent-light: #FABC54;
-      --success: #10B981;
-      --error: #EF4444;
-      --gray-50: #f9fafb;
-      --gray-100: #f3f4f6;
-      --gray-200: #e5e7eb;
-      --gray-300: #d1d5db;
-      --gray-400: #9ca3af;
-      --gray-500: #6b7280;
-      --gray-600: #4b5563;
-      --gray-700: #374151;
-      --gray-800: #1f2937;
-      --gray-900: #111827;
+      --primary: #54565b; /* Primair Leapforce Grijs */
+      --primary-dark: #2f3033; /* Donker Grijs */
+      --primary-light: #a9aaad; /* Licht Grijs */
+      --secondary: #ee7624; /* Primair Leapforce Oranje */
+      --secondary-light: #f4ac7b; /* Licht Oranje */
+      --secondary-dark: #b7530e; /* Extra Donker Oranje */
+      --accent: #f4ac7b; /* Licht Oranje as accent */
+      --accent-light: #f8d2b9; /* Lighter version of Light Oranje */
+      --success: #4CAF50; /* Keep success green for usability */
+      --error: #F44336; /* Keep error red for usability */
+      --gray-50: #f7f7f7;
+      --gray-100: #ebebeb; /* Wit from brand guide */
+      --gray-200: #d4d4d5;
+      --gray-300: #a9aaad; /* Licht Grijs */
+      --gray-400: #8d8f93;
+      --gray-500: #6e7073;
+      --gray-600: #54565b; /* Primair Leapforce Grijs */
+      --gray-700: #424447;
+      --gray-800: #2f3033; /* Donker Grijs */
+      --gray-900: #212224;
       --max-width: 1200px;
       --border-radius: 0.5rem;
       --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       --box-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       --transition: all 0.3s ease;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      --font-sans: 'Helvetica Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
     
     /* Base styles */
@@ -86,7 +86,7 @@
       gap: 1.5rem;
     }
     .navbar-menu a {
-      color: var(--gray-700);
+      color: var(--gray-600);
       text-decoration: none;
       font-weight: 500;
       transition: var(--transition);
@@ -687,7 +687,7 @@
       width: 40px;
       height: 40px;
       border: 3px solid var(--gray-200);
-      border-top: 3px solid var(--primary);
+      border-top: 3px solid var(--secondary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin: 20px auto;
@@ -756,7 +756,7 @@
     }
     
     .notification.info {
-      background-color: var(--primary);
+      background-color: var(--secondary);
     }
     
     .notification.error {
@@ -1695,7 +1695,7 @@
                 submitButton.val('Get My Onboarding Package');
                 // Add custom styling to the submit button
                 submitButton.css({
-                  'background-color': 'var(--primary)',
+                  'background-color': 'var(--secondary)',
                   'color': 'white',
                   'padding': '12px 24px',
                   'font-size': '16px',
@@ -1713,12 +1713,12 @@
                 // Add hover effect
                 submitButton.hover(
                   function() { 
-                    $(this).css('background-color', 'var(--primary-dark)');
+                    $(this).css('background-color', 'var(--secondary-dark)');
                     $(this).css('transform', 'translateY(-2px)');
                     $(this).css('box-shadow', '0 4px 6px rgba(0, 0, 0, 0.15)');
                   }, 
                   function() { 
-                    $(this).css('background-color', 'var(--primary)');
+                    $(this).css('background-color', 'var(--secondary)');
                     $(this).css('transform', 'translateY(0)');
                     $(this).css('box-shadow', '0 2px 4px rgba(0, 0, 0, 0.1)');
                   }
@@ -1738,8 +1738,8 @@
               
               // Add focus styles to form fields
               $form.find('.hs-input').focus(function() {
-                $(this).css('border-color', 'var(--primary)');
-                $(this).css('box-shadow', '0 0 0 3px rgba(0, 122, 140, 0.1)');
+                $(this).css('border-color', 'var(--secondary)');
+                $(this).css('box-shadow', '0 0 0 3px rgba(238, 118, 36, 0.1)');
               });
               
               $form.find('.hs-input').blur(function() {
@@ -2075,7 +2075,7 @@
         
         /* Apply styles to selection cards */
         .selection-card {
-          border: 1px solid #e5e7eb;
+          border: 1px solid #d4d4d5;
           border-radius: 0.5rem;
           padding: 1.5rem;
           position: relative;
@@ -2085,7 +2085,7 @@
         }
         
         .selection-card:hover {
-          border-color: var(--primary);
+          border-color: var(--secondary);
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
@@ -2096,7 +2096,7 @@
         }
         
         .selection-card input:checked + label {
-          color: var(--primary);
+          color: var(--secondary);
         }
         
         .selection-card input:checked + label::before {
@@ -2106,7 +2106,7 @@
           right: 0;
           bottom: 0;
           left: 0;
-          border: 2px solid var(--primary);
+          border: 2px solid var(--secondary);
           border-radius: 0.5rem;
           pointer-events: none;
         }
