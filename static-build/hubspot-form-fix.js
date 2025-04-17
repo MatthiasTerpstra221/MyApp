@@ -207,4 +207,271 @@
       pollForForm();
     };
   });
-})(); 
+})();
+
+// HubSpot Form Fix
+// Ensures that the HubSpot form captures all selection data correctly
+// and provides a seamless transition to the results display
+
+// Function to initialize form with proper data capture
+function initHubSpotFormWithResults() {
+  console.log("Initializing HubSpot form integration with results handling");
+  
+  // Find form submission related elements
+  const formContainer = document.querySelector('.hs-form-container');
+  const submitButtons = document.querySelectorAll('.form-submit-btn');
+  
+  if (!formContainer) {
+    console.error("HubSpot form container not found");
+    return;
+  }
+  
+  // Listen for the HubSpot form to be loaded
+  const observer = new MutationObserver(function(mutations, observer) {
+    for (const mutation of mutations) {
+      if (mutation.addedNodes.length && mutation.addedNodes[0].classList && mutation.addedNodes[0].classList.contains('hs-form')) {
+        console.log("HubSpot form detected in DOM");
+        
+        // Get the form element
+        const hsForm = mutation.addedNodes[0];
+        
+        // Find the hidden onboarding key field
+        const onboardingKeyField = hsForm.querySelector('input[name="hubspot_standard_onboarding_key"]');
+        if (!onboardingKeyField) {
+          console.error("Onboarding key field not found in HubSpot form");
+          return;
+        }
+        
+        // Capture form submission
+        hsForm.addEventListener('submit', function(event) {
+          console.log("Form submission detected");
+          
+          // Ensure onboarding key is set
+          const onboardingKey = onboardingKeyField.value;
+          if (!onboardingKey) {
+            console.error("No onboarding key found at submission time");
+            return;
+          }
+          
+          // Store the package key for results display
+          localStorage.setItem('hubspot_onboarding_key', onboardingKey);
+          
+          // Custom submission handling
+          // Note: We don't prevent default as we want HubSpot to still handle the form
+          // We'll show our own results after submission
+        });
+        
+        // Hook into the HubSpot form's success handler
+        window.addEventListener('message', function(event) {
+          if (event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormSubmit') {
+            console.log("HubSpot form submitted successfully");
+            
+            // Get the onboarding key
+            const onboardingKey = localStorage.getItem('hubspot_onboarding_key');
+            
+            // Show results directly on the page
+            showResultsAfterSubmission(onboardingKey);
+          }
+        });
+        
+        // Stop observing once we've found the form
+        observer.disconnect();
+        break;
+      }
+    }
+  });
+  
+  // Start observing
+  observer.observe(formContainer, { childList: true, subtree: true });
+  
+  // Handle custom calculate button clicks to ensure they populate the hidden field
+  if (submitButtons.length) {
+    submitButtons.forEach(button => {
+      button.addEventListener('click', function(event) {
+        // Don't trigger the normal click handler
+        event.preventDefault();
+        
+        // Generate the onboarding key based on selections
+        const onboardingKey = generateOnboardingKey();
+        console.log("Generated onboarding key:", onboardingKey);
+        
+        // Store for use with form
+        localStorage.setItem('hubspot_onboarding_key', onboardingKey);
+        
+        // Find and set the value in the HubSpot form field
+        const hsForm = document.querySelector('.hs-form');
+        if (hsForm) {
+          const onboardingKeyField = hsForm.querySelector('input[name="hubspot_standard_onboarding_key"]');
+          if (onboardingKeyField) {
+            onboardingKeyField.value = onboardingKey;
+            console.log("Set onboarding key in form field:", onboardingKey);
+          }
+          
+          // Submit the form
+          const submitButton = hsForm.querySelector('input[type="submit"]');
+          if (submitButton) {
+            submitButton.click();
+          }
+        } else {
+          console.error("HubSpot form not found for onboarding key insertion");
+          
+          // If form not found, show results directly
+          showResultsAfterSubmission(onboardingKey);
+        }
+      });
+    });
+  }
+}
+
+// Helper function to generate onboarding key from selections
+function generateOnboardingKey() {
+  // Get selected hubs and tiers
+  const marketingTier = localStorage.getItem('marketing_hub_tier') || 'none';
+  const salesTier = localStorage.getItem('sales_hub_tier') || 'none';
+  const serviceTier = localStorage.getItem('service_hub_tier') || 'none';
+  
+  // Get selected service models for each hub
+  const marketingModel = localStorage.getItem('marketing_service_model') || 'none';
+  const salesModel = localStorage.getItem('sales_service_model') || 'none';
+  const serviceModel = localStorage.getItem('service_service_model') || 'none';
+  
+  // Determine the package key based on selections
+  let packageKey = '';
+  
+  // Check each hub and use the corresponding package key
+  if (marketingTier !== 'none' && marketingModel !== 'none') {
+    packageKey = `marketing_hub_${marketingTier.toLowerCase()}_${marketingModel.toLowerCase()}`;
+  } else if (salesTier !== 'none' && salesModel !== 'none') {
+    packageKey = `sales_hub_${salesTier.toLowerCase()}_${salesModel.toLowerCase()}`;
+  } else if (serviceTier !== 'none' && serviceModel !== 'none') {
+    packageKey = `service_hub_${serviceTier.toLowerCase()}_${serviceModel.toLowerCase()}`;
+  }
+  
+  return packageKey;
+}
+
+// Function to show results after form submission
+function showResultsAfterSubmission(packageKey) {
+  // Close any open popups
+  const popupContainer = document.querySelector('.popup-container');
+  if (popupContainer) {
+    popupContainer.style.display = 'none';
+  }
+  
+  // Scroll to top for better user experience
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  // Wait to ensure DOM is ready
+  setTimeout(() => {
+    // Make sure we have the data available
+    if (typeof hubspotOnboardingData === 'undefined') {
+      console.error('Calculator data not loaded!');
+      return;
+    }
+    
+    // Show the results section
+    const resultsContainer = document.getElementById('final-results-container');
+    if (!resultsContainer) {
+      console.error('Results container not found!');
+      return;
+    }
+    
+    // Get package details
+    const packageDetails = hubspotOnboardingData.getPackageByKey(packageKey);
+    
+    if (!packageDetails) {
+      resultsContainer.innerHTML = `
+        <div class="results-error">
+          <h3>Package Not Found</h3>
+          <p>The selected package (${packageKey}) could not be found in our system.</p>
+          <a href="index.html" class="btn">Return to Calculator</a>
+        </div>
+      `;
+      resultsContainer.style.display = 'block';
+      return;
+    }
+    
+    // Format hub, tier, and service model names for display
+    const hubName = packageDetails.hub.charAt(0).toUpperCase() + packageDetails.hub.slice(1);
+    
+    let tierName = packageDetails.tier;
+    if (tierName === 'pro') tierName = 'Professional';
+    else tierName = tierName.charAt(0).toUpperCase() + tierName.slice(1);
+    
+    let modelName = '';
+    switch(packageDetails.serviceModel) {
+      case 'diy':
+        modelName = 'Do It Yourself (DIY)';
+        break;
+      case 'diwme':
+        modelName = 'Do It With Me (DIWMe)';
+        break;
+      case 'difme':
+        modelName = 'Do It For Me (DIFMe)';
+        break;
+    }
+    
+    // Format price
+    const price = typeof packageDetails.price === 'number' 
+      ? '€' + packageDetails.price.toLocaleString() 
+      : packageDetails.price;
+    
+    // Render package details
+    resultsContainer.innerHTML = `
+      <div class="results-container">
+        <div class="results-header">
+          <h2>Your HubSpot Onboarding Package</h2>
+          <a href="index.html" class="btn">Recalculate</a>
+        </div>
+        
+        <div class="package-summary">
+          <h3>${hubName} Hub - ${tierName} Tier</h3>
+          <p class="service-model">${modelName}</p>
+          
+          <div class="package-details">
+            <div class="detail-row">
+              <span class="detail-label">Package Reference:</span>
+              <span class="detail-value">${packageDetails.packageKey}</span>
+            </div>
+            
+            <div class="detail-row">
+              <span class="detail-label">Estimated Hours:</span>
+              <span class="detail-value">${packageDetails.hours || 'Custom'}</span>
+            </div>
+            
+            <div class="detail-row">
+              <span class="detail-label">Price:</span>
+              <span class="detail-value price-value">${price}</span>
+            </div>
+          </div>
+          
+          <div class="scope-summary">
+            <h4>Scope Summary</h4>
+            <p>${packageDetails.scopeSummary || 'Custom scope based on your specific requirements. Please contact us for details.'}</p>
+          </div>
+        </div>
+        
+        <div class="next-steps">
+          <h3>Thank You for Your Submission!</h3>
+          <p>Your HubSpot onboarding package has been submitted successfully. A Leapforce consultant will contact you shortly to discuss your selected package and any customizations you might need.</p>
+          
+          <div class="actions-row">
+            <a href="https://www.leapforce.nl/contact" target="_blank" class="btn">Contact Us</a>
+            <a href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145" target="_blank" class="btn btn-secondary">Schedule a Call</a>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    // Show the results section
+    resultsContainer.style.display = 'block';
+    
+    // Scroll to results
+    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+  }, 500);
+}
+
+// Initialize when the DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  initHubSpotFormWithResults();
+}); 
