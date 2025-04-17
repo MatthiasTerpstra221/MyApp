@@ -342,6 +342,33 @@
       color: white;
     }
     
+    .step.completed .step-number::after {
+      content: '✓';
+      position: absolute;
+      font-size: 0.8rem;
+    }
+    
+    /* Button outline style */
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      transition: all 0.2s;
+    }
+    
+    .btn-outline:hover {
+      background-color: var(--gray-50);
+    }
+    
+    /* Card style for tier information */
+    .tier-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 0.375rem;
+      padding: 1rem;
+      margin: 1rem 0;
+      background-color: var(--gray-50);
+    }
+    
     /* Calculator steps styles */
     .calculator-step {
       display: none;
@@ -382,8 +409,8 @@
   <nav class="navbar">
     <div class="container navbar-content">
       <div class="navbar-logo">
-        <a href="https://www.leapforce.nl" target="_blank">
-          <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo">
+        <a href="https://www.leapforce.nl" target="_blank" rel="noopener" aria-label="Leapforce homepage">
+          <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" onerror="this.onerror=null; this.src='https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.png';">
         </a>
       </div>
       <div class="navbar-menu">
@@ -414,13 +441,13 @@
   <section class="hero">
   <div class="container">
       <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
-        <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" style="height: 80px; margin-right: 1rem;">
+        <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" style="height: 80px; margin-right: 1rem;" onerror="this.onerror=null; this.style.display='none';">
         <div style="text-align: left; display: flex; flex-direction: column; justify-content: center;">
       <h1>HubSpot Onboarding Calculator</h1>
           <p>Find the perfect HubSpot onboarding package for your business needs</p>
     </div>
       </div>
-      <a href="https://www.hubspot.com/agencies/leapforce" target="_blank" class="btn btn-secondary">Visit Our HubSpot Partner Page</a>
+      <a href="https://www.hubspot.com/agencies/leapforce" target="_blank" rel="noopener" class="btn btn-secondary" aria-label="Visit the Leapforce HubSpot Partner Page">Visit Our HubSpot Partner Page</a>
     </div>
   </section>
   
@@ -655,15 +682,15 @@
         
         <div class="text-center mt-8">
           <p style="margin-bottom: 1rem; font-size: 1.1rem;"><strong>Ready to get started with your onboarding package?</strong></p>
-          <a href="https://www.leapforce.nl/contact/" target="_blank" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem;">Schedule a Call Now</a>
+          <a href="https://www.leapforce.nl/contact/" target="_blank" rel="noopener" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem;">Schedule a Call Now</a>
           <div style="margin: 1rem 0; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
             <span style="height: 1px; background-color: #e5e7eb; flex: 1;"></span>
             <span style="color: #6b7280; font-size: 0.9rem;">OR</span>
             <span style="height: 1px; background-color: #e5e7eb; flex: 1;"></span>
           </div>
-          <a href="https://www.leapforce.nl/contact/" target="_blank" class="btn btn-secondary">Contact Us With Questions</a>
+          <a href="https://www.leapforce.nl/contact/" target="_blank" rel="noopener" class="btn btn-secondary">Contact Us With Questions</a>
           <div style="margin-top: 1.5rem;">
-            <button class="btn btn-outline mt-4" onclick="resetCalculator()" style="font-size: 0.9rem;">Start Over</button>
+            <button class="btn btn-outline mt-4" onclick="resetCalculator()" style="font-size: 0.9rem; width: auto; max-width: 200px; margin: 0 auto; display: block;">Start Over</button>
           </div>
         </div>
       </div>
@@ -779,10 +806,10 @@
     </div>
     
     <!-- HubSpot Form Popup (hidden by default) -->
-    <div id="form-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+    <div id="form-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;" role="dialog" aria-labelledby="form-popup-title" aria-modal="true">
       <div style="background-color: white; max-width: 600px; width: 90%; border-radius: 8px; padding: 2rem; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-        <button id="close-form-popup" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
-        <h3 style="color: var(--primary); margin-bottom: 1rem;">Get Your HubSpot Onboarding Package</h3>
+        <button id="close-form-popup" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;" aria-label="Close form">&times;</button>
+        <h3 id="form-popup-title" style="color: var(--primary); margin-bottom: 1rem;">Get Your HubSpot Onboarding Package</h3>
         <p style="margin-bottom: 1.5rem;">Complete the form below to receive your personalized HubSpot onboarding package.</p>
         
         <!-- HubSpot Form Container -->
@@ -831,7 +858,7 @@
     <div class="card" style="background-color: #f8fafc; border: 1px solid #e5e7eb; text-align: center;">
       <h2 class="section-title">Ready to Get Started with HubSpot?</h2>
       <p class="mb-4">With 100+ CRM implementations, 175+ clients, and 75+ certifications, our team of 35+ specialists is ready to support your HubSpot journey.</p>
-      <a href="https://www.leapforce.nl/contact/" target="_blank" class="btn">Contact Us Today</a>
+      <a href="https://www.leapforce.nl/contact/" target="_blank" rel="noopener" class="btn">Contact Us Today</a>
     </div>
   </div>
   
@@ -843,15 +870,15 @@
           <h3>About Leapforce</h3>
           <p>A top Dutch agency & one of the fastest-growing companies in the Netherlands, recognized with awards like Gazelle 2022, 2023 & 2024, and Top 250 Scaleups 2023.</p>
           <div style="margin-top: 1rem;">
-            <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" style="filter: brightness(0) invert(1); max-width: 150px;">
+            <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" style="filter: brightness(0) invert(1); max-width: 150px;" onerror="this.onerror=null; this.src='https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.png'; this.style.filter='brightness(0) invert(1)'; this.style.maxWidth='150px';">
           </div>
         </div>
         <div class="footer-column">
           <h3>HubSpot Services</h3>
           <ul>
-            <li><a href="https://www.leapforce.nl/expertises/" target="_blank">View All Our Expertises</a></li>
-      </ul>
-    </div>
+            <li><a href="https://www.leapforce.nl/expertises/" target="_blank" rel="noopener">View All Our Expertises</a></li>
+          </ul>
+        </div>
         <div class="footer-column">
           <h3>Contact Us</h3>
           <ul>
@@ -862,7 +889,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2023 Leapforce. All rights reserved. <a href="https://www.leapforce.nl/privacy-policy/" target="_blank">Privacy Policy</a></p>
+        <p>&copy; 2024 Leapforce. All rights reserved. <a href="https://www.leapforce.nl/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a></p>
       </div>
     </div>
   </footer>
@@ -919,8 +946,56 @@
       service_model: 'Do It Yourself' // Default
     };
     
+    // Verify all images are loading properly
+    function verifyImages() {
+      const images = document.querySelectorAll('img');
+      let loaded = 0;
+      const total = images.length;
+      
+      images.forEach(img => {
+        // Check if image is already loaded
+        if (img.complete) {
+          loaded++;
+          if (img.naturalWidth === 0) {
+            console.error(`Image failed to load: ${img.src}`);
+            handleImageError(img);
+          }
+        } else {
+          // Add load event listener
+          img.addEventListener('load', function() {
+            loaded++;
+          });
+          
+          // Add error event listener
+          img.addEventListener('error', function() {
+            console.error(`Image failed to load: ${img.src}`);
+            handleImageError(img);
+          });
+        }
+      });
+      
+      console.log(`Images loaded: ${loaded}/${total}`);
+    }
+    
+    function handleImageError(img) {
+      // If it's a logo, try to replace with a fallback
+      if (img.alt.includes('Logo')) {
+        img.onerror = null; // Prevent infinite loop
+        if (img.src.includes('.svg')) {
+          // Try png version
+          img.src = img.src.replace('.svg', '.png');
+        } else {
+          // If all fails, hide the image
+          img.style.display = 'none';
+        }
+      }
+    }
+    
     // Event Listeners
     document.addEventListener('DOMContentLoaded', function() {
+      // Verify all images
+      verifyImages();
+      
       // Hub selection toggles
       hubCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
@@ -1049,6 +1124,16 @@
         });
       }
       
+      // Focus trap for form popup (accessibility)
+      if (formPopup) {
+        formPopup.addEventListener('click', function(e) {
+          // Close popup when clicking outside the form container
+          if (e.target === formPopup) {
+            formPopup.style.display = 'none';
+          }
+        });
+      }
+      
       // Mobile menu toggle
       const mobileMenuButton = document.querySelector('.mobile-menu-button');
       const mobileMenu = document.getElementById('mobile-menu');
@@ -1074,6 +1159,20 @@
             }
           }
         });
+      });
+      
+      // Close form popup with Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && formPopup.style.display === 'flex') {
+          formPopup.style.display = 'none';
+        }
+      });
+      
+      // Verify all links
+      document.querySelectorAll('a[href^="http"]').forEach(link => {
+        if (!link.getAttribute('rel')) {
+          link.setAttribute('rel', 'noopener');
+        }
       });
     });
     
@@ -1152,6 +1251,13 @@
       if (step === 2) {
         updateTierSections();
       }
+      
+      // Announce step change for accessibility
+      const stepAnnouncement = document.createElement('div');
+      stepAnnouncement.setAttribute('aria-live', 'polite');
+      stepAnnouncement.textContent = `Step ${step} of 4: ${document.querySelector(`.step[data-step="${step}"] .step-text`).textContent}`;
+      document.body.appendChild(stepAnnouncement);
+      setTimeout(() => document.body.removeChild(stepAnnouncement), 1000);
     }
     
     // Generate package key
