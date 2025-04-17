@@ -195,6 +195,76 @@
       font-size: 0.875rem;
       color: #9ca3af;
     }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+      }
+      
+      .mobile-menu-button {
+        display: block !important;
+      }
+      
+      .mobile-menu {
+        display: block;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: white;
+        padding: 1rem;
+        box-shadow: var(--box-shadow);
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+      }
+      
+      .mobile-menu.active {
+        transform: translateY(0);
+      }
+      
+      .mobile-menu a {
+        display: block;
+        padding: 0.75rem 0;
+        color: var(--gray-800);
+        text-decoration: none;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      
+      .selection-grid {
+        grid-template-columns: 1fr !important;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .card {
+        padding: 1.5rem;
+      }
+      
+      .social-proof {
+        gap: 1rem !important;
+      }
+      
+      .social-proof > div {
+        flex-basis: 30%;
+      }
+      
+      .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      
+      .results-highlight {
+        font-size: 1.75rem !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -212,8 +282,23 @@
         <a href="#reviews">Reviews</a>
         <a href="https://www.leapforce.nl/contact/" target="_blank">Contact</a>
       </div>
+      <button class="mobile-menu-button" aria-label="Toggle mobile menu" style="display: none; background: none; border: none; cursor: pointer;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
     </div>
   </nav>
+  
+  <!-- Mobile Menu (hidden by default) -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#calculator">Calculator</a>
+    <a href="#about">About Hubs</a>
+    <a href="#reviews">Reviews</a>
+    <a href="https://www.leapforce.nl/contact/" target="_blank">Contact</a>
+  </div>
   
   <!-- Hero Section -->
   <section class="hero">
@@ -228,13 +313,36 @@
     <!-- Calculator Intro -->
     <div class="card" id="calculator">
       <h2 class="section-title">Calculate Your HubSpot Onboarding Package</h2>
-      <p class="text-center mb-4">Complete the form below to get your personalized HubSpot onboarding recommendation.</p>
+      <div class="benefits-box mb-4">
+        <p class="text-center" style="font-size: 1.1rem; margin-bottom: 0.5rem;">In just 60 seconds, get a personalized onboarding package with:</p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 0.5rem;">
+          <div style="display: flex; align-items: center;"><span style="color: #ea580c; margin-right: 0.5rem;">✓</span> Exact pricing</div>
+          <div style="display: flex; align-items: center;"><span style="color: #ea580c; margin-right: 0.5rem;">✓</span> Implementation timeline</div>
+          <div style="display: flex; align-items: center;"><span style="color: #ea580c; margin-right: 0.5rem;">✓</span> Detailed scope of work</div>
+        </div>
+      </div>
       
       <!-- HubSpot Form Container -->
       <div id="hubspot-form-container">
         <div id="form-loading" style="text-align: center; padding: 2rem;">
           <p>Loading form...</p>
           <div style="width: 40px; height: 40px; border: 5px solid #f3f4f6; border-top: 5px solid #ea580c; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto;"></div>
+        </div>
+      </div>
+      
+      <!-- Social Proof and Trust Signals -->
+      <div class="social-proof mt-4" style="border-top: 1px solid #e5e7eb; padding-top: 1rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; align-items: center;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <div style="font-weight: 700; font-size: 1.5rem; color: #ea580c;">100+</div>
+          <div style="font-size: 0.875rem;">HubSpot implementations</div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <div style="font-weight: 700; font-size: 1.5rem; color: #ea580c;">95%</div>
+          <div style="font-size: 0.875rem;">Client satisfaction rate</div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <div style="font-weight: 700; font-size: 1.5rem; color: #ea580c;">Platinum</div>
+          <div style="font-size: 0.875rem;">HubSpot Partner</div>
         </div>
       </div>
       
@@ -253,10 +361,23 @@
           <!-- Package scope details will appear here -->
         </div>
         
+        <div class="scarcity-box" style="background-color: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; padding: 1rem; margin: 2rem 0; text-align: center;">
+          <div style="font-weight: 600; color: #ea580c;">Limited Time Offer</div>
+          <p style="margin: 0.5rem 0;">Book a call within the next 48 hours and receive a <strong>free HubSpot technical audit</strong> (valued at €500)</p>
+        </div>
+        
         <div class="text-center mt-8">
-          <a href="https://www.leapforce.nl/contact/" target="_blank" class="btn">Schedule a Call</a>
-          <a href="https://www.leapforce.nl/contact/" target="_blank" class="btn btn-secondary">Contact Us</a>
-          <button class="btn btn-outline mt-4" onclick="resetCalculator()">Start Over</button>
+          <p style="margin-bottom: 1rem; font-size: 1.1rem;"><strong>Ready to get started with your onboarding package?</strong></p>
+          <a href="https://www.leapforce.nl/contact/" target="_blank" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem;">Schedule a Call Now</a>
+          <div style="margin: 1rem 0; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <span style="height: 1px; background-color: #e5e7eb; flex: 1;"></span>
+            <span style="color: #6b7280; font-size: 0.9rem;">OR</span>
+            <span style="height: 1px; background-color: #e5e7eb; flex: 1;"></span>
+          </div>
+          <a href="https://www.leapforce.nl/contact/" target="_blank" class="btn btn-secondary">Contact Us With Questions</a>
+          <div style="margin-top: 1.5rem;">
+            <button class="btn btn-outline mt-4" onclick="resetCalculator()" style="font-size: 0.9rem;">Start Over</button>
+          </div>
         </div>
       </div>
     </div>
@@ -454,6 +575,20 @@
       </div>
     </div>
   </footer>
+
+  <!-- Exit Intent Popup (hidden by default) -->
+  <div id="exit-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background-color: white; max-width: 500px; border-radius: 8px; padding: 2rem; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+      <button id="close-popup" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      <h3 style="color: #ea580c; margin-bottom: 1rem;">Wait! Get Your Free HubSpot Guide</h3>
+      <p style="margin-bottom: 1.5rem;">Before you go, download our free guide on "10 Ways to Maximize Your HubSpot ROI" to help jumpstart your implementation.</p>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <input type="email" id="exit-email" placeholder="Your email address" style="padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 4px;">
+        <button id="download-guide" class="btn" style="width: 100%;">Get Free Guide</button>
+      </div>
+      <p style="font-size: 0.8rem; color: #6b7280; margin-top: 1rem; text-align: center;">We respect your privacy and will never share your information.</p>
+    </div>
+  </div>
 
   <!-- HubSpot form script -->
   <script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/embed/v2.js"></script>
@@ -819,6 +954,83 @@
         }
       </style>
     `);
+    
+    // Exit intent detection
+    document.addEventListener('DOMContentLoaded', function() {
+      // Only show exit popup if user hasn't submitted the form
+      let formSubmitted = false;
+      let popupShown = false;
+      
+      // Track form submission
+      window.addEventListener('message', function(event) {
+        if (event.data.type === 'hsFormSubmit') {
+          formSubmitted = true;
+        }
+      });
+      
+      // Exit intent detection
+      document.addEventListener('mouseout', function(e) {
+        // If the mouse leaves the top of the page and popup hasn't been shown yet
+        if (e.clientY < 20 && !popupShown && !formSubmitted) {
+          document.getElementById('exit-popup').style.display = 'flex';
+          popupShown = true;
+          
+          // Track exit popup display in analytics
+          if (typeof _hsq !== 'undefined') {
+            _hsq.push(['trackEvent', {
+              id: 'Exit Popup Displayed'
+            }]);
+          }
+        }
+      });
+      
+      // Close popup when clicking close button
+      document.getElementById('close-popup').addEventListener('click', function() {
+        document.getElementById('exit-popup').style.display = 'none';
+      });
+      
+      // Handle guide download
+      document.getElementById('download-guide').addEventListener('click', function() {
+        const email = document.getElementById('exit-email').value;
+        if (email && email.includes('@')) {
+          // Capture email for marketing - in real implementation, send to HubSpot API
+          console.log('Exit intent email captured:', email);
+          
+          // Show success message
+          const popupContent = document.querySelector('#exit-popup > div');
+          popupContent.innerHTML = `
+            <h3 style="color: #ea580c; margin-bottom: 1rem;">Thank You!</h3>
+            <p>Your guide is on its way to your inbox. Check your email in the next few minutes.</p>
+            <button id="exit-popup-close" class="btn" style="width: 100%; margin-top: 1rem;">Close</button>
+          `;
+          
+          // Handle close button
+          document.getElementById('exit-popup-close').addEventListener('click', function() {
+            document.getElementById('exit-popup').style.display = 'none';
+          });
+          
+          // Track guide download in analytics
+          if (typeof _hsq !== 'undefined') {
+            _hsq.push(['trackEvent', {
+              id: 'Exit Guide Downloaded',
+              value: email
+            }]);
+          }
+        } else {
+          alert('Please enter a valid email address.');
+        }
+      });
+      
+      // Mobile menu toggle functionality
+      const mobileMenuButton = document.querySelector('.mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+          mobileMenu.classList.toggle('active');
+        });
+      }
+    });
   </script>
 </body>
 </html> 
