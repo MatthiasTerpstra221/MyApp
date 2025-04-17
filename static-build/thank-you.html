@@ -4,21 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You | Leapforce HubSpot Onboarding</title>
-    <link rel="stylesheet" href="static/styles.css">
+    <link rel="icon" href="https://www.leapforce.nl/wp-content/uploads/2022/09/cropped-LeapForce-favico-32x32.jpg" sizes="32x32">
+    <link rel="icon" href="https://www.leapforce.nl/wp-content/uploads/2022/09/cropped-LeapForce-favico-192x192.jpg" sizes="192x192">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
+        :root {
+            /* Leapforce Brand Colors */
+            --primary: #ee7624; /* Leapforce Orange */
+            --secondary: #b7530e; /* Dark Orange */
+            --light-orange: #f4ac7b;
+            --leapforce-grey: #54565b;
+            --dark-grey: #2f3033;
+            --light-grey: #a9aaad;
+            --white: #ebebeb;
+            
+            /* UI Colors */
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --text-color: #54565b; /* Leapforce Grey */
+            --border-color: #e5e7eb;
+            --muted-text: #a9aaad; /* Light Grey */
+        }
+        
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: #f5f8fa;
         }
+        
+        body {
+            font-family: "Helvetica Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
         }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-logo img {
+            height: 40px;
+        }
+        
+        .navbar-logo a:not(:first-child) {
+            margin-left: 20px;
+        }
+        
         .card {
             background: white;
             border-radius: 8px;
@@ -26,65 +76,215 @@
             padding: 30px;
             margin-bottom: 30px;
         }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Helvetica Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-weight: 300;
+            color: var(--leapforce-grey);
+            margin-bottom: 1rem;
+        }
+        
         h1 {
-            color: #ff5c35;
+            color: var(--primary);
+            font-size: 2rem;
             margin-top: 0;
+            margin-bottom: 1.5rem;
         }
+        
         p {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
         }
+        
         .btn {
             display: inline-block;
-            background-color: #ff5c35;
+            background-color: var(--primary);
             color: white;
             padding: 10px 20px;
             border-radius: 4px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 400;
             transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
         }
+        
         .btn:hover {
-            background-color: #e54a2b;
+            background-color: var(--secondary);
         }
+        
         .status {
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 4px;
             display: none;
+            border-left: 4px solid;
         }
+        
         .status.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background-color: #e6f4ea;
+            color: #137333;
+            border-color: #34a853;
         }
+        
         .status.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background-color: #fce8e6;
+            color: #c5221f;
+            border-color: #ea4335;
+        }
+        
+        .status.info {
+            background-color: #e8f0fe;
+            color: #1967d2;
+            border-color: #4285f4;
+        }
+        
+        .package-details {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 2rem;
+        }
+        
+        .package-details h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--light-grey);
+            padding-bottom: 0.5rem;
+        }
+        
+        .package-details ul {
+            list-style-type: none;
+        }
+        
+        .package-details li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .package-details li:last-child {
+            border-bottom: none;
+        }
+        
+        .package-details li strong {
+            color: var(--leapforce-grey);
+            margin-right: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--leapforce-grey);
+            color: white;
+            margin-top: 40px;
+        }
+        
+        .copy-box {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .copy-box pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: var(--leapforce-grey);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .copy-btn:hover {
+            background-color: var(--dark-grey);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-logo">
+            <a href="https://www.leapforce.nl" target="_blank" rel="noopener" aria-label="Leapforce homepage">
+                <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" onerror="this.onerror=null; this.src='https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.png';">
+            </a>
+            <a href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl" target="_blank" rel="noopener" aria-label="HubSpot Platinum Partner Page">
+                <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" onerror="this.onerror=null; this.style.display='none';">
+            </a>
+        </div>
+    </div>
+    
     <div class="container">
         <div class="card">
             <h1>Thank You for Your Submission!</h1>
-            <p>We've received your HubSpot onboarding request and will be in touch shortly to discuss next steps.</p>
+            <p>We've received your HubSpot onboarding request and will be in touch shortly to discuss next steps. A confirmation email has been sent to your inbox with details about your selections.</p>
             
             <div id="status" class="status"></div>
             
-            <p>Your selected package includes:</p>
-            <ul id="package-details">
-                <li>Loading your selections...</li>
-            </ul>
+            <div class="package-details">
+                <h3>Your Selected Package</h3>
+                <ul id="package-details">
+                    <li><em>Loading your selections...</em></li>
+                </ul>
+            </div>
             
-            <p>A confirmation email has been sent to your inbox with details about your selections.</p>
+            <div id="technical-info" style="display: none;">
+                <h3>Technical Details (For Support)</h3>
+                <p>If you're experiencing issues with your form submission, please share the following information with our support team:</p>
+                
+                <div class="copy-box">
+                    <pre id="technical-details">Loading technical details...</pre>
+                    <button class="copy-btn" onclick="copyTechnicalDetails()">Copy</button>
+                </div>
+            </div>
             
-            <p><a href="index.html" class="btn">Return to Calculator</a></p>
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-top: 2rem;">
+                <a href="index.html" class="btn">Return to Calculator</a>
+                <a href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145" target="_blank" class="btn" style="background-color: var(--secondary);">Schedule a Call</a>
+            </div>
         </div>
     </div>
+    
+    <footer>
+        <p>© <span id="current-year"></span> Leapforce | <a href="https://www.leapforce.nl/privacy-policy/" target="_blank" style="color: white; text-decoration: underline;">Privacy Policy</a></p>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
             // Check for URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const onboardingKey = urlParams.get('onboarding_key');
@@ -93,70 +293,135 @@
             const serviceTier = urlParams.get('service_tier');
             const serviceModel = urlParams.get('service_model');
             
-            // Also check sessionStorage as backup
+            // Check both localStorage and sessionStorage (localStorage is more reliable but try both)
+            const localOnboardingKey = localStorage.getItem('hubspot_standard_onboarding_key');
+            const localMarketingTier = localStorage.getItem('marketing_hub_tier');
+            const localSalesTier = localStorage.getItem('sales_hub_tier');
+            const localServiceTier = localStorage.getItem('service_hub_tier');
+            const localServiceModel = localStorage.getItem('service_model');
+            
             const sessionOnboardingKey = sessionStorage.getItem('hubspot_standard_onboarding_key');
             const sessionMarketingTier = sessionStorage.getItem('marketing_hub_tier');
             const sessionSalesTier = sessionStorage.getItem('sales_hub_tier');
             const sessionServiceTier = sessionStorage.getItem('service_hub_tier');
             const sessionServiceModel = sessionStorage.getItem('service_model');
-            const submittedEmail = sessionStorage.getItem('submitted_email');
             
-            // Use URL parameters first, fall back to sessionStorage
-            const finalOnboardingKey = onboardingKey || sessionOnboardingKey || 'Not specified';
-            const finalMarketingTier = marketingTier || sessionMarketingTier || 'None';
-            const finalSalesTier = salesTier || sessionSalesTier || 'None';
-            const finalServiceTier = serviceTier || sessionServiceTier || 'None';
-            const finalServiceModel = serviceModel ? decodeURIComponent(serviceModel) : sessionServiceModel || 'Not specified';
+            // Use the most reliable source in this order: URL params > localStorage > sessionStorage
+            const finalOnboardingKey = onboardingKey || localOnboardingKey || sessionOnboardingKey || 'Not specified';
+            const finalMarketingTier = marketingTier || localMarketingTier || sessionMarketingTier || 'None';
+            const finalSalesTier = salesTier || localSalesTier || sessionSalesTier || 'None';
+            const finalServiceTier = serviceTier || localServiceTier || sessionServiceTier || 'None';
+            const finalServiceModel = serviceModel ? decodeURIComponent(serviceModel) : (localServiceModel || sessionServiceModel || 'Not specified');
+            
+            // Create a technical details object for debugging and support
+            const technicalDetails = {
+                timestamp: new Date().toISOString(),
+                source: 'thank-you.html',
+                onboardingKey: {
+                    url: onboardingKey || null,
+                    localStorage: localOnboardingKey || null,
+                    sessionStorage: sessionOnboardingKey || null,
+                    final: finalOnboardingKey
+                },
+                hubTiers: {
+                    marketing: finalMarketingTier,
+                    sales: finalSalesTier,
+                    service: finalServiceTier
+                },
+                serviceModel: finalServiceModel,
+                browser: navigator.userAgent,
+                referrer: document.referrer
+            };
+            
+            // Update the technical details section
+            document.getElementById('technical-details').textContent = JSON.stringify(technicalDetails, null, 2);
             
             // Update package details on the page
             const packageDetails = document.getElementById('package-details');
             packageDetails.innerHTML = '';
             
+            let hasSelections = false;
+            
             if (finalMarketingTier && finalMarketingTier !== 'None') {
                 packageDetails.innerHTML += `<li><strong>Marketing Hub:</strong> ${finalMarketingTier}</li>`;
+                hasSelections = true;
             }
             
             if (finalSalesTier && finalSalesTier !== 'None') {
                 packageDetails.innerHTML += `<li><strong>Sales Hub:</strong> ${finalSalesTier}</li>`;
+                hasSelections = true;
             }
             
             if (finalServiceTier && finalServiceTier !== 'None') {
                 packageDetails.innerHTML += `<li><strong>Service Hub:</strong> ${finalServiceTier}</li>`;
+                hasSelections = true;
             }
             
             if (finalServiceModel && finalServiceModel !== 'Not specified') {
                 packageDetails.innerHTML += `<li><strong>Service Model:</strong> ${finalServiceModel}</li>`;
+                hasSelections = true;
             }
             
-            packageDetails.innerHTML += `<li><strong>Onboarding Package Key:</strong> ${finalOnboardingKey}</li>`;
+            if (finalOnboardingKey && finalOnboardingKey !== 'Not specified') {
+                packageDetails.innerHTML += `<li><strong>Package Reference:</strong> ${finalOnboardingKey}</li>`;
+            }
             
-            // If we have an email and the onboarding key, try to update HubSpot via API
-            if (submittedEmail && (finalOnboardingKey !== 'Not specified')) {
-                const statusElement = document.getElementById('status');
-                statusElement.style.display = 'block';
-                statusElement.classList.add('success');
-                statusElement.textContent = 'Your package selections have been successfully saved with your contact information.';
+            // If no selections were found, show a message
+            if (!hasSelections) {
+                packageDetails.innerHTML = `
+                    <li style="text-align: center; padding: 1rem;">
+                        <em>We couldn't retrieve your package selections.</em>
+                    </li>
+                    <li style="text-align: center;">
+                        <a href="index.html" class="btn" style="margin-top: 1rem;">Return to Calculator</a>
+                    </li>
+                `;
                 
-                // For actual API implementation, you would add code here to call your backend endpoint
-                // that would update the contact record via the HubSpot API
-                console.log('Would update HubSpot contact via API with:', {
-                    email: submittedEmail,
-                    hubspot_standard_onboarding_key: finalOnboardingKey,
-                    marketing_hub_tier: finalMarketingTier,
-                    sales_hub_tier: finalSalesTier,
-                    service_hub_tier: finalServiceTier,
-                    service_model: finalServiceModel
-                });
+                // Show technical details for troubleshooting
+                document.getElementById('technical-info').style.display = 'block';
+            }
+            
+            // Show success message
+            const statusElement = document.getElementById('status');
+            statusElement.style.display = 'block';
+            statusElement.classList.add('success');
+            statusElement.innerHTML = `
+                <strong>Success!</strong> Your form has been submitted successfully.
+                Our team will contact you soon to discuss your HubSpot onboarding needs.
+            `;
+            
+            // Clear storage to prevent showing old data on future visits
+            // Keep the data for 30 minutes in case the user refreshes the page
+            setTimeout(function() {
+                localStorage.removeItem('hubspot_standard_onboarding_key');
+                localStorage.removeItem('marketing_hub_tier');
+                localStorage.removeItem('sales_hub_tier');
+                localStorage.removeItem('service_hub_tier');
+                localStorage.removeItem('service_model');
                 
-                // Clear sessionStorage after use
-                sessionStorage.removeItem('submitted_email');
                 sessionStorage.removeItem('hubspot_standard_onboarding_key');
                 sessionStorage.removeItem('marketing_hub_tier');
                 sessionStorage.removeItem('sales_hub_tier');
                 sessionStorage.removeItem('service_hub_tier');
                 sessionStorage.removeItem('service_model');
-            }
+            }, 30 * 60 * 1000); // 30 minutes
         });
+        
+        // Function to copy technical details
+        function copyTechnicalDetails() {
+            const technicalDetails = document.getElementById('technical-details').textContent;
+            navigator.clipboard.writeText(technicalDetails)
+                .then(() => {
+                    const copyBtn = document.querySelector('.copy-btn');
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Copy';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+        }
     </script>
 </body>
 </html> 
