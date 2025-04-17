@@ -8,93 +8,99 @@
   <link rel="icon" href="favicon.ico">
   <title>HubSpot Onboarding Calculator | Leapforce</title>
   <style>
+    /* CSS Variables for consistency */
+    :root {
+      --primary: #007A8C;
+      --primary-dark: #00636F;
+      --primary-light: #33919E;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --max-width: 1200px;
+      --border-radius: 0.5rem;
+      --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --transition: all 0.3s ease;
+    }
+    
+    /* Base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      line-height: 1.6;
+      color: var(--gray-800);
+      background-color: var(--gray-100);
+    }
+    
     /* Base styling */
     body, html {
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f8fafc;
-      color: #374151;
-      line-height: 1.5;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-    
-    /* Layout */
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
     }
-    .content-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
     
     /* Navigation */
     .navbar {
       background-color: white;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      padding: 1rem 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 100;
     }
     .navbar-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 1rem 0;
     }
     .navbar-logo img {
       height: 40px;
     }
     .navbar-menu {
       display: flex;
-      gap: 2rem;
+      gap: 1.5rem;
     }
     .navbar-menu a {
-      color: #374151;
+      color: var(--gray-700);
       text-decoration: none;
       font-weight: 500;
-      padding: 0.5rem 0;
-      position: relative;
     }
     .navbar-menu a:hover {
-      color: #ea580c;
-    }
-    .navbar-menu a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: #ea580c;
-      transition: width 0.3s ease;
-    }
-    .navbar-menu a:hover::after {
-      width: 100%;
+      color: var(--primary);
     }
     
-    /* Hero section */
+    /* Hero Section */
     .hero {
-      background-color: #ea580c;
-      color: white;
+      background-color: white;
       padding: 4rem 0;
       text-align: center;
     }
     .hero h1 {
       font-size: 2.5rem;
+      color: var(--gray-800);
       margin-bottom: 1rem;
-      color: white;
     }
     .hero p {
       font-size: 1.25rem;
-      max-width: 600px;
+      color: var(--gray-600);
+      max-width: 700px;
       margin: 0 auto;
-      opacity: 0.9;
     }
     
     /* Cards and Sections */
@@ -106,7 +112,7 @@
       margin-bottom: 2rem;
     }
     .section-title {
-      color: #ea580c;
+      color: var(--primary);
       font-size: 1.75rem;
       margin-bottom: 1.5rem;
       text-align: center;
@@ -115,7 +121,7 @@
     /* Buttons */
     .btn {
       display: inline-block;
-      background-color: #ea580c;
+      background-color: var(--primary);
       color: white;
       padding: 0.75rem 1.5rem;
       border-radius: 0.375rem;
@@ -127,15 +133,15 @@
       transition: background-color 0.2s;
     }
     .btn:hover {
-      background-color: #c2410c;
+      background-color: var(--primary-dark);
     }
     .btn-secondary {
       background-color: white;
-      color: #ea580c;
-      border: 1px solid #ea580c;
+      color: var(--primary);
+      border: 1px solid var(--primary);
     }
     .btn-secondary:hover {
-      background-color: #fef2f2;
+      background-color: var(--gray-50);
     }
     
     /* Utility classes */
@@ -226,7 +232,7 @@
       
       .mobile-menu a {
         display: block;
-        padding: 0.75rem 0;
+      padding: 0.75rem 0;
         color: var(--gray-800);
         text-decoration: none;
         border-bottom: 1px solid var(--gray-200);
@@ -258,7 +264,7 @@
       
       .btn {
         width: 100%;
-        margin-bottom: 0.5rem;
+      margin-bottom: 0.5rem;
       }
       
       .results-highlight {
@@ -303,46 +309,179 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="container">
-      <h1>HubSpot Onboarding Calculator</h1>
-      <p>Calculate your custom HubSpot onboarding package and find the perfect solution for your business needs</p>
+      <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" style="height: 80px; margin-right: 1rem;">
+        <div style="text-align: left; display: flex; flex-direction: column; justify-content: center;">
+          <h1>HubSpot Onboarding Calculator</h1>
+          <p>Find the perfect HubSpot onboarding package for your business needs</p>
+        </div>
+      </div>
+      <a href="https://www.hubspot.com/agencies/leapforce" target="_blank" class="btn btn-secondary">Visit Our HubSpot Partner Page</a>
     </div>
   </section>
   
   <!-- Main Content -->
   <div class="content-container">
-    <!-- Calculator Intro -->
+    <!-- Calculator Section -->
     <div class="card" id="calculator">
       <h2 class="section-title">Calculate Your HubSpot Onboarding Package</h2>
       <div class="benefits-box mb-4">
-        <p class="text-center" style="font-size: 1.1rem; margin-bottom: 0.5rem;">In just 60 seconds, get a personalized onboarding package with:</p>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 0.5rem;">
-          <div style="display: flex; align-items: center;"><span style="color: #ea580c; margin-right: 0.5rem;">✓</span> Exact pricing</div>
-          <div style="display: flex; align-items: center;"><span style="color: #ea580c; margin-right: 0.5rem;">✓</span> Implementation timeline</div>
-          <div style="display: flex; align-items: center;"><span style="color: #ea580c; margin-right: 0.5rem;">✓</span> Detailed scope of work</div>
-        </div>
+        <p class="text-center" style="font-size: 1.1rem; margin-bottom: 0.5rem;">Select your preferred Hub(s), tier(s) and service model to get a personalized onboarding package:</p>
       </div>
       
-      <!-- HubSpot Form Container -->
-      <div id="hubspot-form-container">
-        <div id="form-loading" style="text-align: center; padding: 2rem;">
-          <p>Loading form...</p>
-          <div style="width: 40px; height: 40px; border: 5px solid #f3f4f6; border-top: 5px solid #ea580c; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto;"></div>
+      <!-- Selection Form -->
+      <div id="selection-form">
+        <!-- Hubs Selection -->
+        <div class="selection-section mb-8">
+          <h3 class="text-center mb-4">Select HubSpot Hub(s)</h3>
+          <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <div class="selection-card" data-hub="marketing">
+              <input type="checkbox" id="marketing-hub" name="hub" value="marketing" class="hub-checkbox">
+              <label for="marketing-hub" class="selection-label">
+                <h4>Marketing Hub</h4>
+                <p>Attract visitors, convert leads, and run complete marketing campaigns at scale</p>
+              </label>
+            </div>
+            
+            <div class="selection-card" data-hub="sales">
+              <input type="checkbox" id="sales-hub" name="hub" value="sales" class="hub-checkbox">
+              <label for="sales-hub" class="selection-label">
+                <h4>Sales Hub</h4>
+                <p>Close more deals, deepen relationships, and manage your pipeline more effectively</p>
+              </label>
+            </div>
+            
+            <div class="selection-card" data-hub="service">
+              <input type="checkbox" id="service-hub" name="hub" value="service" class="hub-checkbox">
+              <label for="service-hub" class="selection-label">
+                <h4>Service Hub</h4>
+                <p>Connect with customers, exceed expectations, and turn customers into promoters</p>
+              </label>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <!-- Social Proof and Trust Signals -->
-      <div class="social-proof mt-4" style="border-top: 1px solid #e5e7eb; padding-top: 1rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; align-items: center;">
-        <div style="display: flex; flex-direction: column; align-items: center;">
-          <div style="font-weight: 700; font-size: 1.5rem; color: #ea580c;">100+</div>
-          <div style="font-size: 0.875rem;">CRM implementations</div>
+        
+        <!-- Tier Selection (Initially hidden) -->
+        <div id="marketing-tier-section" class="tier-section mb-8" style="display: none;">
+          <h3 class="text-center mb-4">Select Marketing Hub Tier</h3>
+          <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <div class="selection-card" data-tier="starter">
+              <input type="radio" id="marketing-starter" name="marketing_tier" value="Starter" class="tier-radio">
+              <label for="marketing-starter" class="selection-label">
+                <h4>Starter</h4>
+                <p>Essential marketing tools to get your inbound strategy started</p>
+              </label>
+            </div>
+            
+            <div class="selection-card" data-tier="professional">
+              <input type="radio" id="marketing-professional" name="marketing_tier" value="Professional" class="tier-radio">
+              <label for="marketing-professional" class="selection-label">
+                <h4>Professional</h4>
+                <p>Advanced marketing automation and campaign management tools</p>
+              </label>
+            </div>
+            
+            <div class="selection-card" data-tier="enterprise">
+              <input type="radio" id="marketing-enterprise" name="marketing_tier" value="Enterprise" class="tier-radio">
+              <label for="marketing-enterprise" class="selection-label">
+                <h4>Enterprise</h4>
+                <p>Sophisticated marketing tools with advanced features and customization</p>
+              </label>
+            </div>
+          </div>
         </div>
-        <div style="display: flex; flex-direction: column; align-items: center;">
-          <div style="font-weight: 700; font-size: 1.5rem; color: #ea580c;">4.9/5</div>
-          <div style="font-size: 0.875rem;">Client rating (53 reviews)</div>
+        
+        <div id="sales-tier-section" class="tier-section mb-8" style="display: none;">
+          <h3 class="text-center mb-4">Select Sales Hub Tier</h3>
+          <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <div class="selection-card" data-tier="starter">
+              <input type="radio" id="sales-starter" name="sales_tier" value="Starter" class="tier-radio">
+              <label for="sales-starter" class="selection-label">
+                <h4>Starter</h4>
+                <p>Essential sales CRM tools for small teams</p>
+              </label>
+            </div>
+            
+            <div class="selection-card" data-tier="professional">
+              <input type="radio" id="sales-professional" name="sales_tier" value="Professional" class="tier-radio">
+              <label for="sales-professional" class="selection-label">
+                <h4>Professional</h4>
+                <p>Advanced sales automation and analytics tools</p>
+              </label>
+            </div>
+            
+            <div class="selection-card" data-tier="enterprise">
+              <input type="radio" id="sales-enterprise" name="sales_tier" value="Enterprise" class="tier-radio">
+              <label for="sales-enterprise" class="selection-label">
+                <h4>Enterprise</h4>
+                <p>Powerful sales tools with advanced reporting and customization</p>
+              </label>
+            </div>
+          </div>
         </div>
-        <div style="display: flex; flex-direction: column; align-items: center;">
-          <div style="font-weight: 700; font-size: 1.5rem; color: #ea580c;">Platinum</div>
-          <div style="font-size: 0.875rem;">HubSpot Solutions Partner</div>
+        
+        <div id="service-tier-section" class="tier-section mb-8" style="display: none;">
+          <h3 class="text-center mb-4">Select Service Hub Tier</h3>
+          <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <div class="selection-card" data-tier="starter">
+              <input type="radio" id="service-starter" name="service_tier" value="Starter" class="tier-radio">
+              <label for="service-starter" class="selection-label">
+                <h4>Starter</h4>
+                <p>Essential customer service tools for small teams</p>
+              </label>
+            </div>
+            
+            <div class="selection-card" data-tier="professional">
+              <input type="radio" id="service-professional" name="service_tier" value="Professional" class="tier-radio">
+              <label for="service-professional" class="selection-label">
+                <h4>Professional</h4>
+                <p>Advanced automation and customer feedback tools</p>
+              </label>
+            </div>
+            
+            <div class="selection-card" data-tier="enterprise">
+              <input type="radio" id="service-enterprise" name="service_tier" value="Enterprise" class="tier-radio">
+              <label for="service-enterprise" class="selection-label">
+                <h4>Enterprise</h4>
+                <p>Comprehensive service tools with advanced customization</p>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Service Model Selection -->
+        <div class="selection-section mb-8">
+          <h3 class="text-center mb-4">Select Service Model</h3>
+          <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <div class="selection-card" data-model="diy">
+              <input type="radio" id="service-diy" name="service_model" value="Do It Yourself" class="model-radio" checked>
+              <label for="service-diy" class="selection-label">
+                <h4>Do It Yourself</h4>
+                <p>We guide you through the process, providing expertise and advice, while you handle the implementation</p>
+              </label>
+            </div>
+            
+            <div class="selection-card" data-model="diwm">
+              <input type="radio" id="service-diwm" name="service_model" value="Do It With Me" class="model-radio">
+              <label for="service-diwm" class="selection-label">
+                <h4>Do It With Me</h4>
+                <p>A collaborative approach where we work together on implementation</p>
+              </label>
+            </div>
+            
+            <div class="selection-card" data-model="difm">
+              <input type="radio" id="service-difm" name="service_model" value="Do It For Me" class="model-radio">
+              <label for="service-difm" class="selection-label">
+                <h4>Do It For Me</h4>
+                <p>We handle the entire implementation for you, from setup to optimization</p>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Calculate Button -->
+        <div class="text-center">
+          <button id="calculate-button" class="btn">Calculate My Price</button>
         </div>
       </div>
       
@@ -361,8 +500,8 @@
           <!-- Package scope details will appear here -->
         </div>
         
-        <div class="scarcity-box" style="background-color: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; padding: 1rem; margin: 2rem 0; text-align: center;">
-          <div style="font-weight: 600; color: #ea580c;">Limited Time Offer</div>
+        <div class="scarcity-box" style="background-color: #f8fafc; border: 1px solid #e5e7eb; border-radius: 6px; padding: 1rem; margin: 2rem 0; text-align: center;">
+          <div style="font-weight: 600; color: var(--primary);">Limited Time Offer</div>
           <p style="margin: 0.5rem 0;">Book a call within the next 48 hours and receive a <strong>free HubSpot technical audit</strong> (valued at €500)</p>
         </div>
         
@@ -390,22 +529,19 @@
         <h3>Marketing Hub</h3>
         <p>HubSpot's Marketing Hub helps you attract the right audience, convert more visitors into customers, and run complete inbound marketing campaigns at scale.</p>
         
-        <div style="border-left: 3px solid #ea580c; padding-left: 1rem; margin: 1.5rem 0;">
+        <div class="tier-card">
           <h4>Starter</h4>
           <p>Basic marketing tools including email marketing, ad management, and forms. Perfect for businesses just starting with inbound marketing.</p>
-          <p><strong>€499</strong> onboarding with essential setup and guidance</p>
         </div>
         
-        <div style="border-left: 3px solid #ea580c; padding-left: 1rem; margin: 1.5rem 0;">
+        <div class="tier-card">
           <h4>Professional</h4>
           <p>Advanced marketing automation, ABM tools, and custom reporting. Ideal for growing marketing teams with sophisticated strategies.</p>
-          <p><strong>€999</strong> onboarding with comprehensive setup and strategy</p>
         </div>
         
-        <div style="border-left: 3px solid #ea580c; padding-left: 1rem; margin: 1.5rem 0;">
+        <div class="tier-card">
           <h4>Enterprise</h4>
           <p>Enterprise-grade tools including advanced permissions, partitioning, and custom objects. Built for large teams with complex requirements.</p>
-          <p><strong>€1999</strong> onboarding with extensive customization and consultation</p>
         </div>
       </div>
       
@@ -413,22 +549,19 @@
         <h3>Sales Hub</h3>
         <p>HubSpot's Sales Hub helps your team close more deals, deepen relationships, and manage their pipeline more effectively.</p>
         
-        <div style="border-left: 3px solid #ea580c; padding-left: 1rem; margin: 1.5rem 0;">
+        <div class="tier-card">
           <h4>Starter</h4>
           <p>Essential sales tools including email templates, tracking, and basic deal management. Great for small sales teams.</p>
-          <p><strong>€499</strong> onboarding with CRM setup and basic sales process</p>
         </div>
         
-        <div style="border-left: 3px solid #ea580c; padding-left: 1rem; margin: 1.5rem 0;">
+        <div class="tier-card">
           <h4>Professional</h4>
           <p>Advanced sales automation, forecasting, and team management. Perfect for growing sales teams with established processes.</p>
-          <p><strong>€999</strong> onboarding with sales automation and pipeline optimization</p>
         </div>
         
-        <div style="border-left: 3px solid #ea580c; padding-left: 1rem; margin: 1.5rem 0;">
+        <div class="tier-card">
           <h4>Enterprise</h4>
           <p>Enterprise features including playbooks, predictive lead scoring, and advanced permissions. Designed for large sales organizations.</p>
-          <p><strong>€1999</strong> onboarding with customized sales workflows and training</p>
         </div>
       </div>
       
@@ -436,22 +569,19 @@
         <h3>Service Hub</h3>
         <p>HubSpot's Service Hub helps you connect with customers, exceed expectations, and turn customers into promoters.</p>
         
-        <div style="border-left: 3px solid #ea580c; padding-left: 1rem; margin: 1.5rem 0;">
+        <div class="tier-card">
           <h4>Starter</h4>
           <p>Essential customer service tools including ticketing, live chat, and conversation inbox. Perfect for small support teams.</p>
-          <p><strong>€499</strong> onboarding with ticketing setup and basic support processes</p>
         </div>
         
-        <div style="border-left: 3px solid #ea580c; padding-left: 1rem; margin: 1.5rem 0;">
+        <div class="tier-card">
           <h4>Professional</h4>
           <p>Advanced features including automation, knowledge base, and customer feedback. Ideal for dedicated service teams.</p>
-          <p><strong>€999</strong> onboarding with help desk optimization and knowledge base setup</p>
         </div>
         
-        <div style="border-left: 3px solid #ea580c; padding-left: 1rem; margin: 1.5rem 0;">
+        <div class="tier-card">
           <h4>Enterprise</h4>
           <p>Enterprise-grade tools including custom reporting, playbooks, and advanced automation. Built for large service organizations.</p>
-          <p><strong>€1999</strong> onboarding with comprehensive service strategy and customization</p>
         </div>
       </div>
     </div>
@@ -460,11 +590,11 @@
     <div class="card">
       <h2 class="section-title">Our Service Models</h2>
       
-      <div class="selection-grid mb-8" style="grid-template-columns: repeat(3, 1fr);">
-        <div style="padding: 1.5rem; border-radius: 0.5rem; background-color: #f8fafc; border: 1px solid #e5e7eb;">
-          <h3 style="color: #ea580c;">Do It Yourself</h3>
+      <div class="selection-grid mb-8" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        <div class="tier-card" style="margin: 0;">
+          <h3 style="color: var(--primary);">Do It Yourself</h3>
           <p>We guide you through the process, providing expertise and advice, while you handle the implementation.</p>
-          <ul>
+          <ul style="list-style-position: inside; margin-top: 1rem;">
             <li>Expert guidance and strategy</li>
             <li>Training on HubSpot tools</li>
             <li>Implementation templates</li>
@@ -472,10 +602,10 @@
           </ul>
         </div>
         
-        <div style="padding: 1.5rem; border-radius: 0.5rem; background-color: #f8fafc; border: 1px solid #e5e7eb;">
-          <h3 style="color: #ea580c;">Do It With Me</h3>
+        <div class="tier-card" style="margin: 0;">
+          <h3 style="color: var(--primary);">Do It With Me</h3>
           <p>A collaborative approach where we work together on implementation, combining your business knowledge with our HubSpot expertise.</p>
-          <ul>
+          <ul style="list-style-position: inside; margin-top: 1rem;">
             <li>Shared implementation responsibility</li>
             <li>Hands-on training and workshops</li>
             <li>Regular progress reviews</li>
@@ -483,10 +613,10 @@
           </ul>
         </div>
         
-        <div style="padding: 1.5rem; border-radius: 0.5rem; background-color: #f8fafc; border: 1px solid #e5e7eb;">
-          <h3 style="color: #ea580c;">Do It For Me</h3>
+        <div class="tier-card" style="margin: 0;">
+          <h3 style="color: var(--primary);">Do It For Me</h3>
           <p>We handle the entire implementation for you, from setup to optimization, allowing your team to focus on core business activities.</p>
-          <ul>
+          <ul style="list-style-position: inside; margin-top: 1rem;">
             <li>End-to-end implementation</li>
             <li>Custom configuration and integrations</li>
             <li>Comprehensive documentation</li>
@@ -496,7 +626,31 @@
       </div>
       
       <div class="text-center">
-        <a href="#calculator" class="btn">Calculate Your Package</a>
+        <a href="#calculator" class="btn" aria-label="Calculate your HubSpot onboarding package">Calculate Your Package</a>
+      </div>
+    </div>
+    
+    <!-- HubSpot Form Popup (hidden by default) -->
+    <div id="form-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+      <div style="background-color: white; max-width: 600px; width: 90%; border-radius: 8px; padding: 2rem; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <button id="close-form-popup" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        <h3 style="color: var(--primary); margin-bottom: 1rem;">Get Your HubSpot Onboarding Package</h3>
+        <p style="margin-bottom: 1.5rem;">Complete the form below to receive your personalized HubSpot onboarding package.</p>
+        
+        <!-- HubSpot Form Container -->
+        <div id="hubspot-form-container">
+          <div id="form-loading" style="text-align: center; padding: 2rem;">
+            <p>Loading form...</p>
+            <div style="width: 40px; height: 40px; border: 5px solid #f3f4f6; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto;"></div>
+          </div>
+        </div>
+        
+        <!-- Hidden Fields -->
+        <input type="hidden" id="marketing_hub_tier" name="marketing_hub_tier" value="">
+        <input type="hidden" id="sales_hub_tier" name="sales_hub_tier" value="">
+        <input type="hidden" id="service_hub_tier" name="service_hub_tier" value="">
+        <input type="hidden" id="service_model" name="service_model" value="">
+        <input type="hidden" id="hubspot_standard_onboarding_key" name="hubspot_standard_onboarding_key" value="">
       </div>
     </div>
     
@@ -504,38 +658,32 @@
     <div class="card" id="reviews">
       <h2 class="section-title">What Our Clients Say</h2>
       
-      <div class="selection-grid mb-8" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-        <div style="padding: 1.5rem; border-radius: 0.5rem; background-color: #f8fafc; border: 1px solid #e5e7eb;">
-          <div style="color: #ea580c; font-size: 1.5rem; margin-bottom: 0.5rem;">★★★★★</div>
+      <div class="selection-grid mb-8" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <div class="tier-card" style="margin: 0;">
+          <div style="color: var(--primary); font-size: 1.5rem; margin-bottom: 0.5rem;" aria-label="Five star rating">★★★★★</div>
           <p style="font-style: italic;">"We worked with Leapforce for our HubSpot implementation, and we're very happy with the results. The process was handled in a highly structured and efficient way."</p>
           <p style="font-weight: 600;">— M. Doornenbal, Churned</p>
         </div>
         
-        <div style="padding: 1.5rem; border-radius: 0.5rem; background-color: #f8fafc; border: 1px solid #e5e7eb;">
-          <div style="color: #ea580c; font-size: 1.5rem; margin-bottom: 0.5rem;">★★★★★</div>
+        <div class="tier-card" style="margin: 0;">
+          <div style="color: var(--primary); font-size: 1.5rem; margin-bottom: 0.5rem;" aria-label="Five star rating">★★★★★</div>
           <p style="font-style: italic;">"Leapforce led our migration from Pipedrive to HubSpot in a proactive and well-structured way, making the process smooth and painless."</p>
           <p style="font-weight: 600;">— M. Doornenbal</p>
         </div>
         
-        <div style="padding: 1.5rem; border-radius: 0.5rem; background-color: #f8fafc; border: 1px solid #e5e7eb;">
-          <div style="color: #ea580c; font-size: 1.5rem; margin-bottom: 0.5rem;">★★★★★</div>
+        <div class="tier-card" style="margin: 0;">
+          <div style="color: var(--primary); font-size: 1.5rem; margin-bottom: 0.5rem;" aria-label="Five star rating">★★★★★</div>
           <p style="font-style: italic;">"Thanks to the cooperation with Leapforce, we have been able to really professionalize our sales team. Working with Matthias is a joy—it feels like he is part of our team."</p>
           <p style="font-weight: 600;">— D. Verberne, Sales & Marketing Manager, Rijnmond</p>
         </div>
       </div>
-      
-      <div class="text-center">
-        <a href="https://www.leapforce.nl/customer-reviews/" target="_blank" class="btn">Read More Reviews</a>
-      </div>
     </div>
     
     <!-- CTA Section -->
-    <div class="card" style="background-color: #fef2f2; border: 1px solid #fee2e2;">
-      <div class="text-center">
-        <h2 style="color: #ea580c;">Ready to Get Started with HubSpot?</h2>
-        <p class="mb-4">With 100+ CRM implementations, 175+ clients, and 75+ certifications, our team of 35+ specialists is ready to support your HubSpot journey.</p>
-        <a href="https://www.leapforce.nl/contact/" target="_blank" class="btn">Contact Us Today</a>
-      </div>
+    <div class="card" style="background-color: #f8fafc; border: 1px solid #e5e7eb; text-align: center;">
+      <h2 class="section-title">Ready to Get Started with HubSpot?</h2>
+      <p class="mb-4">With 100+ CRM implementations, 175+ clients, and 75+ certifications, our team of 35+ specialists is ready to support your HubSpot journey.</p>
+      <a href="https://www.leapforce.nl/contact/" target="_blank" class="btn">Contact Us Today</a>
     </div>
   </div>
   
@@ -553,16 +701,13 @@
         <div class="footer-column">
           <h3>HubSpot Services</h3>
           <ul>
-            <li><a href="https://www.leapforce.nl/hubspot-partner/" target="_blank">HubSpot Implementation</a></li>
-            <li><a href="https://www.leapforce.nl/hubspot-onboarding/" target="_blank">HubSpot Onboarding</a></li>
-            <li><a href="https://www.leapforce.nl/hubspot-marketing-sales-automation/" target="_blank">Marketing & Sales Automation</a></li>
-            <li><a href="https://www.leapforce.nl/hubspot-cms-development/" target="_blank">CMS Development</a></li>
+            <li><a href="https://www.leapforce.nl/expertises/" target="_blank">View All Our Expertises</a></li>
           </ul>
         </div>
         <div class="footer-column">
           <h3>Contact Us</h3>
           <ul>
-            <li>Phone: <a href="tel:+31852080870">+31 (0)20 262 2333</a></li>
+            <li>Phone: <a href="tel:+31202622333">+31 (0)20 262 2333</a></li>
             <li>Email: <a href="mailto:info@leapforce.nl">info@leapforce.nl</a></li>
             <li>Address: H.J.E. Wenckebachweg 123, 1096 AM Amsterdam, Netherlands</li>
           </ul>
@@ -578,7 +723,7 @@
   <div id="exit-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
     <div style="background-color: white; max-width: 500px; border-radius: 8px; padding: 2rem; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
       <button id="close-popup" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
-      <h3 style="color: #ea580c; margin-bottom: 1rem;">Ready to Transform Your HubSpot Experience?</h3>
+      <h3 style="color: var(--primary); margin-bottom: 1rem;">Ready to Transform Your HubSpot Experience?</h3>
       <p style="margin-bottom: 1.5rem;">With our HubSpot Platinum Solutions Partner status and 100+ successful CRM implementations, we're ready to help you get the most out of your HubSpot investment.</p>
       <div style="display: flex; flex-direction: column; gap: 1rem;">
         <input type="email" id="exit-email" placeholder="Your email address" style="padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 4px;">
@@ -590,326 +735,197 @@
 
   <!-- HubSpot form script -->
   <script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/embed/v2.js"></script>
-  
+
   <!-- Calculator logic -->
   <script>
-    // State management
-    const state = {
-      hubs: [],
-      tiers: {},
-      serviceModel: '',
-      pricing: {
-        marketing: {
-          starter: { diy: 499, diwm: 999, difm: 1999, hours: { diy: 4, diwm: 8, difm: 16 } },
-          professional: { diy: 999, diwm: 1999, difm: 3999, hours: { diy: 8, diwm: 16, difm: 32 } },
-          enterprise: { diy: 1999, diwm: 3999, difm: 7999, hours: { diy: 16, diwm: 32, difm: 64 } }
-        },
-        sales: {
-          starter: { diy: 499, diwm: 999, difm: 1999, hours: { diy: 4, diwm: 8, difm: 16 } },
-          professional: { diy: 999, diwm: 1999, difm: 3999, hours: { diy: 8, diwm: 16, difm: 32 } },
-          enterprise: { diy: 1999, diwm: 3999, difm: 7999, hours: { diy: 16, diwm: 32, difm: 64 } }
-        },
-        service: {
-          starter: { diy: 499, diwm: 999, difm: 1999, hours: { diy: 4, diwm: 8, difm: 16 } },
-          professional: { diy: 999, diwm: 1999, difm: 3999, hours: { diy: 8, diwm: 16, difm: 32 } },
-          enterprise: { diy: 1999, diwm: 3999, difm: 7999, hours: { diy: 16, diwm: 32, difm: 64 } }
-        }
-      },
-      packageKeys: {
-        marketing: {
-          starter: { diy: 'ms_diy', diwm: 'ms_diwm', difm: 'ms_difm' },
-          professional: { diy: 'mp_diy', diwm: 'mp_diwm', difm: 'mp_difm' },
-          enterprise: { diy: 'me_diy', diwm: 'me_diwm', difm: 'me_difm' }
-        },
-        sales: {
-          starter: { diy: 'ss_diy', diwm: 'ss_diwm', difm: 'ss_difm' },
-          professional: { diy: 'sp_diy', diwm: 'sp_diwm', difm: 'sp_difm' },
-          enterprise: { diy: 'se_diy', diwm: 'se_diwm', difm: 'se_difm' }
-        },
-        service: {
-          starter: { diy: 'sers_diy', diwm: 'sers_diwm', difm: 'sers_difm' },
-          professional: { diy: 'serp_diy', diwm: 'serp_diwm', difm: 'serp_difm' },
-          enterprise: { diy: 'sere_diy', diwm: 'sere_diwm', difm: 'sere_difm' }
-        }
-      }
+    // Dom Elements
+    const calculateButton = document.getElementById('calculate-button');
+    const hubCheckboxes = document.querySelectorAll('.hub-checkbox');
+    const marketingTierSection = document.getElementById('marketing-tier-section');
+    const salesTierSection = document.getElementById('sales-tier-section');
+    const serviceTierSection = document.getElementById('service-tier-section');
+    const formPopup = document.getElementById('form-popup');
+    const closeFormPopupButton = document.getElementById('close-form-popup');
+    const selectionForm = document.getElementById('selection-form');
+    const resultsSection = document.getElementById('results-section');
+    
+    // State
+    let selectedHubs = [];
+    let selections = {
+      marketing_tier: '',
+      sales_tier: '',
+      service_tier: '',
+      service_model: 'Do It Yourself' // Default
     };
     
-    // Show calculator results
-    function showResults() {
-      document.getElementById('hubspot-form-container').style.display = 'none';
-      document.getElementById('results-section').style.display = 'block';
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Hub selection toggles
+      hubCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          const hub = this.value;
+          const isChecked = this.checked;
+          
+          // Show/hide tier sections based on selection
+          if (hub === 'marketing') {
+            marketingTierSection.style.display = isChecked ? 'block' : 'none';
+            if (!isChecked) {
+              // Clear marketing tier selection
+              document.querySelectorAll('input[name="marketing_tier"]').forEach(radio => {
+                radio.checked = false;
+              });
+              selections.marketing_tier = '';
+            }
+          } else if (hub === 'sales') {
+            salesTierSection.style.display = isChecked ? 'block' : 'none';
+            if (!isChecked) {
+              // Clear sales tier selection
+              document.querySelectorAll('input[name="sales_tier"]').forEach(radio => {
+                radio.checked = false;
+              });
+              selections.sales_tier = '';
+            }
+          } else if (hub === 'service') {
+            serviceTierSection.style.display = isChecked ? 'block' : 'none';
+            if (!isChecked) {
+              // Clear service tier selection
+              document.querySelectorAll('input[name="service_tier"]').forEach(radio => {
+                radio.checked = false;
+              });
+              selections.service_tier = '';
+            }
+          }
+          
+          // Track selected hubs
+          if (isChecked) {
+            selectedHubs.push(hub);
+          } else {
+            selectedHubs = selectedHubs.filter(h => h !== hub);
+          }
+        });
+      });
       
-      // Scroll to results
-      document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    // Reset calculator
-    function resetCalculator() {
-      document.getElementById('results-section').style.display = 'none';
-      document.getElementById('hubspot-form-container').style.display = 'block';
+      // Tier selection
+      document.querySelectorAll('input[name="marketing_tier"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          selections.marketing_tier = this.value;
+        });
+      });
       
-      // Clear state
-      state.hubs = [];
-      state.tiers = {};
-      state.serviceModel = '';
+      document.querySelectorAll('input[name="sales_tier"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          selections.sales_tier = this.value;
+        });
+      });
       
-      // Scroll to form
-      document.getElementById('hubspot-form-container').scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    // Calculate results based on form submissions
-    function calculateResults(hubs, serviceModel) {
-      let totalPrice = 0;
-      let totalHours = 0;
-      let resultHtml = '';
-      let scopeHtml = '';
+      document.querySelectorAll('input[name="service_tier"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          selections.service_tier = this.value;
+        });
+      });
       
-      // Calculate totals
-      hubs.forEach(hub => {
-        totalPrice += hub.price;
-        totalHours += getHubHours(hub.name, hub.tier);
+      // Service model selection
+      document.querySelectorAll('input[name="service_model"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          selections.service_model = this.value;
+        });
+      });
+      
+      // Calculate button click
+      calculateButton.addEventListener('click', function() {
+        // Validate selections
+        let isValid = true;
+        let errorMessage = '';
         
-        resultHtml += `
-          <div class="tier-card" style="margin: 0.75rem 0;">
-            <h4>${hub.name} Hub - ${hub.tier}</h4>
-            <p><strong>€${hub.price}</strong> onboarding</p>
-            <p>Estimated implementation time: ${getHubHours(hub.name, hub.tier)} hours</p>
-          </div>
-        `;
+        // Check if at least one hub is selected
+        if (selectedHubs.length === 0) {
+          isValid = false;
+          errorMessage = 'Please select at least one HubSpot Hub.';
+        }
         
-        // Add scope details for each selected package
-        const scopeDetail = getScopeDetail(hub.name, hub.tier, serviceModel);
-        if (scopeDetail) {
-          scopeHtml += `
-            <div class="tier-card" style="margin: 1rem 0;">
-              <h4>${hub.name} Hub ${hub.tier} - ${getServiceModelFullName(serviceModel)}</h4>
-              <p><strong>Hours:</strong> ${getHubHours(hub.name, hub.tier)}</p>
-              <p><strong>Scope:</strong> ${scopeDetail}</p>
-            </div>
-          `;
+        // Check if selected hubs have tier selections
+        if (isValid) {
+          if (selectedHubs.includes('marketing') && !selections.marketing_tier) {
+            isValid = false;
+            errorMessage = 'Please select a tier for Marketing Hub.';
+          } else if (selectedHubs.includes('sales') && !selections.sales_tier) {
+            isValid = false;
+            errorMessage = 'Please select a tier for Sales Hub.';
+          } else if (selectedHubs.includes('service') && !selections.service_tier) {
+            isValid = false;
+            errorMessage = 'Please select a tier for Service Hub.';
+          }
+        }
+        
+        if (isValid) {
+          // Generate package keys
+          const packageKeys = [];
+          
+          if (selectedHubs.includes('marketing') && selections.marketing_tier) {
+            packageKeys.push(generatePackageKey('marketing', selections.marketing_tier, selections.service_model));
+          }
+          
+          if (selectedHubs.includes('sales') && selections.sales_tier) {
+            packageKeys.push(generatePackageKey('sales', selections.sales_tier, selections.service_model));
+          }
+          
+          if (selectedHubs.includes('service') && selections.service_tier) {
+            packageKeys.push(generatePackageKey('service', selections.service_tier, selections.service_model));
+          }
+          
+          // Set hidden fields
+          document.getElementById('marketing_hub_tier').value = selections.marketing_tier;
+          document.getElementById('sales_hub_tier').value = selections.sales_tier;
+          document.getElementById('service_hub_tier').value = selections.service_tier;
+          document.getElementById('service_model').value = selections.service_model;
+          document.getElementById('hubspot_standard_onboarding_key').value = packageKeys.join(';');
+          
+          // Show form popup
+          formPopup.style.display = 'flex';
+          
+          // Create HubSpot form
+          createHubSpotForm();
+        } else {
+          alert(errorMessage);
         }
       });
       
-      // Apply service model multiplier
-      const multiplier = getServiceModelMultiplier(serviceModel);
-      totalPrice = Math.round(totalPrice * multiplier);
-      
-      // Build the results
-      const resultSummary = document.getElementById('results-summary');
-      if (resultSummary) {
-        resultSummary.innerHTML = `
-          <p class="mb-4"><strong>Selected Hubs:</strong> ${hubs.map(h => h.name + ' Hub').join(', ')}</p>
-          <p class="mb-4"><strong>Service Model:</strong> ${getServiceModelFullName(serviceModel)}</p>
-          ${resultHtml}
-          <div style="margin-top: 1.5rem;">
-            <p><strong>Estimated Implementation Time:</strong> ${totalHours} hours</p>
-          </div>
-        `;
+      // Close form popup
+      if (closeFormPopupButton) {
+        closeFormPopupButton.addEventListener('click', function() {
+          formPopup.style.display = 'none';
+        });
       }
       
-      // Add scope details
-      const scopeDetails = document.getElementById('scope-details');
-      if (scopeDetails && scopeHtml) {
-        scopeDetails.innerHTML = `
-          <h4>Package Scope Details</h4>
-          ${scopeHtml}
-        `;
+      // Mobile menu toggle
+      const mobileMenuButton = document.querySelector('.mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+          mobileMenu.classList.toggle('active');
+        });
       }
       
-      // Update total price display
-      const totalPriceElement = document.getElementById('total-price');
-      if (totalPriceElement) {
-        totalPriceElement.textContent = `€${totalPrice}`;
-      }
-    }
-    
-    // Get scope detail based on hub, tier, and service model
-    function getScopeDetail(hub, tier, serviceModel) {
-      const scopes = {
-        Marketing: {
-          Starter: {
-            'Do It Yourself': 'We guide you on basic portal "getting started" steps—tracking code, one lead-capture form, one email template—but you implement them. Includes 2 coaching sessions for Q&A and best practices.',
-            'Do It With Me': 'We collaborate on the same setup tasks, sharing responsibilities for 2 simple submissions and 1 email template. We handle some tasks, you handle others. Includes 3 coaching sessions.',
-            'Do It For Me': 'We fully implement the starter portal setup (code installation, up to 3 forms, basic reporting, 2 simple automations). Includes 3 coaching sessions and 1 team training.'
-          },
-          Professional: {
-            'Do It Yourself': 'We teach you how to configure more advanced marketing features—e.g. 2 automations (workflows), lead scoring basics, custom dashboards—and you carry them out. Includes 3 coaching sessions.',
-            'Do It With Me': 'A joint effort setting up advanced features (3 automations, lead scoring, campaign setup, custom dashboards). We do part of the technical work while guiding you on the rest. Includes 1 team training + 4 coaching sessions.',
-            'Do It For Me': 'A full-service build-out of Pro features—3 automations, lead scoring, more sophisticated campaign setup, custom reporting, etc. We do nearly everything. Includes 1 team training + 5 coaching sessions.'
-          },
-          Enterprise: {
-            'Do It Yourself': 'Guidance on enterprise-level marketing features setup with your team handling implementation.',
-            'Do It With Me': 'Collaborative approach for advanced marketing features with shared responsibility.',
-            'Do It For Me': 'Complete implementation of enterprise marketing features by our team.'
-          }
-        },
-        Sales: {
-          Starter: {
-            'Do It Yourself': 'We help you configure basic sales tools—basic CRM setup, email templates, simple sequences. You handle the key implementation. Includes 1 team training + 2 coaching sessions.',
-            'Do It With Me': 'We work together on pipeline setup, deal stage workflow, meeting link, basic automation. We do some config, you do the rest. Includes 1 team training + 3 coaching sessions.',
-            'Do It For Me': 'We handle the key Sales Starter implementation—basic deal setup, meeting management, basic automation—while you provide requirements. Includes 1 team training + 3 coaching sessions.'
-          },
-          Professional: {
-            'Do It Yourself': 'We guide you on multiple deal stage workflows, advanced deal card customization, and basic sales reporting dashboards. You do setup steps. Includes 3 coaching sessions.',
-            'Do It With Me': 'A collaborative Pro-level build: advanced quotes, sequences/workflows, meeting link setup, custom deal properties. We share the tasks. Includes 1 team training + 4 coaching sessions.',
-            'Do It For Me': 'We fully implement advanced pipelines, automation/sequences, custom sales reporting, quotes setup. Minimal effort needed on your end. Includes 1 team training + 5 coaching sessions.'
-          },
-          Enterprise: {
-            'Do It Yourself': 'Guidance on enterprise-level sales features setup with your team handling implementation.',
-            'Do It With Me': 'Collaborative implementation of advanced sales tools with shared responsibilities.',
-            'Do It For Me': 'Complete implementation of enterprise sales features by our team.'
-          }
-        },
-        Service: {
-          Starter: {
-            'Do It Yourself': 'We instruct you on setting up your first ticket pipeline, basic routing rules, and simple email/snippet usage. You do the hands-on HubSpot configuration. Includes 2 coaching sessions.',
-            'Do It With Me': 'We help you set up your Service Hub together—shared knowledge base structure, ticket forms, basic automations. Joint implementation approach. Includes 1 team training + 3 coaching sessions.',
-            'Do It For Me': 'We take care of the full basic service setup: pipeline(s), routing, knowledge base structure, chatflows. You provide requirements. Includes 1 team training + 3 coaching sessions.'
-          },
-          Professional: {
-            'Do It Yourself': 'We coach you through advanced service features implementation—multiple ticket pipelines, custom ticket properties, knowledge base setup. You handle configuration. Includes 2 coaching sessions.',
-            'Do It With Me': 'We collaborate on advanced workflows (SLAs, routing), knowledge base organization, service feedback surveys or chatbots. Some setup is on us, some on you. Includes 1 team training + 3 coaching sessions.',
-            'Do It For Me': 'We fully implement your Professional-level service environment: pipelines, automations, reporting dashboards, knowledge base structure, etc. Includes 2 team trainings + 4 coaching sessions.'
-          },
-          Enterprise: {
-            'Do It Yourself': 'Guidance on enterprise-level service features setup with your team handling implementation.',
-            'Do It With Me': 'Collaborative implementation of advanced service tools with shared responsibilities.',
-            'Do It For Me': 'Complete implementation of enterprise service features by our team.'
-          }
-        }
-      };
-      
-      return scopes[hub] && scopes[hub][tier] && scopes[hub][tier][serviceModel] 
-        ? scopes[hub][tier][serviceModel] 
-        : 'Custom implementation based on your specific requirements.';
-    }
-    
-    // Get full service model name
-    function getServiceModelFullName(model) {
-      const names = {
-        'Do It Yourself': 'Do It Yourself (DIY)',
-        'Do It With Me': 'Do It With Me (DIWM)',
-        'Do It For Me': 'Do It For Me (DIFM)'
-      };
-      
-      return names[model] || model;
-    }
-    
-    // Initialize HubSpot form
-    document.addEventListener('DOMContentLoaded', function() {
-      // Create the HubSpot form
-      try {
-        if (window.hbspt) {
-          console.log("Creating HubSpot form...");
-          
-          hbspt.forms.create({
-            portalId: "7208949",
-            formId: "699d6d6a-52b4-4439-b6ea-2584491b8baa",
-            region: "na1",
-            target: "#hubspot-form-container",
-            onFormReady: function($form) {
-              console.log("HubSpot form loaded successfully");
-              
-              // Hide loading indicator
-              document.getElementById('form-loading').style.display = 'none';
-              
-              // Customize submit button text
-              var submitButton = $form.find('.hs-button.primary');
-              if (submitButton.length) {
-                submitButton.val('Calculate My Package');
-              }
-            },
-            onFormSubmit: function($form, data) {
-              console.log("Form submitted with data:", data);
-              
-              // Extract hub and tier selections from form
-              const hubSelections = [];
-              const serviceModel = getServiceModelFromForm(data);
-              
-              // Process Marketing Hub selection
-              if (data.marketing_hub_tier) {
-                hubSelections.push({
-                  name: 'Marketing',
-                  tier: data.marketing_hub_tier
-                });
-              }
-              
-              // Process Sales Hub selection
-              if (data.sales_hub_tier) {
-                hubSelections.push({
-                  name: 'Sales',
-                  tier: data.sales_hub_tier
-                });
-              }
-              
-              // Process Service Hub selection
-              if (data.service_hub_tier) {
-                hubSelections.push({
-                  name: 'Service',
-                  tier: data.service_hub_tier
-                });
-              }
-              
-              // Generate package keys for hidden field
-              const packageKeys = hubSelections.map(hub => 
-                generatePackageKey(hub.name, hub.tier, serviceModel)
-              );
-              
-              // Update the hidden field with package keys (semicolon-separated)
-              if (packageKeys.length > 0) {
-                const hiddenField = $form.find('input[name="hubspot_standard_onboarding_key"]');
-                if (hiddenField.length) {
-                  hiddenField.val(packageKeys.join(';'));
-                  console.log("Updated hidden field with keys:", packageKeys.join(';'));
-                } else {
-                  console.error("Hidden field 'hubspot_standard_onboarding_key' not found in form");
-                }
-              }
-              
-              // Process form data and prepare to show results after submission
-              const hubsWithPricing = hubSelections.map(hub => ({
-                ...hub,
-                price: getHubPrice(hub.name, hub.tier)
-              }));
-              
-              // Store the data for use after form submission
-              window.calculatorData = {
-                hubs: hubsWithPricing,
-                serviceModel: serviceModel
-              };
-            },
-            onFormSubmitted: function() {
-              // Show results using the stored data
-              if (window.calculatorData) {
-                calculateResults(
-                  window.calculatorData.hubs, 
-                  window.calculatorData.serviceModel
-                );
-                showResults();
-              }
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
             }
-          });
-        } else {
-          console.error("HubSpot script not loaded");
-          document.getElementById('hubspot-form-container').innerHTML = 
-            '<div style="text-align: center; padding: 20px;">' +
-            '<p style="color: #ef4444;">We\'re having trouble loading the form.</p>' +
-            '<p>Please try contacting us directly:</p>' +
-            '<a href="https://www.leapforce.nl/contact/" class="btn" target="_blank">Contact Us</a>' +
-            '</div>';
-        }
-      } catch (error) {
-        console.error("Error creating HubSpot form:", error);
-        document.getElementById('hubspot-form-container').innerHTML = 
-          '<div style="text-align: center; padding: 20px;">' +
-          '<p style="color: #ef4444;">We\'re having trouble loading the form.</p>' +
-          '<p>Please try contacting us directly:</p>' +
-          '<a href="https://www.leapforce.nl/contact/" class="btn" target="_blank">Contact Us</a>' +
-          '</div>';
-      }
+          }
+        });
+      });
     });
     
-    // Generate standard package key in format: [hub]_hub_[tier]_[service_model]
+    // Generate package key
     function generatePackageKey(hub, tier, serviceModel) {
       // Lowercase and normalize hub name
       const hubLower = hub.toLowerCase();
@@ -937,12 +953,355 @@
       return `${hubLower}_hub_${tierLower}_${serviceAbbr}`;
     }
     
-    // Extract service model from form data
-    function getServiceModelFromForm(data) {
-      // Default to "Do It With Me" if not specified
-      return data.service_model || 'Do It With Me';
+    // Create HubSpot form
+    function createHubSpotForm() {
+      // Form properties
+      const portalId = '7208949';
+      const formId = '699d6d6a-52b4-4439-b6ea-2584491b8baa';
+      
+      try {
+        if (window.hbspt) {
+          console.log("Creating HubSpot form...");
+          
+          hbspt.forms.create({
+            portalId: portalId,
+            formId: formId,
+            region: "na1",
+            target: "#hubspot-form-container",
+            formData: {
+              marketing_hub_tier: selections.marketing_tier,
+              sales_hub_tier: selections.sales_tier,
+              service_hub_tier: selections.service_tier,
+              service_model: selections.service_model,
+              hubspot_standard_onboarding_key: document.getElementById('hubspot_standard_onboarding_key').value
+            },
+            onFormReady: function($form) {
+              console.log("HubSpot form loaded successfully");
+              
+              // Hide loading indicator
+              document.getElementById('form-loading').style.display = 'none';
+              
+              // Customize submit button text
+              var submitButton = $form.find('.hs-button.primary');
+              if (submitButton.length) {
+                submitButton.val('Get My Onboarding Package');
+              }
+              
+              // Apply custom styles to form
+              const formContainer = document.querySelector('.hs-form-container');
+              if (formContainer) {
+                formContainer.style.maxWidth = '100%';
+              }
+            },
+            onFormSubmit: function($form) {
+              console.log("Form submitted");
+              
+              // Update hidden fields
+              const formData = new FormData($form[0]);
+              document.getElementById('hubspot_standard_onboarding_key').value = formData.get('hubspot_standard_onboarding_key') || '';
+            },
+            onFormSubmitted: function() {
+              console.log("Form submission completed");
+              
+              // Hide form popup
+              formPopup.style.display = 'none';
+              
+              // Calculate and show results
+              calculateResults();
+              
+              // Show results section
+              selectionForm.style.display = 'none';
+              resultsSection.style.display = 'block';
+              
+              // Scroll to results
+              resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+          });
+        } else {
+          console.error("HubSpot script not loaded");
+          document.getElementById('hubspot-form-container').innerHTML = 
+            '<div style="text-align: center; padding: 20px;">' +
+            '<p style="color: #ef4444;">We\'re having trouble loading the form.</p>' +
+            '<p>Please try contacting us directly:</p>' +
+            '<a href="https://www.leapforce.nl/contact/" class="btn" target="_blank">Contact Us</a>' +
+            '</div>';
+        }
+      } catch (error) {
+        console.error("Error creating HubSpot form:", error);
+        document.getElementById('hubspot-form-container').innerHTML = 
+          '<div style="text-align: center; padding: 20px;">' +
+          '<p style="color: #ef4444;">We\'re having trouble loading the form.</p>' +
+          '<p>Please try contacting us directly:</p>' +
+          '<a href="https://www.leapforce.nl/contact/" class="btn" target="_blank">Contact Us</a>' +
+          '</div>';
+      }
     }
-
+    
+    // Calculate results
+    function calculateResults() {
+      let totalPrice = 0;
+      let totalHours = 0;
+      let resultHtml = '';
+      let scopeHtml = '';
+      
+      // Process Marketing Hub
+      if (selectedHubs.includes('marketing') && selections.marketing_tier) {
+        const price = getHubPrice('marketing', selections.marketing_tier);
+        const hours = getHubHours('marketing', selections.marketing_tier);
+        totalPrice += price;
+        totalHours += hours;
+        
+        resultHtml += `
+          <div class="tier-card" style="margin: 0.75rem 0;">
+            <h4>Marketing Hub - ${selections.marketing_tier}</h4>
+            <p><strong>€${price}</strong> onboarding</p>
+            <p>Estimated implementation time: ${hours} hours</p>
+          </div>
+        `;
+        
+        // Add scope details
+        const scopeDetail = getScopeDetail('marketing', selections.marketing_tier, selections.service_model);
+        if (scopeDetail) {
+          scopeHtml += `
+            <div class="tier-card" style="margin: 1rem 0;">
+              <h4>Marketing Hub ${selections.marketing_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
+              <p><strong>Hours:</strong> ${hours}</p>
+              <p><strong>Scope:</strong> ${scopeDetail}</p>
+            </div>
+          `;
+        }
+      }
+      
+      // Process Sales Hub
+      if (selectedHubs.includes('sales') && selections.sales_tier) {
+        const price = getHubPrice('sales', selections.sales_tier);
+        const hours = getHubHours('sales', selections.sales_tier);
+        totalPrice += price;
+        totalHours += hours;
+        
+        resultHtml += `
+          <div class="tier-card" style="margin: 0.75rem 0;">
+            <h4>Sales Hub - ${selections.sales_tier}</h4>
+            <p><strong>€${price}</strong> onboarding</p>
+            <p>Estimated implementation time: ${hours} hours</p>
+          </div>
+        `;
+        
+        // Add scope details
+        const scopeDetail = getScopeDetail('sales', selections.sales_tier, selections.service_model);
+        if (scopeDetail) {
+          scopeHtml += `
+            <div class="tier-card" style="margin: 1rem 0;">
+              <h4>Sales Hub ${selections.sales_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
+              <p><strong>Hours:</strong> ${hours}</p>
+              <p><strong>Scope:</strong> ${scopeDetail}</p>
+            </div>
+          `;
+        }
+      }
+      
+      // Process Service Hub
+      if (selectedHubs.includes('service') && selections.service_tier) {
+        const price = getHubPrice('service', selections.service_tier);
+        const hours = getHubHours('service', selections.service_tier);
+        totalPrice += price;
+        totalHours += hours;
+        
+        resultHtml += `
+          <div class="tier-card" style="margin: 0.75rem 0;">
+            <h4>Service Hub - ${selections.service_tier}</h4>
+            <p><strong>€${price}</strong> onboarding</p>
+            <p>Estimated implementation time: ${hours} hours</p>
+          </div>
+        `;
+        
+        // Add scope details
+        const scopeDetail = getScopeDetail('service', selections.service_tier, selections.service_model);
+        if (scopeDetail) {
+          scopeHtml += `
+            <div class="tier-card" style="margin: 1rem 0;">
+              <h4>Service Hub ${selections.service_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
+              <p><strong>Hours:</strong> ${hours}</p>
+              <p><strong>Scope:</strong> ${scopeDetail}</p>
+            </div>
+          `;
+        }
+      }
+      
+      // Apply service model multiplier
+      const multiplier = getServiceModelMultiplier(selections.service_model);
+      totalPrice = Math.round(totalPrice * multiplier);
+      
+      // Build the results
+      const resultSummary = document.getElementById('results-summary');
+      if (resultSummary) {
+        resultSummary.innerHTML = `
+          <p class="mb-4"><strong>Selected Hubs:</strong> ${selectedHubs.map(h => h.charAt(0).toUpperCase() + h.slice(1) + ' Hub').join(', ')}</p>
+          <p class="mb-4"><strong>Service Model:</strong> ${getServiceModelFullName(selections.service_model)}</p>
+          ${resultHtml}
+          <div style="margin-top: 1.5rem;">
+            <p><strong>Estimated Implementation Time:</strong> ${totalHours} hours</p>
+          </div>
+        `;
+      }
+      
+      // Add scope details
+      const scopeDetails = document.getElementById('scope-details');
+      if (scopeDetails && scopeHtml) {
+        scopeDetails.innerHTML = `
+          <h4>Package Scope Details</h4>
+          ${scopeHtml}
+        `;
+      }
+      
+      // Update total price display
+      const totalPriceElement = document.getElementById('total-price');
+      if (totalPriceElement) {
+        totalPriceElement.textContent = `€${totalPrice}`;
+      }
+    }
+    
+    // Reset calculator
+    function resetCalculator() {
+      // Reset selections
+      selectedHubs = [];
+      selections = {
+        marketing_tier: '',
+        sales_tier: '',
+        service_tier: '',
+        service_model: 'Do It Yourself'
+      };
+      
+      // Reset checkboxes and radio buttons
+      document.querySelectorAll('.hub-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      
+      document.querySelectorAll('.tier-radio').forEach(radio => {
+        radio.checked = false;
+      });
+      
+      // Reset service model
+      document.getElementById('service-diy').checked = true;
+      
+      // Hide tier sections
+      marketingTierSection.style.display = 'none';
+      salesTierSection.style.display = 'none';
+      serviceTierSection.style.display = 'none';
+      
+      // Hide results, show form
+      resultsSection.style.display = 'none';
+      selectionForm.style.display = 'block';
+      
+      // Scroll to calculator
+      document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Get price for a hub and tier
+    function getHubPrice(hub, tier) {
+      const prices = {
+        marketing: { starter: 499, professional: 999, enterprise: 1999 },
+        sales: { starter: 499, professional: 999, enterprise: 1999 },
+        service: { starter: 499, professional: 999, enterprise: 1999 }
+      };
+      
+      return prices[hub] && prices[hub][tier] ? prices[hub][tier] : 0;
+    }
+    
+    // Get estimated hours for a hub and tier
+    function getHubHours(hub, tier) {
+      const hours = {
+        marketing: { starter: 10, professional: 20, enterprise: 40 },
+        sales: { starter: 8, professional: 16, enterprise: 32 },
+        service: { starter: 8, professional: 16, enterprise: 32 }
+      };
+      
+      return hours[hub] && hours[hub][tier] ? hours[hub][tier] : 0;
+    }
+    
+    // Get multiplier based on service model
+    function getServiceModelMultiplier(model) {
+      const multipliers = {
+        'Do It Yourself': 0.8,
+        'Do It With Me': 1.0,
+        'Do It For Me': 1.2
+      };
+      
+      return multipliers[model] || 1.0;
+    }
+    
+    // Get full service model name
+    function getServiceModelFullName(model) {
+      const names = {
+        'Do It Yourself': 'Do It Yourself (DIY)',
+        'Do It With Me': 'Do It With Me (DIWM)',
+        'Do It For Me': 'Do It For Me (DIFM)'
+      };
+      
+      return names[model] || model;
+    }
+    
+    // Get scope detail based on hub, tier, and service model
+    function getScopeDetail(hub, tier, serviceModel) {
+      const scopes = {
+        marketing: {
+          starter: {
+            'Do It Yourself': 'We guide you on basic portal "getting started" steps—tracking code, one lead-capture form, one email template—but you implement them. Includes 2 coaching sessions for Q&A and best practices.',
+            'Do It With Me': 'We collaborate on the same setup tasks, sharing responsibilities for 2 simple submissions and 1 email template. We handle some tasks, you handle others. Includes 3 coaching sessions.',
+            'Do It For Me': 'We fully implement the starter portal setup (code installation, up to 3 forms, basic reporting, 2 simple automations). Includes 3 coaching sessions and 1 team training.'
+          },
+          professional: {
+            'Do It Yourself': 'We teach you how to configure more advanced marketing features—e.g. 2 automations (workflows), lead scoring basics, custom dashboards—and you carry them out. Includes 3 coaching sessions.',
+            'Do It With Me': 'A joint effort setting up advanced features (3 automations, lead scoring, campaign setup, custom dashboards). We do part of the technical work while guiding you on the rest. Includes 1 team training + 4 coaching sessions.',
+            'Do It For Me': 'A full-service build-out of Pro features—3 automations, lead scoring, more sophisticated campaign setup, custom reporting, etc. We do nearly everything. Includes 1 team training + 5 coaching sessions.'
+          },
+          enterprise: {
+            'Do It Yourself': 'Guidance on enterprise-level marketing features setup with your team handling implementation.',
+            'Do It With Me': 'Collaborative approach for advanced marketing features with shared responsibility.',
+            'Do It For Me': 'Complete implementation of enterprise marketing features by our team.'
+          }
+        },
+        sales: {
+          starter: {
+            'Do It Yourself': 'We help you configure basic sales tools—basic CRM setup, email templates, simple sequences. You handle the key implementation. Includes 1 team training + 2 coaching sessions.',
+            'Do It With Me': 'We work together on pipeline setup, deal stage workflow, meeting link, basic automation. We do some config, you do the rest. Includes 1 team training + 3 coaching sessions.',
+            'Do It For Me': 'We handle the key Sales Starter implementation—basic deal setup, meeting management, basic automation—while you provide requirements. Includes 1 team training + 3 coaching sessions.'
+          },
+          professional: {
+            'Do It Yourself': 'We guide you on multiple deal stage workflows, advanced deal card customization, and basic sales reporting dashboards. You do setup steps. Includes 3 coaching sessions.',
+            'Do It With Me': 'A collaborative Pro-level build: advanced quotes, sequences/workflows, meeting link setup, custom deal properties. We share the tasks. Includes 1 team training + 4 coaching sessions.',
+            'Do It For Me': 'We fully implement advanced pipelines, automation/sequences, custom sales reporting, quotes setup. Minimal effort needed on your end. Includes 1 team training + 5 coaching sessions.'
+          },
+          enterprise: {
+            'Do It Yourself': 'Guidance on enterprise-level sales features setup with your team handling implementation.',
+            'Do It With Me': 'Collaborative implementation of advanced sales tools with shared responsibilities.',
+            'Do It For Me': 'Complete implementation of enterprise sales features by our team.'
+          }
+        },
+        service: {
+          starter: {
+            'Do It Yourself': 'We instruct you on setting up your first ticket pipeline, basic routing rules, and simple email/snippet usage. You do the hands-on HubSpot configuration. Includes 2 coaching sessions.',
+            'Do It With Me': 'We help you set up your Service Hub together—shared knowledge base structure, ticket forms, basic automations. Joint implementation approach. Includes 1 team training + 3 coaching sessions.',
+            'Do It For Me': 'We take care of the full basic service setup: pipeline(s), routing, knowledge base structure, chatflows. You provide requirements. Includes 1 team training + 3 coaching sessions.'
+          },
+          professional: {
+            'Do It Yourself': 'We coach you through advanced service features implementation—multiple ticket pipelines, custom ticket properties, knowledge base setup. You handle configuration. Includes 2 coaching sessions.',
+            'Do It With Me': 'We collaborate on advanced workflows (SLAs, routing), knowledge base organization, service feedback surveys or chatbots. Some setup is on us, some on you. Includes 1 team training + 3 coaching sessions.',
+            'Do It For Me': 'We fully implement your Professional-level service environment: pipelines, automations, reporting dashboards, knowledge base structure, etc. Includes 2 team trainings + 4 coaching sessions.'
+          },
+          enterprise: {
+            'Do It Yourself': 'Guidance on enterprise-level service features setup with your team handling implementation.',
+            'Do It With Me': 'Collaborative implementation of advanced service tools with shared responsibilities.',
+            'Do It For Me': 'Complete implementation of enterprise service features by our team.'
+          }
+        }
+      };
+      
+      return scopes[hub] && scopes[hub][tier] && scopes[hub][tier][serviceModel] 
+        ? scopes[hub][tier][serviceModel] 
+        : 'Custom implementation based on your specific requirements.';
+    }
+    
     // Add animation keyframes
     document.head.insertAdjacentHTML('beforeend', `
       <style>
@@ -950,85 +1309,55 @@
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
+        
+        /* Apply styles to selection cards */
+        .selection-card {
+          border: 1px solid #e5e7eb;
+          border-radius: 0.5rem;
+          padding: 1.5rem;
+          position: relative;
+          cursor: pointer;
+          transition: all 0.2s;
+          background-color: white;
+        }
+        
+        .selection-card:hover {
+          border-color: var(--primary);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .selection-card input[type="checkbox"],
+        .selection-card input[type="radio"] {
+          position: absolute;
+          opacity: 0;
+        }
+        
+        .selection-card input:checked + label {
+          color: var(--primary);
+        }
+        
+        .selection-card input:checked + label::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          border: 2px solid var(--primary);
+          border-radius: 0.5rem;
+          pointer-events: none;
+        }
+        
+        .selection-label {
+          display: block;
+          cursor: pointer;
+        }
+        
+        .selection-label h4 {
+          margin-bottom: 0.5rem;
+        }
       </style>
     `);
-    
-    // Exit intent detection
-    document.addEventListener('DOMContentLoaded', function() {
-      // Only show exit popup if user hasn't submitted the form
-      let formSubmitted = false;
-      let popupShown = false;
-      
-      // Track form submission
-      window.addEventListener('message', function(event) {
-        if (event.data.type === 'hsFormSubmit') {
-          formSubmitted = true;
-        }
-      });
-      
-      // Exit intent detection
-      document.addEventListener('mouseout', function(e) {
-        // If the mouse leaves the top of the page and popup hasn't been shown yet
-        if (e.clientY < 20 && !popupShown && !formSubmitted) {
-          document.getElementById('exit-popup').style.display = 'flex';
-          popupShown = true;
-          
-          // Track exit popup display in analytics
-          if (typeof _hsq !== 'undefined') {
-            _hsq.push(['trackEvent', {
-              id: 'Exit Popup Displayed'
-            }]);
-          }
-        }
-      });
-      
-      // Close popup when clicking close button
-      document.getElementById('close-popup').addEventListener('click', function() {
-        document.getElementById('exit-popup').style.display = 'none';
-      });
-      
-      // Handle guide download
-      document.getElementById('download-guide').addEventListener('click', function() {
-        const email = document.getElementById('exit-email').value;
-        if (email && email.includes('@')) {
-          // Capture email for marketing - in real implementation, send to HubSpot API
-          console.log('Exit intent email captured:', email);
-          
-          // Show success message
-          const popupContent = document.querySelector('#exit-popup > div');
-          popupContent.innerHTML = `
-            <h3 style="color: #ea580c; margin-bottom: 1rem;">Thank You!</h3>
-            <p>Your guide is on its way to your inbox. Check your email in the next few minutes.</p>
-            <button id="exit-popup-close" class="btn" style="width: 100%; margin-top: 1rem;">Close</button>
-          `;
-          
-          // Handle close button
-          document.getElementById('exit-popup-close').addEventListener('click', function() {
-            document.getElementById('exit-popup').style.display = 'none';
-          });
-          
-          // Track guide download in analytics
-          if (typeof _hsq !== 'undefined') {
-            _hsq.push(['trackEvent', {
-              id: 'Exit Guide Downloaded',
-              value: email
-            }]);
-          }
-        } else {
-          alert('Please enter a valid email address.');
-        }
-      });
-      
-      // Mobile menu toggle functionality
-      const mobileMenuButton = document.querySelector('.mobile-menu-button');
-      const mobileMenu = document.getElementById('mobile-menu');
-      
-      if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.addEventListener('click', function() {
-          mobileMenu.classList.toggle('active');
-        });
-      }
-    });
   </script>
 </body>
-</html> 
+</html>
