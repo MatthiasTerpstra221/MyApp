@@ -889,7 +889,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2024 Leapforce. All rights reserved. <a href="https://www.leapforce.nl/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a></p>
+        <p>&copy; 2025 Leapforce. All rights reserved. <a href="https://www.leapforce.nl/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a></p>
       </div>
     </div>
   </footer>
@@ -1103,7 +1103,16 @@
             packageKeys.push(generatePackageKey('service', selections.service_tier, selections.service_model));
           }
           
-          document.getElementById('hubspot_standard_onboarding_key').value = packageKeys.join(';');
+          const packageKeysValue = packageKeys.join(';');
+          document.getElementById('hubspot_standard_onboarding_key').value = packageKeysValue;
+          
+          // Log hidden field values for verification
+          console.log('Hidden field values:');
+          console.log('Marketing Hub Tier:', selections.marketing_tier || 'Not selected');
+          console.log('Sales Hub Tier:', selections.sales_tier || 'Not selected');
+          console.log('Service Hub Tier:', selections.service_tier || 'Not selected');
+          console.log('Service Model:', selections.service_model);
+          console.log('Package Keys:', packageKeysValue);
           
           // Show form popup and calculate results simultaneously
           formPopup.style.display = 'flex';
@@ -1340,6 +1349,25 @@
               
               // Hide form popup
               formPopup.style.display = 'none';
+              
+              // Show success message
+              const successMessage = document.createElement('div');
+              successMessage.style.position = 'fixed';
+              successMessage.style.bottom = '20px';
+              successMessage.style.right = '20px';
+              successMessage.style.padding = '15px 20px';
+              successMessage.style.backgroundColor = '#10b981'; // Green
+              successMessage.style.color = 'white';
+              successMessage.style.borderRadius = '4px';
+              successMessage.style.zIndex = '1000';
+              successMessage.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+              successMessage.innerHTML = '<strong>Success!</strong> Your information has been submitted. We\'ll be in touch shortly.';
+              document.body.appendChild(successMessage);
+              
+              // Remove success message after 5 seconds
+              setTimeout(() => {
+                document.body.removeChild(successMessage);
+              }, 5000);
             }
           });
         } else {
@@ -1488,6 +1516,13 @@
     
     // Reset calculator
     function resetCalculator() {
+      // Confirm before resetting if on results page
+      if (currentStep === 4) {
+        if (!confirm("Are you sure you want to start over? Your current package configuration will be lost.")) {
+          return;
+        }
+      }
+      
       // Reset selections
       selectedHubs = [];
       selections = {
@@ -1519,6 +1554,24 @@
       
       // Scroll to calculator
       document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
+      
+      // Provide visual feedback
+      const feedbackMessage = document.createElement('div');
+      feedbackMessage.style.position = 'fixed';
+      feedbackMessage.style.bottom = '20px';
+      feedbackMessage.style.right = '20px';
+      feedbackMessage.style.padding = '10px 15px';
+      feedbackMessage.style.backgroundColor = 'rgba(0, 122, 140, 0.9)';
+      feedbackMessage.style.color = 'white';
+      feedbackMessage.style.borderRadius = '4px';
+      feedbackMessage.style.zIndex = '1000';
+      feedbackMessage.textContent = 'Calculator reset successfully';
+      document.body.appendChild(feedbackMessage);
+      
+      // Remove feedback message after 3 seconds
+      setTimeout(() => {
+        document.body.removeChild(feedbackMessage);
+      }, 3000);
     }
     
     // Get price for a hub and tier
