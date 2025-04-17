@@ -242,6 +242,9 @@ function initHubSpotFormWithResults() {
           return;
         }
         
+        // Also look for the hidden contact property field
+        const contactPropertyField = hsForm.querySelector('input[name="contact_hubspot_owner_id"]');
+        
         // Capture form submission
         hsForm.addEventListener('submit', function(event) {
           console.log("Form submission detected");
@@ -251,6 +254,13 @@ function initHubSpotFormWithResults() {
           if (!onboardingKey) {
             console.error("No onboarding key found at submission time");
             return;
+          }
+          
+          // Also ensure contact property is set
+          if (contactPropertyField && !contactPropertyField.value) {
+            // Default HubSpot owner ID for Matthias - this should be configured as needed
+            contactPropertyField.value = "51812602";
+            console.log("Set contact property field to default owner ID");
           }
           
           // Store the package key for results display
@@ -301,10 +311,31 @@ function initHubSpotFormWithResults() {
         // Find and set the value in the HubSpot form field
         const hsForm = document.querySelector('.hs-form');
         if (hsForm) {
+          // Set the onboarding key
           const onboardingKeyField = hsForm.querySelector('input[name="hubspot_standard_onboarding_key"]');
           if (onboardingKeyField) {
             onboardingKeyField.value = onboardingKey;
             console.log("Set onboarding key in form field:", onboardingKey);
+          }
+          
+          // Also set the contact property field
+          const contactPropertyField = hsForm.querySelector('input[name="contact_hubspot_owner_id"]');
+          if (contactPropertyField) {
+            // Default HubSpot owner ID for Matthias
+            contactPropertyField.value = "51812602";
+            console.log("Set contact property field to default owner ID");
+          } else {
+            console.warn("Contact property field not found in form");
+            
+            // Try to create it if it doesn't exist
+            if (hsForm) {
+              const newField = document.createElement('input');
+              newField.type = 'hidden';
+              newField.name = 'contact_hubspot_owner_id';
+              newField.value = '51812602';
+              hsForm.appendChild(newField);
+              console.log("Created contact property field and set to default owner ID");
+            }
           }
           
           // Submit the form
@@ -320,6 +351,16 @@ function initHubSpotFormWithResults() {
         }
       });
     });
+  }
+  
+  // Check for direct access via URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const showResults = urlParams.get('show_results');
+  const onboardingKey = urlParams.get('onboarding_key');
+  
+  if (showResults === 'true' && onboardingKey) {
+    console.log("Direct access with onboarding key:", onboardingKey);
+    showResultsAfterSubmission(onboardingKey);
   }
 }
 
@@ -421,7 +462,7 @@ function showResultsAfterSubmission(packageKey) {
       <div class="results-container">
         <div class="results-header">
           <h2>Your HubSpot Onboarding Package</h2>
-          <a href="index.html" class="btn">Recalculate</a>
+          <a href="index.html" class="btn"><i class="fas fa-calculator icon"></i>Recalculate</a>
         </div>
         
         <div class="package-summary">
@@ -430,34 +471,34 @@ function showResultsAfterSubmission(packageKey) {
           
           <div class="package-details">
             <div class="detail-row">
-              <span class="detail-label">Package Reference:</span>
+              <span class="detail-label"><i class="fas fa-tag icon icon-orange"></i>Package Reference:</span>
               <span class="detail-value">${packageDetails.packageKey}</span>
             </div>
             
             <div class="detail-row">
-              <span class="detail-label">Estimated Hours:</span>
+              <span class="detail-label"><i class="fas fa-clock icon icon-orange"></i>Estimated Hours:</span>
               <span class="detail-value">${packageDetails.hours || 'Custom'}</span>
             </div>
             
             <div class="detail-row">
-              <span class="detail-label">Price:</span>
+              <span class="detail-label"><i class="fas fa-euro-sign icon icon-orange"></i>Price:</span>
               <span class="detail-value price-value">${price}</span>
             </div>
           </div>
           
           <div class="scope-summary">
-            <h4>Scope Summary</h4>
+            <h4><i class="fas fa-file-alt icon icon-orange"></i>Scope Summary</h4>
             <p>${packageDetails.scopeSummary || 'Custom scope based on your specific requirements. Please contact us for details.'}</p>
           </div>
         </div>
         
         <div class="next-steps">
-          <h3>Thank You for Your Submission!</h3>
+          <h3><i class="fas fa-check-circle icon icon-orange"></i>Thank You for Your Submission!</h3>
           <p>Your HubSpot onboarding package has been submitted successfully. A Leapforce consultant will contact you shortly to discuss your selected package and any customizations you might need.</p>
           
           <div class="actions-row">
-            <a href="https://www.leapforce.nl/contact" target="_blank" class="btn">Contact Us</a>
-            <a href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145" target="_blank" class="btn btn-secondary">Schedule a Call</a>
+            <a href="https://www.leapforce.nl/contact" target="_blank" class="btn"><i class="fas fa-envelope icon"></i>Contact Us</a>
+            <a href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145" target="_blank" class="btn btn-secondary"><i class="fas fa-calendar-alt icon"></i>Schedule a Call</a>
           </div>
         </div>
       </div>

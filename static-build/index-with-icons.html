@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HubSpot Onboarding Calculator | Leapforce</title>
+    <link rel="icon" href="https://www.leapforce.nl/wp-content/uploads/2022/09/cropped-LeapForce-favico-32x32.jpg" sizes="32x32">
+    <link rel="icon" href="https://www.leapforce.nl/wp-content/uploads/2022/09/cropped-LeapForce-favico-192x192.jpg" sizes="192x192">
+    <!-- Import Leapforce Brand Stylesheet -->
+    <link rel="stylesheet" href="leapforce-brand.css">
+    <!-- Package Details CSS -->
+    <link rel="stylesheet" href="package-details.css">
+    <!-- Font Awesome for professional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      /* Icon styling */
+      .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.5rem;
+      }
+      
+      .icon-orange {
+        color: var(--leapforce-orange);
+      }
+      
+      .icon-grey {
+        color: var(--leapforce-grey);
+      }
+      
+      /* Detail items with icons */
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border-color);
+      }
+      
+      .detail-row:last-child {
+        border-bottom: none;
+      }
+      
+      .detail-label {
+        font-weight: 500;
+        color: var(--leapforce-grey);
+        display: flex;
+        align-items: center;
+      }
+      
+      .detail-value {
+        font-weight: 400;
+      }
+      
+      /* Package summary with icon */
+      .scope-summary h4 {
+        display: flex;
+        align-items: center;
+      }
+      
+      /* Navbar specific styles */
+      .navbar-logo {
+        display: flex;
+        align-items: center;
+      }
+      
+      .navbar-logo img {
+        height: 40px;
+        width: auto;
+        display: block;
+      }
+      
+      .navbar-logo a + a {
+        margin-left: 20px;
+      }
+      
+      /* Footer styles */
+      footer {
+        background-color: var(--leapforce-grey);
+        color: white;
+        padding: 1.5rem 0;
+        margin-top: 3rem;
+        text-align: center;
+      }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-logo">
+            <a href="https://www.leapforce.nl" target="_blank" rel="noopener" aria-label="Leapforce homepage">
+                <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" onerror="this.onerror=null; this.src='https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.png';">
+            </a>
+            <a href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl" target="_blank" rel="noopener" aria-label="HubSpot Platinum Partner Page">
+                <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner">
+            </a>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Calculate Your<br>HubSpot Onboarding Package</h1>
+        <div class="leapforce-divider"></div>
+    </div>
+
+    <!-- Main calculator content -->
+    <div class="calculator-container leapforce-container">
+      <!-- Include the rest of the calculator HTML here -->
+      <div id="calculator-app">
+        <!-- Calculator content will be loaded here -->
+      </div>
+      
+      <!-- Final Package Results Section - Will be hidden until needed -->
+      <div id="final-results-container" class="final-results-section" style="display: none;">
+        <!-- Results will be loaded here by results-page.js -->
+      </div>
+    </div>
+
+    <!-- HubSpot Form Script -->
+    <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/embed/v2.js"></script>
+    
+    <!-- HubSpot Form Fix -->
+    <script src="hubspot-form-fix.js"></script>
+    
+    <!-- HubSpot Form Helpers -->
+    <script src="hubspot-form-helpers.js"></script>
+    
+    <!-- Results Page Handler -->
+    <script src="results-page.js"></script>
+
+    <!-- Footer -->
+    <footer>
+      <div class="leapforce-container">
+        <p>© <span id="current-year"></span> Leapforce | <a href="https://www.leapforce.nl/privacy-policy/" target="_blank" class="leapforce-link" style="color: white; text-decoration: underline;">Privacy Policy</a></p>
+      </div>
+    </footer>
+    
+    <script>
+      // Set current year in footer
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+      
+      // Add any other JavaScript needed for the calculator here
+    </script>
+</body>
+</html> 

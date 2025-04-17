@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HubSpot Onboarding Calculator | Leapforce</title>
+    <link rel="icon" href="https://www.leapforce.nl/wp-content/uploads/2022/09/cropped-LeapForce-favico-32x32.jpg" sizes="32x32">
+    <link rel="icon" href="https://www.leapforce.nl/wp-content/uploads/2022/09/cropped-LeapForce-favico-192x192.jpg" sizes="192x192">
+    <!-- Import Leapforce Brand Stylesheet -->
+    <link rel="stylesheet" href="leapforce-brand.css">
+    <style>
+      /* Page-specific styles using leapforce-brand.css variables for consistency */
+      body {
+        background-color: var(--gray-50);
+      }
+      
+      /* Calculator container */
+      .calculator-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      
+      /* Hero section */
+      .hero {
+        text-align: center;
+        padding: 3rem 1rem;
+        background-color: var(--gray-50);
+        margin-bottom: 2rem;
+      }
+      
+      .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+    </style>
+    <!-- HubSpot tracking code -->
+    <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/7208949.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-logo" style="display: flex; align-items: center;">
+            <a href="https://www.leapforce.nl" target="_blank" rel="noopener" aria-label="Leapforce homepage">
+                <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" style="height: 40px;" onerror="this.onerror=null; this.src='https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.png';">
+            </a>
+            <a href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl" target="_blank" rel="noopener" aria-label="HubSpot Platinum Partner Page" style="margin-left: 20px;">
+                <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" style="height: 40px;" onerror="this.onerror=null; this.style.display='none';">
+            </a>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Calculate Your<br>HubSpot Onboarding Package</h1>
+        <div class="leapforce-divider"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="leapforce-container">
+        <h2>Simplified Demo</h2>
+        <p>This is a simplified version of the HubSpot Onboarding Calculator that demonstrates the use of the centralized <code>leapforce-brand.css</code> stylesheet.</p>
+        
+        <div class="card" style="background: var(--bg-color); border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); padding: 20px; margin: 30px 0;">
+            <h3>Using Brand Guidelines</h3>
+            <p>This page demonstrates using the centralized <code>leapforce-brand.css</code> stylesheet for consistent branding across all pages.</p>
+            
+            <ul style="margin-top: 20px; margin-bottom: 20px; padding-left: 20px;">
+                <li>Consistent colors</li>
+                <li>Consistent typography</li>
+                <li>Consistent UI components</li>
+                <li>Easy maintenance</li>
+            </ul>
+            
+            <div style="margin-top: 30px;">
+                <a href="#" class="btn">Primary Button</a>
+                <a href="#" class="btn btn-secondary" style="margin-left: 10px;">Secondary Button</a>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="thank-you-simple.html" class="btn">View Thank You Page</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="leapforce-container">
+        <p>© <span id="current-year"></span> Leapforce | <a href="https://www.leapforce.nl/privacy-policy/" target="_blank" class="leapforce-link" style="color: white; text-decoration: underline;">Privacy Policy</a></p>
+      </div>
+    </footer>
+    
+    <script>
+      // Set current year in footer
+      document.getElementById("current-year").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html> 

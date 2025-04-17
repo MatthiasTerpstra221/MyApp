@@ -77,12 +77,12 @@ document.addEventListener('DOMContentLoaded', function() {
     ? '€' + packageDetails.price.toLocaleString() 
     : packageDetails.price;
   
-  // Render package details
+  // Render package details with icons
   resultsContainer.innerHTML = `
     <div class="results-container">
       <div class="results-header">
         <h2>Your HubSpot Onboarding Package</h2>
-        <a href="index.html" class="btn">Recalculate</a>
+        <a href="index.html" class="btn"><i class="fas fa-calculator icon"></i>Recalculate</a>
       </div>
       
       <div class="package-summary">
@@ -91,34 +91,34 @@ document.addEventListener('DOMContentLoaded', function() {
         
         <div class="package-details">
           <div class="detail-row">
-            <span class="detail-label">Package Reference:</span>
+            <span class="detail-label"><i class="fas fa-tag icon icon-orange"></i>Package Reference:</span>
             <span class="detail-value">${packageDetails.packageKey}</span>
           </div>
           
           <div class="detail-row">
-            <span class="detail-label">Estimated Hours:</span>
+            <span class="detail-label"><i class="fas fa-clock icon icon-orange"></i>Estimated Hours:</span>
             <span class="detail-value">${packageDetails.hours || 'Custom'}</span>
           </div>
           
           <div class="detail-row">
-            <span class="detail-label">Price:</span>
+            <span class="detail-label"><i class="fas fa-euro-sign icon icon-orange"></i>Price:</span>
             <span class="detail-value price-value">${price}</span>
           </div>
         </div>
         
         <div class="scope-summary">
-          <h4>Scope Summary</h4>
+          <h4><i class="fas fa-file-alt icon icon-orange"></i>Scope Summary</h4>
           <p>${packageDetails.scopeSummary || 'Custom scope based on your specific requirements. Please contact us for details.'}</p>
         </div>
       </div>
       
       <div class="next-steps">
-        <h3>Next Steps</h3>
+        <h3><i class="fas fa-check-circle icon icon-orange"></i>Next Steps</h3>
         <p>Thank you for using our HubSpot Onboarding Calculator. A Leapforce consultant will contact you shortly to discuss your selected package and any customizations you might need.</p>
         
         <div class="actions-row">
-          <a href="https://www.leapforce.nl/contact" target="_blank" class="btn">Contact Us</a>
-          <a href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145" target="_blank" class="btn btn-secondary">Schedule a Call</a>
+          <a href="https://www.leapforce.nl/contact" target="_blank" class="btn"><i class="fas fa-envelope icon"></i>Contact Us</a>
+          <a href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145" target="_blank" class="btn btn-secondary"><i class="fas fa-calendar-alt icon"></i>Schedule a Call</a>
         </div>
       </div>
     </div>
