@@ -271,6 +271,110 @@
         font-size: 1.75rem !important;
       }
     }
+    
+    /* Step indicator styles */
+    .step-indicator {
+      margin: 2rem 0;
+    }
+    
+    .steps-container {
+      display: flex;
+      justify-content: space-between;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .steps-container::before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background-color: var(--gray-300);
+      z-index: 1;
+    }
+    
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: white;
+      border: 2px solid var(--gray-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .step-text {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .step.active .step-number {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    
+    .step.active .step-text {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    .step.completed .step-number {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    
+    /* Calculator steps styles */
+    .calculator-step {
+      display: none;
+    }
+    
+    .calculator-step.active {
+      display: block;
+    }
+    
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .steps-container::before {
+        left: 15%;
+        right: 15%;
+      }
+      
+      .step-text {
+        font-size: 0.7rem;
+      }
+    }
+    
+    .results-highlight {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 1.5rem 0;
+    }
   </style>
 </head>
 <body>
@@ -308,13 +412,13 @@
   
   <!-- Hero Section -->
   <section class="hero">
-    <div class="container">
+  <div class="container">
       <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
         <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" style="height: 80px; margin-right: 1rem;">
         <div style="text-align: left; display: flex; flex-direction: column; justify-content: center;">
-          <h1>HubSpot Onboarding Calculator</h1>
+      <h1>HubSpot Onboarding Calculator</h1>
           <p>Find the perfect HubSpot onboarding package for your business needs</p>
-        </div>
+    </div>
       </div>
       <a href="https://www.hubspot.com/agencies/leapforce" target="_blank" class="btn btn-secondary">Visit Our HubSpot Partner Page</a>
     </div>
@@ -325,169 +429,213 @@
     <!-- Calculator Section -->
     <div class="card" id="calculator">
       <h2 class="section-title">Calculate Your HubSpot Onboarding Package</h2>
+      
+      <!-- Step indicator -->
+      <div class="step-indicator mb-4">
+        <div class="steps-container">
+          <div class="step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-text">Select Hub(s)</div>
+          </div>
+          <div class="step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-text">Select Tier(s)</div>
+          </div>
+          <div class="step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-text">Service Model</div>
+          </div>
+          <div class="step" data-step="4">
+            <div class="step-number">4</div>
+            <div class="step-text">Results</div>
+          </div>
+        </div>
+      </div>
+      
       <div class="benefits-box mb-4">
-        <p class="text-center" style="font-size: 1.1rem; margin-bottom: 0.5rem;">Select your preferred Hub(s), tier(s) and service model to get a personalized onboarding package:</p>
+        <p class="text-center" style="font-size: 1.1rem; margin-bottom: 0.5rem;">Follow these steps to get a personalized onboarding package for your business:</p>
       </div>
       
       <!-- Selection Form -->
       <div id="selection-form">
-        <!-- Hubs Selection -->
-        <div class="selection-section mb-8">
-          <h3 class="text-center mb-4">Select HubSpot Hub(s)</h3>
-          <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-            <div class="selection-card" data-hub="marketing">
-              <input type="checkbox" id="marketing-hub" name="hub" value="marketing" class="hub-checkbox">
-              <label for="marketing-hub" class="selection-label">
-                <h4>Marketing Hub</h4>
-                <p>Attract visitors, convert leads, and run complete marketing campaigns at scale</p>
-              </label>
+        <!-- Step 1: Hubs Selection -->
+        <div id="step-1" class="calculator-step active">
+          <div class="selection-section mb-8">
+            <h3 class="text-center mb-4">Select HubSpot Hub(s)</h3>
+            <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+              <div class="selection-card" data-hub="marketing">
+                <input type="checkbox" id="marketing-hub" name="hub" value="marketing" class="hub-checkbox">
+                <label for="marketing-hub" class="selection-label">
+                  <h4>Marketing Hub</h4>
+                  <p>Attract visitors, convert leads, and run complete marketing campaigns at scale</p>
+                </label>
+              </div>
+              
+              <div class="selection-card" data-hub="sales">
+                <input type="checkbox" id="sales-hub" name="hub" value="sales" class="hub-checkbox">
+                <label for="sales-hub" class="selection-label">
+                  <h4>Sales Hub</h4>
+                  <p>Close more deals, deepen relationships, and manage your pipeline more effectively</p>
+                </label>
+              </div>
+              
+              <div class="selection-card" data-hub="service">
+                <input type="checkbox" id="service-hub" name="hub" value="service" class="hub-checkbox">
+                <label for="service-hub" class="selection-label">
+                  <h4>Service Hub</h4>
+                  <p>Connect with customers, exceed expectations, and turn customers into promoters</p>
+                </label>
+              </div>
             </div>
-            
-            <div class="selection-card" data-hub="sales">
-              <input type="checkbox" id="sales-hub" name="hub" value="sales" class="hub-checkbox">
-              <label for="sales-hub" class="selection-label">
-                <h4>Sales Hub</h4>
-                <p>Close more deals, deepen relationships, and manage your pipeline more effectively</p>
-              </label>
-            </div>
-            
-            <div class="selection-card" data-hub="service">
-              <input type="checkbox" id="service-hub" name="hub" value="service" class="hub-checkbox">
-              <label for="service-hub" class="selection-label">
-                <h4>Service Hub</h4>
-                <p>Connect with customers, exceed expectations, and turn customers into promoters</p>
-              </label>
-            </div>
+          </div>
+          
+          <div class="navigation-buttons">
+            <div></div>
+            <button id="step-1-next" class="btn">Next: Select Tier(s)</button>
           </div>
         </div>
         
-        <!-- Tier Selection (Initially hidden) -->
-        <div id="marketing-tier-section" class="tier-section mb-8" style="display: none;">
-          <h3 class="text-center mb-4">Select Marketing Hub Tier</h3>
-          <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-            <div class="selection-card" data-tier="starter">
-              <input type="radio" id="marketing-starter" name="marketing_tier" value="Starter" class="tier-radio">
-              <label for="marketing-starter" class="selection-label">
-                <h4>Starter</h4>
-                <p>Essential marketing tools to get your inbound strategy started</p>
-              </label>
+        <!-- Step 2: Tier Selection -->
+        <div id="step-2" class="calculator-step">
+          <div id="tier-sections-container">
+            <!-- Marketing Hub Tier Section (Conditionally Shown) -->
+            <div id="marketing-tier-section" class="tier-section mb-8" style="display: none;">
+              <h3 class="text-center mb-4">Select Marketing Hub Tier</h3>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-tier="starter">
+                  <input type="radio" id="marketing-starter" name="marketing_tier" value="Starter" class="tier-radio">
+                  <label for="marketing-starter" class="selection-label">
+                    <h4>Starter</h4>
+                    <p>Essential marketing tools to get your inbound strategy started</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="professional">
+                  <input type="radio" id="marketing-professional" name="marketing_tier" value="Professional" class="tier-radio">
+                  <label for="marketing-professional" class="selection-label">
+                    <h4>Professional</h4>
+                    <p>Advanced marketing automation and campaign management tools</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="enterprise">
+                  <input type="radio" id="marketing-enterprise" name="marketing_tier" value="Enterprise" class="tier-radio">
+                  <label for="marketing-enterprise" class="selection-label">
+                    <h4>Enterprise</h4>
+                    <p>Sophisticated marketing tools with advanced features and customization</p>
+                  </label>
+                </div>
+              </div>
             </div>
             
-            <div class="selection-card" data-tier="professional">
-              <input type="radio" id="marketing-professional" name="marketing_tier" value="Professional" class="tier-radio">
-              <label for="marketing-professional" class="selection-label">
-                <h4>Professional</h4>
-                <p>Advanced marketing automation and campaign management tools</p>
-              </label>
+            <!-- Sales Hub Tier Section (Conditionally Shown) -->
+            <div id="sales-tier-section" class="tier-section mb-8" style="display: none;">
+              <h3 class="text-center mb-4">Select Sales Hub Tier</h3>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-tier="starter">
+                  <input type="radio" id="sales-starter" name="sales_tier" value="Starter" class="tier-radio">
+                  <label for="sales-starter" class="selection-label">
+                    <h4>Starter</h4>
+                    <p>Essential sales CRM tools for small teams</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="professional">
+                  <input type="radio" id="sales-professional" name="sales_tier" value="Professional" class="tier-radio">
+                  <label for="sales-professional" class="selection-label">
+                    <h4>Professional</h4>
+                    <p>Advanced sales automation and analytics tools</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="enterprise">
+                  <input type="radio" id="sales-enterprise" name="sales_tier" value="Enterprise" class="tier-radio">
+                  <label for="sales-enterprise" class="selection-label">
+                    <h4>Enterprise</h4>
+                    <p>Powerful sales tools with advanced reporting and customization</p>
+                  </label>
+                </div>
+              </div>
             </div>
             
-            <div class="selection-card" data-tier="enterprise">
-              <input type="radio" id="marketing-enterprise" name="marketing_tier" value="Enterprise" class="tier-radio">
-              <label for="marketing-enterprise" class="selection-label">
-                <h4>Enterprise</h4>
-                <p>Sophisticated marketing tools with advanced features and customization</p>
-              </label>
+            <!-- Service Hub Tier Section (Conditionally Shown) -->
+            <div id="service-tier-section" class="tier-section mb-8" style="display: none;">
+              <h3 class="text-center mb-4">Select Service Hub Tier</h3>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-tier="starter">
+                  <input type="radio" id="service-starter" name="service_tier" value="Starter" class="tier-radio">
+                  <label for="service-starter" class="selection-label">
+                    <h4>Starter</h4>
+                    <p>Essential customer service tools for small teams</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="professional">
+                  <input type="radio" id="service-professional" name="service_tier" value="Professional" class="tier-radio">
+                  <label for="service-professional" class="selection-label">
+                    <h4>Professional</h4>
+                    <p>Advanced automation and customer feedback tools</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="enterprise">
+                  <input type="radio" id="service-enterprise" name="service_tier" value="Enterprise" class="tier-radio">
+                  <label for="service-enterprise" class="selection-label">
+                    <h4>Enterprise</h4>
+                    <p>Comprehensive service tools with advanced customization</p>
+                  </label>
+                </div>
+              </div>
             </div>
+          </div>
+          
+          <div class="navigation-buttons">
+            <button id="step-2-back" class="btn btn-secondary">Back</button>
+            <button id="step-2-next" class="btn">Next: Select Service Model</button>
           </div>
         </div>
         
-        <div id="sales-tier-section" class="tier-section mb-8" style="display: none;">
-          <h3 class="text-center mb-4">Select Sales Hub Tier</h3>
-          <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-            <div class="selection-card" data-tier="starter">
-              <input type="radio" id="sales-starter" name="sales_tier" value="Starter" class="tier-radio">
-              <label for="sales-starter" class="selection-label">
-                <h4>Starter</h4>
-                <p>Essential sales CRM tools for small teams</p>
-              </label>
-            </div>
-            
-            <div class="selection-card" data-tier="professional">
-              <input type="radio" id="sales-professional" name="sales_tier" value="Professional" class="tier-radio">
-              <label for="sales-professional" class="selection-label">
-                <h4>Professional</h4>
-                <p>Advanced sales automation and analytics tools</p>
-              </label>
-            </div>
-            
-            <div class="selection-card" data-tier="enterprise">
-              <input type="radio" id="sales-enterprise" name="sales_tier" value="Enterprise" class="tier-radio">
-              <label for="sales-enterprise" class="selection-label">
-                <h4>Enterprise</h4>
-                <p>Powerful sales tools with advanced reporting and customization</p>
-              </label>
-            </div>
-          </div>
-        </div>
-        
-        <div id="service-tier-section" class="tier-section mb-8" style="display: none;">
-          <h3 class="text-center mb-4">Select Service Hub Tier</h3>
-          <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-            <div class="selection-card" data-tier="starter">
-              <input type="radio" id="service-starter" name="service_tier" value="Starter" class="tier-radio">
-              <label for="service-starter" class="selection-label">
-                <h4>Starter</h4>
-                <p>Essential customer service tools for small teams</p>
-              </label>
-            </div>
-            
-            <div class="selection-card" data-tier="professional">
-              <input type="radio" id="service-professional" name="service_tier" value="Professional" class="tier-radio">
-              <label for="service-professional" class="selection-label">
-                <h4>Professional</h4>
-                <p>Advanced automation and customer feedback tools</p>
-              </label>
-            </div>
-            
-            <div class="selection-card" data-tier="enterprise">
-              <input type="radio" id="service-enterprise" name="service_tier" value="Enterprise" class="tier-radio">
-              <label for="service-enterprise" class="selection-label">
-                <h4>Enterprise</h4>
-                <p>Comprehensive service tools with advanced customization</p>
-              </label>
+        <!-- Step 3: Service Model Selection -->
+        <div id="step-3" class="calculator-step">
+          <div class="selection-section mb-8">
+            <h3 class="text-center mb-4">Select Service Model</h3>
+            <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+              <div class="selection-card" data-model="diy">
+                <input type="radio" id="service-diy" name="service_model" value="Do It Yourself" class="model-radio" checked>
+                <label for="service-diy" class="selection-label">
+                  <h4>Do It Yourself</h4>
+                  <p>We guide you through the process, providing expertise and advice, while you handle the implementation</p>
+                </label>
+              </div>
+              
+              <div class="selection-card" data-model="diwm">
+                <input type="radio" id="service-diwm" name="service_model" value="Do It With Me" class="model-radio">
+                <label for="service-diwm" class="selection-label">
+                  <h4>Do It With Me</h4>
+                  <p>A collaborative approach where we work together on implementation</p>
+                </label>
+              </div>
+              
+              <div class="selection-card" data-model="difm">
+                <input type="radio" id="service-difm" name="service_model" value="Do It For Me" class="model-radio">
+                <label for="service-difm" class="selection-label">
+                  <h4>Do It For Me</h4>
+                  <p>We handle the entire implementation for you, from setup to optimization</p>
+                </label>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <!-- Service Model Selection -->
-        <div class="selection-section mb-8">
-          <h3 class="text-center mb-4">Select Service Model</h3>
-          <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-            <div class="selection-card" data-model="diy">
-              <input type="radio" id="service-diy" name="service_model" value="Do It Yourself" class="model-radio" checked>
-              <label for="service-diy" class="selection-label">
-                <h4>Do It Yourself</h4>
-                <p>We guide you through the process, providing expertise and advice, while you handle the implementation</p>
-              </label>
-            </div>
-            
-            <div class="selection-card" data-model="diwm">
-              <input type="radio" id="service-diwm" name="service_model" value="Do It With Me" class="model-radio">
-              <label for="service-diwm" class="selection-label">
-                <h4>Do It With Me</h4>
-                <p>A collaborative approach where we work together on implementation</p>
-              </label>
-            </div>
-            
-            <div class="selection-card" data-model="difm">
-              <input type="radio" id="service-difm" name="service_model" value="Do It For Me" class="model-radio">
-              <label for="service-difm" class="selection-label">
-                <h4>Do It For Me</h4>
-                <p>We handle the entire implementation for you, from setup to optimization</p>
-              </label>
-            </div>
+          
+          <div class="navigation-buttons">
+            <button id="step-3-back" class="btn btn-secondary">Back</button>
+            <button id="calculate-button" class="btn">View My Package</button>
           </div>
-        </div>
-        
-        <!-- Calculate Button -->
-        <div class="text-center">
-          <button id="calculate-button" class="btn">Calculate My Price</button>
         </div>
       </div>
       
-      <!-- Results Section (hidden initially) -->
-      <div id="results-section" style="display: none;" class="fade-in">
-        <h3 class="mt-8 mb-4">Your HubSpot Onboarding Package</h3>
+      <!-- Results Section (step 4, hidden initially) -->
+      <div id="step-4" class="calculator-step">
+        <h3 class="mt-4 mb-4">Your HubSpot Onboarding Package</h3>
         <p>Based on your selections, here is your detailed HubSpot onboarding package:</p>
         
         <div class="results-container slide-up" id="results-summary">
@@ -702,8 +850,8 @@
           <h3>HubSpot Services</h3>
           <ul>
             <li><a href="https://www.leapforce.nl/expertises/" target="_blank">View All Our Expertises</a></li>
-          </ul>
-        </div>
+      </ul>
+    </div>
         <div class="footer-column">
           <h3>Contact Us</h3>
           <ul>
@@ -747,10 +895,23 @@
     const formPopup = document.getElementById('form-popup');
     const closeFormPopupButton = document.getElementById('close-form-popup');
     const selectionForm = document.getElementById('selection-form');
-    const resultsSection = document.getElementById('results-section');
+    
+    // Step navigation elements
+    const step1 = document.getElementById('step-1');
+    const step2 = document.getElementById('step-2');
+    const step3 = document.getElementById('step-3');
+    const step4 = document.getElementById('step-4');
+    
+    const step1Next = document.getElementById('step-1-next');
+    const step2Back = document.getElementById('step-2-back');
+    const step2Next = document.getElementById('step-2-next');
+    const step3Back = document.getElementById('step-3-back');
+    
+    const stepIndicators = document.querySelectorAll('.step');
     
     // State
     let selectedHubs = [];
+    let currentStep = 1;
     let selections = {
       marketing_tier: '',
       sales_tier: '',
@@ -766,42 +927,33 @@
           const hub = this.value;
           const isChecked = this.checked;
           
-          // Show/hide tier sections based on selection
-          if (hub === 'marketing') {
-            marketingTierSection.style.display = isChecked ? 'block' : 'none';
-            if (!isChecked) {
-              // Clear marketing tier selection
-              document.querySelectorAll('input[name="marketing_tier"]').forEach(radio => {
-                radio.checked = false;
-              });
-              selections.marketing_tier = '';
-            }
-          } else if (hub === 'sales') {
-            salesTierSection.style.display = isChecked ? 'block' : 'none';
-            if (!isChecked) {
-              // Clear sales tier selection
-              document.querySelectorAll('input[name="sales_tier"]').forEach(radio => {
-                radio.checked = false;
-              });
-              selections.sales_tier = '';
-            }
-          } else if (hub === 'service') {
-            serviceTierSection.style.display = isChecked ? 'block' : 'none';
-            if (!isChecked) {
-              // Clear service tier selection
-              document.querySelectorAll('input[name="service_tier"]').forEach(radio => {
-                radio.checked = false;
-              });
-              selections.service_tier = '';
-            }
-          }
-          
           // Track selected hubs
           if (isChecked) {
             selectedHubs.push(hub);
           } else {
             selectedHubs = selectedHubs.filter(h => h !== hub);
+            
+            // Clear tier selection when hub is unchecked
+            if (hub === 'marketing') {
+              selections.marketing_tier = '';
+              document.querySelectorAll('input[name="marketing_tier"]').forEach(radio => {
+                radio.checked = false;
+              });
+            } else if (hub === 'sales') {
+              selections.sales_tier = '';
+              document.querySelectorAll('input[name="sales_tier"]').forEach(radio => {
+                radio.checked = false;
+              });
+            } else if (hub === 'service') {
+              selections.service_tier = '';
+              document.querySelectorAll('input[name="service_tier"]').forEach(radio => {
+                radio.checked = false;
+              });
+            }
           }
+          
+          // Update visibility of tier sections in step 2
+          updateTierSections();
         });
       });
       
@@ -831,33 +983,36 @@
         });
       });
       
+      // Step navigation
+      step1Next.addEventListener('click', function() {
+        if (validateStep1()) {
+          goToStep(2);
+        }
+      });
+      
+      step2Back.addEventListener('click', function() {
+        goToStep(1);
+      });
+      
+      step2Next.addEventListener('click', function() {
+        if (validateStep2()) {
+          goToStep(3);
+        }
+      });
+      
+      step3Back.addEventListener('click', function() {
+        goToStep(2);
+      });
+      
       // Calculate button click
       calculateButton.addEventListener('click', function() {
-        // Validate selections
-        let isValid = true;
-        let errorMessage = '';
-        
-        // Check if at least one hub is selected
-        if (selectedHubs.length === 0) {
-          isValid = false;
-          errorMessage = 'Please select at least one HubSpot Hub.';
-        }
-        
-        // Check if selected hubs have tier selections
-        if (isValid) {
-          if (selectedHubs.includes('marketing') && !selections.marketing_tier) {
-            isValid = false;
-            errorMessage = 'Please select a tier for Marketing Hub.';
-          } else if (selectedHubs.includes('sales') && !selections.sales_tier) {
-            isValid = false;
-            errorMessage = 'Please select a tier for Sales Hub.';
-          } else if (selectedHubs.includes('service') && !selections.service_tier) {
-            isValid = false;
-            errorMessage = 'Please select a tier for Service Hub.';
-          }
-        }
-        
-        if (isValid) {
+        if (validateStep3()) {
+          // Set hidden fields for HubSpot form
+          document.getElementById('marketing_hub_tier').value = selections.marketing_tier || '';
+          document.getElementById('sales_hub_tier').value = selections.sales_tier || '';
+          document.getElementById('service_hub_tier').value = selections.service_tier || '';
+          document.getElementById('service_model').value = selections.service_model;
+          
           // Generate package keys
           const packageKeys = [];
           
@@ -873,20 +1028,17 @@
             packageKeys.push(generatePackageKey('service', selections.service_tier, selections.service_model));
           }
           
-          // Set hidden fields
-          document.getElementById('marketing_hub_tier').value = selections.marketing_tier;
-          document.getElementById('sales_hub_tier').value = selections.sales_tier;
-          document.getElementById('service_hub_tier').value = selections.service_tier;
-          document.getElementById('service_model').value = selections.service_model;
           document.getElementById('hubspot_standard_onboarding_key').value = packageKeys.join(';');
           
-          // Show form popup
+          // Show form popup and calculate results simultaneously
           formPopup.style.display = 'flex';
-          
-          // Create HubSpot form
           createHubSpotForm();
-        } else {
-          alert(errorMessage);
+          
+          // Calculate and show results immediately
+          calculateResults();
+          
+          // Go to step 4 (results)
+          goToStep(4);
         }
       });
       
@@ -924,6 +1076,83 @@
         });
       });
     });
+    
+    // Step validation functions
+    function validateStep1() {
+      if (selectedHubs.length === 0) {
+        alert('Please select at least one HubSpot Hub.');
+        return false;
+      }
+      return true;
+    }
+    
+    function validateStep2() {
+      let isValid = true;
+      let errorMessage = '';
+      
+      // Check if selected hubs have tier selections
+      if (selectedHubs.includes('marketing') && !selections.marketing_tier) {
+        isValid = false;
+        errorMessage = 'Please select a tier for Marketing Hub.';
+      } else if (selectedHubs.includes('sales') && !selections.sales_tier) {
+        isValid = false;
+        errorMessage = 'Please select a tier for Sales Hub.';
+      } else if (selectedHubs.includes('service') && !selections.service_tier) {
+        isValid = false;
+        errorMessage = 'Please select a tier for Service Hub.';
+      }
+      
+      if (!isValid) {
+        alert(errorMessage);
+      }
+      
+      return isValid;
+    }
+    
+    function validateStep3() {
+      // Service model is pre-selected with default value, so always valid
+      return true;
+    }
+    
+    // Update tier sections visibility
+    function updateTierSections() {
+      marketingTierSection.style.display = selectedHubs.includes('marketing') ? 'block' : 'none';
+      salesTierSection.style.display = selectedHubs.includes('sales') ? 'block' : 'none';
+      serviceTierSection.style.display = selectedHubs.includes('service') ? 'block' : 'none';
+    }
+    
+    // Step navigation
+    function goToStep(step) {
+      // Hide all steps
+      const steps = [step1, step2, step3, step4];
+      steps.forEach(s => s.classList.remove('active'));
+      
+      // Show current step
+      steps[step - 1].classList.add('active');
+      
+      // Update step indicators
+      stepIndicators.forEach(indicator => {
+        const indicatorStep = parseInt(indicator.getAttribute('data-step'));
+        indicator.classList.remove('active', 'completed');
+        
+        if (indicatorStep === step) {
+          indicator.classList.add('active');
+        } else if (indicatorStep < step) {
+          indicator.classList.add('completed');
+        }
+      });
+      
+      // Update current step
+      currentStep = step;
+      
+      // Scroll to the calculator section
+      document.getElementById('calculator').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      // If going to step 2, update tier sections visibility
+      if (step === 2) {
+        updateTierSections();
+      }
+    }
     
     // Generate package key
     function generatePackageKey(hub, tier, serviceModel) {
@@ -969,9 +1198,9 @@
             region: "na1",
             target: "#hubspot-form-container",
             formData: {
-              marketing_hub_tier: selections.marketing_tier,
-              sales_hub_tier: selections.sales_tier,
-              service_hub_tier: selections.service_tier,
+              marketing_hub_tier: selections.marketing_tier || '',
+              sales_hub_tier: selections.sales_tier || '',
+              service_hub_tier: selections.service_tier || '',
               service_model: selections.service_model,
               hubspot_standard_onboarding_key: document.getElementById('hubspot_standard_onboarding_key').value
             },
@@ -1005,16 +1234,6 @@
               
               // Hide form popup
               formPopup.style.display = 'none';
-              
-              // Calculate and show results
-              calculateResults();
-              
-              // Show results section
-              selectionForm.style.display = 'none';
-              resultsSection.style.display = 'block';
-              
-              // Scroll to results
-              resultsSection.scrollIntoView({ behavior: 'smooth' });
             }
           });
         } else {
@@ -1036,7 +1255,7 @@
           '</div>';
       }
     }
-    
+
     // Calculate results
     function calculateResults() {
       let totalPrice = 0;
@@ -1189,9 +1408,8 @@
       salesTierSection.style.display = 'none';
       serviceTierSection.style.display = 'none';
       
-      // Hide results, show form
-      resultsSection.style.display = 'none';
-      selectionForm.style.display = 'block';
+      // Go back to step 1
+      goToStep(1);
       
       // Scroll to calculator
       document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
@@ -1205,7 +1423,7 @@
         service: { starter: 499, professional: 999, enterprise: 1999 }
       };
       
-      return prices[hub] && prices[hub][tier] ? prices[hub][tier] : 0;
+      return prices[hub] && prices[hub][tier.toLowerCase()] ? prices[hub][tier.toLowerCase()] : 0;
     }
     
     // Get estimated hours for a hub and tier
@@ -1216,7 +1434,7 @@
         service: { starter: 8, professional: 16, enterprise: 32 }
       };
       
-      return hours[hub] && hours[hub][tier] ? hours[hub][tier] : 0;
+      return hours[hub] && hours[hub][tier.toLowerCase()] ? hours[hub][tier.toLowerCase()] : 0;
     }
     
     // Get multiplier based on service model
@@ -1243,6 +1461,7 @@
     
     // Get scope detail based on hub, tier, and service model
     function getScopeDetail(hub, tier, serviceModel) {
+      const tierLower = tier.toLowerCase();
       const scopes = {
         marketing: {
           starter: {
@@ -1297,8 +1516,8 @@
         }
       };
       
-      return scopes[hub] && scopes[hub][tier] && scopes[hub][tier][serviceModel] 
-        ? scopes[hub][tier][serviceModel] 
+      return scopes[hub] && scopes[hub][tierLower] && scopes[hub][tierLower][serviceModel] 
+        ? scopes[hub][tierLower][serviceModel] 
         : 'Custom implementation based on your specific requirements.';
     }
     
