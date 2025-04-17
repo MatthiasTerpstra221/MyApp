@@ -3,425 +3,460 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You | Leapforce HubSpot Onboarding</title>
-    <link rel="icon" href="https://www.leapforce.nl/wp-content/uploads/2022/09/cropped-LeapForce-favico-32x32.jpg" sizes="32x32">
-    <link rel="icon" href="https://www.leapforce.nl/wp-content/uploads/2022/09/cropped-LeapForce-favico-192x192.jpg" sizes="192x192">
+    <meta name="description" content="Thank you for your HubSpot onboarding request - a Leapforce expert will contact you soon.">
+    <title>Thank You | HubSpot Onboarding Calculator | Leapforce</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.leapforce.io/wp-content/uploads/fbrfg/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.leapforce.io/wp-content/uploads/fbrfg/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.leapforce.io/wp-content/uploads/fbrfg/favicon-16x16.png">
+    
+    <!-- Leapforce Brand CSS -->
+    <link rel="stylesheet" href="leapforce-brand.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
-        :root {
-            /* Leapforce Brand Colors */
-            --primary: #ee7624; /* Leapforce Orange */
-            --secondary: #b7530e; /* Dark Orange */
-            --light-orange: #f4ac7b;
-            --leapforce-grey: #54565b;
-            --dark-grey: #2f3033;
-            --light-grey: #a9aaad;
-            --white: #ebebeb;
-            
-            /* UI Colors */
-            --bg-color: #ffffff;
-            --card-bg: #ffffff;
-            --text-color: #54565b; /* Leapforce Grey */
-            --border-color: #e5e7eb;
-            --muted-text: #a9aaad; /* Light Grey */
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
         body {
-            font-family: "Helvetica Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-weight: 300;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: #f8f9fa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
             padding: 0;
+            color: var(--leapforce-dark-gray);
+            background-color: var(--leapforce-light-gray);
+            line-height: 1.6;
         }
         
-        .container {
-            max-width: 800px;
+        .thank-you-container {
+            max-width: 900px;
             margin: 0 auto;
             padding: 40px 20px;
         }
         
-        .navbar {
+        .hero {
+            background-color: var(--leapforce-orange);
+            padding: 50px 30px;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 36px;
+            margin: 0 0 20px 0;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .success-icon {
+            font-size: 80px;
+            color: white;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .summary-card {
             background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .summary-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        
-        .navbar-logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .navbar-logo img {
-            height: 40px;
-        }
-        
-        .navbar-logo a:not(:first-child) {
-            margin-left: 20px;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 30px;
             margin-bottom: 30px;
+            border-bottom: 1px solid var(--leapforce-light-gray);
+            padding-bottom: 20px;
         }
         
-        h1, h2, h3, h4, h5, h6 {
-            font-family: "Helvetica Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-weight: 300;
-            color: var(--leapforce-grey);
-            margin-bottom: 1rem;
+        .summary-header h2 {
+            font-size: 24px;
+            margin: 0;
         }
         
-        h1 {
-            color: var(--primary);
-            font-size: 2rem;
-            margin-top: 0;
-            margin-bottom: 1.5rem;
+        .total-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--leapforce-orange);
         }
         
-        p {
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
+        .selection-item {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
         }
         
-        .btn {
-            display: inline-block;
-            background-color: var(--primary);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 400;
-            transition: background-color 0.2s;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .btn:hover {
-            background-color: var(--secondary);
-        }
-        
-        .status {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            display: none;
-            border-left: 4px solid;
-        }
-        
-        .status.success {
-            background-color: #e6f4ea;
-            color: #137333;
-            border-color: #34a853;
-        }
-        
-        .status.error {
-            background-color: #fce8e6;
-            color: #c5221f;
-            border-color: #ea4335;
-        }
-        
-        .status.info {
-            background-color: #e8f0fe;
-            color: #1967d2;
-            border-color: #4285f4;
-        }
-        
-        .package-details {
-            background-color: #f8f9fa;
-            border-radius: 4px;
-            padding: 20px;
-            margin-bottom: 2rem;
-        }
-        
-        .package-details h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            border-bottom: 1px solid var(--light-grey);
-            padding-bottom: 0.5rem;
-        }
-        
-        .package-details ul {
-            list-style-type: none;
-        }
-        
-        .package-details li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        
-        .package-details li:last-child {
+        .selection-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
             border-bottom: none;
         }
         
-        .package-details li strong {
-            color: var(--leapforce-grey);
-            margin-right: 10px;
+        .item-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .item-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 122, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .item-icon i {
+            font-size: 24px;
+            color: var(--leapforce-orange);
+        }
+        
+        .item-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .item-price {
+            margin-left: auto;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--leapforce-orange);
+        }
+        
+        .item-description {
+            color: var(--leapforce-medium-gray);
+            margin-bottom: 15px;
+        }
+        
+        .next-steps {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .next-steps h2 {
+            margin-top: 0;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--leapforce-dark-gray);
+        }
+        
+        .steps-list {
+            counter-reset: step-counter;
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .steps-list li {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 20px;
+            counter-increment: step-counter;
+        }
+        
+        .steps-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 36px;
+            height: 36px;
+            background-color: var(--leapforce-orange);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .steps-list li strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: var(--leapforce-dark-gray);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--leapforce-orange);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e06e00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background-color: #f1f3f5;
+            color: var(--leapforce-dark-gray);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn i {
+            margin-right: 8px;
         }
         
         footer {
             text-align: center;
-            padding: 20px;
-            background-color: var(--leapforce-grey);
-            color: white;
-            margin-top: 40px;
-        }
-        
-        .copy-box {
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        
-        .copy-box pre {
-            margin: 0;
-            white-space: pre-wrap;
-            word-break: break-all;
-            color: #333;
+            margin-top: 50px;
+            color: var(--leapforce-medium-gray);
             font-size: 14px;
         }
         
-        .copy-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: var(--leapforce-grey);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            font-size: 12px;
-            cursor: pointer;
+        footer a {
+            color: var(--leapforce-orange);
+            text-decoration: none;
         }
         
-        .copy-btn:hover {
-            background-color: var(--dark-grey);
+        footer a:hover {
+            text-decoration: underline;
         }
         
         @media (max-width: 768px) {
-            .container {
-                padding: 20px 15px;
+            .hero {
+                padding: 40px 20px;
             }
             
-            .navbar {
-                padding: 0.8rem 1rem;
+            .hero h1 {
+                font-size: 28px;
             }
             
-            h1 {
-                font-size: 1.8rem;
+            .hero p {
+                font-size: 16px;
             }
             
-            .card {
-                padding: 20px;
+            .success-icon {
+                font-size: 60px;
+            }
+            
+            .item-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .item-icon {
+                margin-bottom: 10px;
+            }
+            
+            .item-price {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <div class="navbar-logo">
-            <a href="https://www.leapforce.nl" target="_blank" rel="noopener" aria-label="Leapforce homepage">
-                <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" onerror="this.onerror=null; this.src='https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.png';">
-            </a>
-            <a href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl" target="_blank" rel="noopener" aria-label="HubSpot Platinum Partner Page">
-                <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" onerror="this.onerror=null; this.style.display='none';">
-            </a>
-        </div>
-    </div>
-    
-    <div class="container">
-        <div class="card">
-            <h1>Thank You for Your Submission!</h1>
-            <p>We've received your HubSpot onboarding request and will be in touch shortly to discuss next steps. A confirmation email has been sent to your inbox with details about your selections.</p>
-            
-            <div id="status" class="status"></div>
-            
-            <div class="package-details">
-                <h3>Your Selected Package</h3>
-                <ul id="package-details">
-                    <li><em>Loading your selections...</em></li>
-                </ul>
-            </div>
-            
-            <div id="technical-info" style="display: none;">
-                <h3>Technical Details (For Support)</h3>
-                <p>If you're experiencing issues with your form submission, please share the following information with our support team:</p>
-                
-                <div class="copy-box">
-                    <pre id="technical-details">Loading technical details...</pre>
-                    <button class="copy-btn" onclick="copyTechnicalDetails()">Copy</button>
+    <div class="thank-you-container">
+        <div class="hero">
+            <div class="hero-content">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
                 </div>
-            </div>
-            
-            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-top: 2rem;">
-                <a href="index.html" class="btn">Return to Calculator</a>
-                <a href="https://meetings.hubspot.com/leo-braak/leo-matthias?uuid=e7f1fa4c-1a89-4e21-8c03-60b8dc1c0145" target="_blank" class="btn" style="background-color: var(--secondary);">Schedule a Call</a>
+                <h1>Thank You for Your Request</h1>
+                <p>We've received your HubSpot onboarding information. One of our specialists will contact you within 1 business day to discuss your implementation.</p>
             </div>
         </div>
+        
+        <div class="summary-card">
+            <div class="summary-header">
+                <h2>Your HubSpot Package Summary</h2>
+                <div class="total-price" id="total-price">$0</div>
+            </div>
+            
+            <div id="summary-content">
+                <p>Loading your submission details...</p>
+            </div>
+        </div>
+        
+        <div class="next-steps">
+            <h2>What Happens Next?</h2>
+            <ul class="steps-list">
+                <li>
+                    <strong>Expert Review</strong>
+                    Our HubSpot specialists will review your package selection and requirements.
+                </li>
+                <li>
+                    <strong>Personal Contact</strong>
+                    We'll reach out to you via phone or email within 1 business day to discuss your implementation needs.
+                </li>
+                <li>
+                    <strong>Custom Plan</strong>
+                    We'll create a tailored implementation plan based on your business objectives and timeline.
+                </li>
+                <li>
+                    <strong>Implementation Kickoff</strong>
+                    Once approved, we'll schedule your onboarding kickoff and begin the implementation process.
+                </li>
+            </ul>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-calculator"></i> Back to Calculator
+            </a>
+            <a href="https://www.leapforce.io/contact" class="btn btn-primary">
+                <i class="fas fa-phone-alt"></i> Contact Us
+            </a>
+            <a href="https://www.leapforce.io/hubspot-services" class="btn btn-secondary">
+                <i class="fas fa-info-circle"></i> Our HubSpot Services
+            </a>
+        </div>
+        
+        <footer>
+            <p>&copy; <script>document.write(new Date().getFullYear())</script> Leapforce. All rights reserved. | <a href="https://www.leapforce.io/privacy-policy">Privacy Policy</a></p>
+        </footer>
     </div>
     
-    <footer>
-        <p>© <span id="current-year"></span> Leapforce | <a href="https://www.leapforce.nl/privacy-policy/" target="_blank" style="color: white; text-decoration: underline;">Privacy Policy</a></p>
-    </footer>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Set current year in footer
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-            
-            // Check for URL parameters
+            // Get parameters from URL
             const urlParams = new URLSearchParams(window.location.search);
-            const onboardingKey = urlParams.get('onboarding_key');
-            const marketingTier = urlParams.get('marketing_tier');
-            const salesTier = urlParams.get('sales_tier');
-            const serviceTier = urlParams.get('service_tier');
-            const serviceModel = urlParams.get('service_model');
+            const hub = urlParams.get('hub') || '';
+            const packageName = urlParams.get('package') || '';
+            const addons = urlParams.get('addons') || '';
+            const totalPrice = urlParams.get('total_price') || '0';
             
-            // Check both localStorage and sessionStorage (localStorage is more reliable but try both)
-            const localOnboardingKey = localStorage.getItem('hubspot_standard_onboarding_key');
-            const localMarketingTier = localStorage.getItem('marketing_hub_tier');
-            const localSalesTier = localStorage.getItem('sales_hub_tier');
-            const localServiceTier = localStorage.getItem('service_hub_tier');
-            const localServiceModel = localStorage.getItem('service_model');
+            // Format the total price
+            const formattedPrice = parseInt(totalPrice).toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
             
-            const sessionOnboardingKey = sessionStorage.getItem('hubspot_standard_onboarding_key');
-            const sessionMarketingTier = sessionStorage.getItem('marketing_hub_tier');
-            const sessionSalesTier = sessionStorage.getItem('sales_hub_tier');
-            const sessionServiceTier = sessionStorage.getItem('service_hub_tier');
-            const sessionServiceModel = sessionStorage.getItem('service_model');
+            // Update the total price
+            document.getElementById('total-price').textContent = formattedPrice;
             
-            // Use the most reliable source in this order: URL params > localStorage > sessionStorage
-            const finalOnboardingKey = onboardingKey || localOnboardingKey || sessionOnboardingKey || 'Not specified';
-            const finalMarketingTier = marketingTier || localMarketingTier || sessionMarketingTier || 'None';
-            const finalSalesTier = salesTier || localSalesTier || sessionSalesTier || 'None';
-            const finalServiceTier = serviceTier || localServiceTier || sessionServiceTier || 'None';
-            const finalServiceModel = serviceModel ? decodeURIComponent(serviceModel) : (localServiceModel || sessionServiceModel || 'Not specified');
-            
-            // Create a technical details object for debugging and support
-            const technicalDetails = {
-                timestamp: new Date().toISOString(),
-                source: 'thank-you.html',
-                onboardingKey: {
-                    url: onboardingKey || null,
-                    localStorage: localOnboardingKey || null,
-                    sessionStorage: sessionOnboardingKey || null,
-                    final: finalOnboardingKey
-                },
-                hubTiers: {
-                    marketing: finalMarketingTier,
-                    sales: finalSalesTier,
-                    service: finalServiceTier
-                },
-                serviceModel: finalServiceModel,
-                browser: navigator.userAgent,
-                referrer: document.referrer
-            };
-            
-            // Update the technical details section
-            document.getElementById('technical-details').textContent = JSON.stringify(technicalDetails, null, 2);
-            
-            // Update package details on the page
-            const packageDetails = document.getElementById('package-details');
-            packageDetails.innerHTML = '';
-            
-            let hasSelections = false;
-            
-            if (finalMarketingTier && finalMarketingTier !== 'None') {
-                packageDetails.innerHTML += `<li><strong>Marketing Hub:</strong> ${finalMarketingTier}</li>`;
-                hasSelections = true;
+            // Get the hub icon based on hub name
+            let hubIcon = 'fa-solid fa-building';
+            if (hub.toLowerCase().includes('marketing')) {
+                hubIcon = 'fa-solid fa-bullhorn';
+            } else if (hub.toLowerCase().includes('sales')) {
+                hubIcon = 'fa-solid fa-handshake';
+            } else if (hub.toLowerCase().includes('service')) {
+                hubIcon = 'fa-solid fa-headset';
+            } else if (hub.toLowerCase().includes('cms')) {
+                hubIcon = 'fa-solid fa-globe';
+            } else if (hub.toLowerCase().includes('operations')) {
+                hubIcon = 'fa-solid fa-cogs';
             }
             
-            if (finalSalesTier && finalSalesTier !== 'None') {
-                packageDetails.innerHTML += `<li><strong>Sales Hub:</strong> ${finalSalesTier}</li>`;
-                hasSelections = true;
-            }
+            // Format addons as array
+            const addonArray = addons.split(',').map(addon => addon.trim()).filter(Boolean);
             
-            if (finalServiceTier && finalServiceTier !== 'None') {
-                packageDetails.innerHTML += `<li><strong>Service Hub:</strong> ${finalServiceTier}</li>`;
-                hasSelections = true;
-            }
-            
-            if (finalServiceModel && finalServiceModel !== 'Not specified') {
-                packageDetails.innerHTML += `<li><strong>Service Model:</strong> ${finalServiceModel}</li>`;
-                hasSelections = true;
-            }
-            
-            if (finalOnboardingKey && finalOnboardingKey !== 'Not specified') {
-                packageDetails.innerHTML += `<li><strong>Package Reference:</strong> ${finalOnboardingKey}</li>`;
-            }
-            
-            // If no selections were found, show a message
-            if (!hasSelections) {
-                packageDetails.innerHTML = `
-                    <li style="text-align: center; padding: 1rem;">
-                        <em>We couldn't retrieve your package selections.</em>
-                    </li>
-                    <li style="text-align: center;">
-                        <a href="index.html" class="btn" style="margin-top: 1rem;">Return to Calculator</a>
-                    </li>
-                `;
+            // Build HTML for summary
+            let summaryHTML = `
+                <div class="summary-section">
+                    <h3>Selected Hub</h3>
+                    <div class="hub-icon">
+                        <i class="fas ${hubIcon}"></i>
+                    </div>
+                    <strong>${hub}</strong>
+                </div>
                 
-                // Show technical details for troubleshooting
-                document.getElementById('technical-info').style.display = 'block';
-            }
-            
-            // Show success message
-            const statusElement = document.getElementById('status');
-            statusElement.style.display = 'block';
-            statusElement.classList.add('success');
-            statusElement.innerHTML = `
-                <strong>Success!</strong> Your form has been submitted successfully.
-                Our team will contact you soon to discuss your HubSpot onboarding needs.
+                <div class="summary-section">
+                    <h3>Selected Package</h3>
+                    <p>${packageName}</p>
+                </div>
             `;
             
-            // Clear storage to prevent showing old data on future visits
-            // Keep the data for 30 minutes in case the user refreshes the page
-            setTimeout(function() {
-                localStorage.removeItem('hubspot_standard_onboarding_key');
-                localStorage.removeItem('marketing_hub_tier');
-                localStorage.removeItem('sales_hub_tier');
-                localStorage.removeItem('service_hub_tier');
-                localStorage.removeItem('service_model');
-                
-                sessionStorage.removeItem('hubspot_standard_onboarding_key');
-                sessionStorage.removeItem('marketing_hub_tier');
-                sessionStorage.removeItem('sales_hub_tier');
-                sessionStorage.removeItem('service_hub_tier');
-                sessionStorage.removeItem('service_model');
-            }, 30 * 60 * 1000); // 30 minutes
+            // Add addons if any
+            if (addonArray.length > 0) {
+                summaryHTML += `
+                    <div class="summary-section">
+                        <h3>Selected Add-ons</h3>
+                        <ul>
+                            ${addonArray.map(addon => `<li>${addon}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            // Add total price
+            summaryHTML += `
+                <div class="summary-section">
+                    <h3>Total Investment</h3>
+                    <div class="total-price">${formattedPrice}</div>
+                </div>
+            `;
+            
+            // Update the summary container
+            document.getElementById('selection-summary').innerHTML = summaryHTML;
         });
-        
-        // Function to copy technical details
-        function copyTechnicalDetails() {
-            const technicalDetails = document.getElementById('technical-details').textContent;
-            navigator.clipboard.writeText(technicalDetails)
-                .then(() => {
-                    const copyBtn = document.querySelector('.copy-btn');
-                    copyBtn.textContent = 'Copied!';
-                    setTimeout(() => {
-                        copyBtn.textContent = 'Copy';
-                    }, 2000);
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                });
-        }
     </script>
+    
+    <!-- HubSpot Tracking Code -->
+    <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/21830924.js"></script>
 </body>
 </html> 

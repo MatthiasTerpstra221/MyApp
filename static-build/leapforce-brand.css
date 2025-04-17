@@ -962,4 +962,58 @@ a:hover {
   .leapforce-button {
     width: 100%;
   }
+  
+  /* Enhanced mobile responsiveness */
+  .selection-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .selection-card {
+    padding: 15px !important;
+  }
+  
+  .summary-container {
+    padding: 15px !important;
+  }
+  
+  .summary-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  
+  .summary-total-price {
+    margin-top: 10px !important;
+  }
+  
+  .nav-buttons {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  
+  .section-header h2 {
+    font-size: 24px !important;
+  }
+  
+  .hero h1 {
+    font-size: 28px !important;
+  }
+  
+  .hero p {
+    font-size: 16px !important;
+  }
+  
+  /* Improve progress bar on mobile */
+  .progress-container {
+    overflow-x: auto !important;
+    padding-bottom: 10px !important;
+  }
+  
+  .stage-label {
+    font-size: 12px !important;
+  }
+  
+  .stage-number {
+    width: 30px !important;
+    height: 30px !important;
+  }
 } 
