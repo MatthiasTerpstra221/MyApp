@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="HubSpot Onboarding Calculator by Leapforce - Calculate your HubSpot onboarding package">
+  <link rel="icon" href="favicon.ico">
+  <title>HubSpot Onboarding Calculator | Leapforce</title>
+  <style>
+    /* CSS Variables for consistency - Updated with Leapforce brand colors */
+    :root {
+      --primary: #54565b; /* Primair Leapforce Grijs */
+      --primary-dark: #2f3033; /* Donker Grijs */
+      --primary-light: #a9aaad; /* Licht Grijs */
+      --secondary: #ee7624; /* Primair Leapforce Oranje */
+      --secondary-light: #f4ac7b; /* Licht Oranje */
+      --secondary-dark: #b7530e; /* Extra Donker Oranje */
+      --accent: #f4ac7b; /* Licht Oranje as accent */
+      --accent-light: #f8d2b9; /* Lighter version of Light Oranje */
+      --success: #4CAF50; /* Keep success green for usability */
+      --error: #F44336; /* Keep error red for usability */
+      --gray-50: #f7f7f7;
+      --gray-100: #ebebeb; /* Wit from brand guide */
+      --gray-200: #d4d4d5;
+      --gray-300: #a9aaad; /* Licht Grijs */
+      --gray-400: #8d8f93;
+      --gray-500: #6e7073;
+      --gray-600: #54565b; /* Primair Leapforce Grijs */
+      --gray-700: #424447;
+      --gray-800: #2f3033; /* Donker Grijs */
+      --gray-900: #212224;
+      --max-width: 1200px;
+      --border-radius: 0.5rem;
+      --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --box-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s ease;
+      --font-sans: 'Helvetica Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    
+    /* Base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      color: var(--gray-800);
+      background-color: var(--gray-100);
+    }
+    
+    /* Base styling */
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    /* Navigation */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+    .navbar-logo img {
+      height: 40px;
+    }
+    .navbar-menu {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .navbar-menu a {
+      color: var(--gray-600);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      padding: 0.5rem 0;
+      position: relative;
+    }
+    .navbar-menu a:hover {
+      color: var(--primary);
+    }
+    .navbar-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary);
+      transition: var(--transition);
+    }
+    .navbar-menu a:hover::after {
+      width: 100%;
+    }
+    
+    /* Hero Section */
+    .hero {
+      background-color: white;
+      padding: 4rem 0;
+      text-align: center;
+      background-image: linear-gradient(45deg, rgba(0, 122, 140, 0.03) 0%, rgba(0, 122, 140, 0.03) 100%);
+      border-bottom: 1px solid rgba(0, 122, 140, 0.1);
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      color: var(--gray-800);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    .hero h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background-color: var(--primary);
+      border-radius: 2px;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--gray-600);
+      max-width: 700px;
+      margin: 1.5rem auto 0;
+    }
+    
+    /* Cards and Sections */
+    .card {
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: var(--box-shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--gray-200);
+      transition: var(--transition);
+    }
+    .card:hover {
+      box-shadow: var(--box-shadow-md);
+    }
+    .section-title {
+      color: var(--primary);
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 1.5px;
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      background-color: var(--primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      text-decoration: none;
+      font-weight: 500;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .btn-secondary {
+      background-color: white;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-secondary:hover {
+      background-color: var(--gray-50);
+      border-color: var(--primary-dark);
+      color: var(--primary-dark);
+    }
+    
+    /* Utility classes */
+    .text-center {
+      text-align: center;
+    }
+    .mt-4 {
+      margin-top: 1rem;
+    }
+    .mt-8 {
+      margin-top: 2rem;
+    }
+    .mb-4 {
+      margin-bottom: 1rem;
+    }
+    .mb-8 {
+      margin-bottom: 2rem;
+    }
+    
+    /* Footer */
+    .footer {
+      background-color: #1f2937;
+      color: white;
+      padding: 3rem 0;
+      position: relative;
+    }
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+    }
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .footer-column h3 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      color: white;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background-color: var(--primary-light);
+    }
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .footer-column ul li {
+      margin-bottom: 0.5rem;
+    }
+    .footer-column a {
+      color: #d1d5db;
+      text-decoration: none;
+      transition: var(--transition);
+      position: relative;
+      display: inline-block;
+    }
+    .footer-column a:hover {
+      color: white;
+      text-decoration: none;
+    }
+    .footer-column a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: white;
+      transition: var(--transition);
+    }
+    .footer-column a:hover::after {
+      width: 100%;
+    }
+    .footer-bottom {
+      border-top: 1px solid #374151;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #9ca3af;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+      }
+      
+      .mobile-menu-button {
+        display: block !important;
+      }
+      
+      .mobile-menu {
+        display: block;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: white;
+        padding: 1rem;
+        box-shadow: var(--box-shadow);
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+      }
+      
+      .mobile-menu.active {
+        transform: translateY(0);
+      }
+      
+      .mobile-menu a {
+        display: block;
+      padding: 0.75rem 0;
+        color: var(--gray-800);
+        text-decoration: none;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      
+      .selection-grid {
+        grid-template-columns: 1fr !important;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .card {
+        padding: 1.5rem;
+      }
+      
+      .social-proof {
+        gap: 1rem !important;
+      }
+      
+      .social-proof > div {
+        flex-basis: 30%;
+      }
+      
+      .btn {
+        width: 100%;
+      margin-bottom: 0.5rem;
+      }
+      
+      .results-highlight {
+        font-size: 1.75rem !important;
+      }
+    }
+    
+    /* Step indicator styles */
+    .step-indicator {
+      margin: 2.5rem 0;
+    }
+    
+    .steps-container {
+      display: flex;
+      justify-content: space-between;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .steps-container::before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      left: 10%;
+      right: 10%;
+      height: 3px;
+      background-color: var(--gray-300);
+      z-index: 1;
+      border-radius: 1.5px;
+    }
+    
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .step-number {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background-color: white;
+      border: 2px solid var(--gray-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .step-text {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .step.active .step-number {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 0 0 4px rgba(0, 122, 140, 0.2);
+    }
+    
+    .step.active .step-text {
+      color: var(--primary);
+      font-weight: 600;
+      transform: translateY(-2px);
+    }
+    
+    .step.completed .step-number {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    
+    .step.completed .step-number::after {
+      content: '✓';
+      position: absolute;
+      font-size: 0.9rem;
+    }
+    
+    .step.completed .step-text {
+      color: var(--primary);
+    }
+    
+    /* Update for steps-container to show progress */
+    .steps-container[data-current-step="1"]::before {
+      background: linear-gradient(to right, 
+        var(--primary) 0%, var(--primary) 0%, 
+        var(--gray-300) 0%, var(--gray-300) 100%);
+    }
+    
+    .steps-container[data-current-step="2"]::before {
+      background: linear-gradient(to right, 
+        var(--primary) 0%, var(--primary) 33%, 
+        var(--gray-300) 33%, var(--gray-300) 100%);
+    }
+    
+    .steps-container[data-current-step="3"]::before {
+      background: linear-gradient(to right, 
+        var(--primary) 0%, var(--primary) 66%, 
+        var(--gray-300) 66%, var(--gray-300) 100%);
+    }
+    
+    .steps-container[data-current-step="4"]::before {
+      background: linear-gradient(to right, 
+        var(--primary) 0%, var(--primary) 100%);
+    }
+    
+    /* Button outline style */
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      transition: all 0.2s;
+    }
+    
+    .btn-outline:hover {
+      background-color: rgba(0, 122, 140, 0.05);
+      border-color: var(--primary-dark);
+      color: var(--primary-dark);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Button with accent color */
+    .btn-accent {
+      background-color: var(--secondary);
+      color: white;
+    }
+    
+    .btn-accent:hover {
+      background-color: var(--secondary-dark);
+    }
+    
+    /* Card style for tier information */
+    .tier-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      background-color: var(--gray-50);
+      transition: var(--transition);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .tier-card:hover {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border-color: var(--gray-300);
+    }
+    
+    /* Selection card enhancements */
+    .selection-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.25s;
+      background-color: white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+    
+    .selection-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+    
+    .selection-card input[type="checkbox"],
+    .selection-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+    }
+    
+    .selection-card input:checked + label {
+      color: var(--primary);
+    }
+    
+    .selection-card input:checked + label::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border: 2px solid var(--primary);
+      border-radius: 0.75rem;
+      pointer-events: none;
+      box-shadow: 0 0 0 2px rgba(0, 122, 140, 0.1);
+    }
+    
+    .selection-card input:checked + label::after {
+      content: '✓';
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      background-color: var(--primary);
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+    
+    .selection-label {
+      display: block;
+      cursor: pointer;
+    }
+    
+    .selection-label h4 {
+      margin-bottom: 0.75rem;
+      color: var(--gray-800);
+      font-size: 1.1rem;
+      transition: var(--transition);
+    }
+    
+    .selection-card:hover .selection-label h4 {
+      color: var(--primary);
+    }
+    
+    /* Calculator steps styles */
+    .calculator-step {
+      display: none;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .calculator-step.active {
+      display: block;
+    }
+    
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    
+    /* Benefits box styling */
+    .benefits-box {
+      background-color: rgba(0, 122, 140, 0.05);
+      border: 1px solid rgba(0, 122, 140, 0.1);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 1rem 0 2rem;
+    }
+    
+    /* Results section styling */
+    .results-container {
+      animation: slideUp 0.5s ease-out;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    .results-highlight {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 1.5rem 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      background: linear-gradient(45deg, rgba(0, 122, 140, 0.05) 0%, rgba(0, 122, 140, 0.1) 100%);
+      border-radius: 1rem;
+      box-shadow: inset 0 0 0 1px rgba(0, 122, 140, 0.1);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    /* Scarcity box styling */
+    .scarcity-box {
+      display: none; /* Hide the scarcity box */
+    }
+    
+    /* Form popup styling */
+    #form-popup {
+      backdrop-filter: blur(5px);
+    }
+    
+    #form-popup > div {
+      animation: scaleIn 0.3s ease-out;
+    }
+    
+    @keyframes scaleIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    /* Loading spinner enhancements */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    #form-loading div {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--gray-200);
+      border-top: 3px solid var(--secondary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Improved mobile responsiveness */
+    @media (max-width: 768px) {
+      .steps-container::before {
+        left: 15%;
+        right: 15%;
+      }
+      
+      .step-text {
+        font-size: 0.7rem;
+      }
+      
+      .selection-grid {
+        grid-template-columns: 1fr !important;
+      }
+      
+      .selection-card {
+        margin-bottom: 1rem;
+      }
+      
+      .navigation-buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .navigation-buttons button {
+        width: 100%;
+      }
+      
+      .results-highlight {
+        font-size: 2rem;
+        padding: 0.3rem 1rem;
+      }
+    }
+    
+    /* Notification styles */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 6px;
+      color: white;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+      z-index: 1000;
+      animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+    }
+    
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    
+    .notification.success {
+      background-color: var(--success);
+    }
+    
+    .notification.info {
+      background-color: var(--secondary);
+    }
+    
+    .notification.error {
+      background-color: var(--error);
+    }
+  </style>
+</head>
+<body>
+<style>body > a:not([class]) { display: none !important; }</style>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <div class="navbar-logo">
+        <a href="https://www.leapforce.nl" target="_blank" rel="noopener" aria-label="Leapforce homepage">
+          <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" style="height: 40px;" onerror="this.onerror=null; this.src='https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.png';">
+        </a>
+        <a href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl" target="_blank" rel="noopener" aria-label="HubSpot Platinum Partner Page" style="display: flex; align-items: center; margin-left: 15px;">
+          <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" style="height: 40px;" onerror="this.onerror=null; this.style.display='none';">
+        </a>
+      </div>
+      <div class="navbar-menu">
+        <a href="#calculator">Calculator</a>
+        <a href="#about">About Hubs</a>
+        <a href="#reviews">Reviews</a>
+        <a href="https://www.leapforce.nl/contact/" target="_blank">Contact</a>
+      </div>
+      <button class="mobile-menu-button" aria-label="Toggle mobile menu" style="display: none; background: none; border: none; cursor: pointer;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
+  
+  <!-- Mobile Menu (hidden by default) -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#calculator">Calculator</a>
+    <a href="#about">About Hubs</a>
+    <a href="#reviews">Reviews</a>
+    <a href="https://www.leapforce.nl/contact/" target="_blank">Contact</a>
+  </div>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+  <div class="container">
+      <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <div style="text-align: center;">
+          <h1>HubSpot Onboarding Calculator</h1>
+          <p>Find the perfect HubSpot onboarding package for your business needs</p>
+        </div>
+      </div>
+      <a href="https://ecosystem.hubspot.com/marketplace/solutions/leapforce-nl" target="_blank" rel="noopener" class="btn btn-secondary" aria-label="Visit the Leapforce HubSpot Partner Page">Visit Our HubSpot Partner Page</a>
+    </div>
+  </section>
+  
+  <!-- Main Content -->
+  <div class="content-container">
+    <!-- Calculator Section -->
+    <div class="card" id="calculator">
+      <h2 class="section-title">Calculate Your HubSpot Onboarding Package</h2>
+      
+      <!-- Step indicator -->
+      <div class="step-indicator mb-4">
+        <div class="steps-container">
+          <div class="step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-text">Select Hub(s)</div>
+          </div>
+          <div class="step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-text">Select Tier(s)</div>
+          </div>
+          <div class="step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-text">Service Model</div>
+          </div>
+          <div class="step" data-step="4">
+            <div class="step-number">4</div>
+            <div class="step-text">Results</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="benefits-box mb-4">
+        <p class="text-center" style="font-size: 1.1rem; margin-bottom: 0.5rem;">Follow these steps to get a personalized onboarding package for your business:</p>
+      </div>
+      
+      <!-- Selection Form -->
+      <div id="selection-form">
+        <!-- Step 1: Hubs Selection -->
+        <div id="step-1" class="calculator-step active">
+          <div class="selection-section mb-8">
+            <h3 class="text-center mb-4">Select HubSpot Hub(s)</h3>
+            <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+              <div class="selection-card" data-hub="marketing">
+                <input type="checkbox" id="marketing-hub" name="hub" value="marketing" class="hub-checkbox">
+                <label for="marketing-hub" class="selection-label">
+                  <h4>Marketing Hub</h4>
+                  <p>Attract visitors, convert leads, and run complete marketing campaigns at scale</p>
+                </label>
+              </div>
+              
+              <div class="selection-card" data-hub="sales">
+                <input type="checkbox" id="sales-hub" name="hub" value="sales" class="hub-checkbox">
+                <label for="sales-hub" class="selection-label">
+                  <h4>Sales Hub</h4>
+                  <p>Close more deals, deepen relationships, and manage your pipeline more effectively</p>
+                </label>
+              </div>
+              
+              <div class="selection-card" data-hub="service">
+                <input type="checkbox" id="service-hub" name="hub" value="service" class="hub-checkbox">
+                <label for="service-hub" class="selection-label">
+                  <h4>Service Hub</h4>
+                  <p>Connect with customers, exceed expectations, and turn customers into promoters</p>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="navigation-buttons">
+            <div></div>
+            <button id="step-1-next" class="btn">Next: Select Tier(s)</button>
+          </div>
+        </div>
+        
+        <!-- Step 2: Tier Selection -->
+        <div id="step-2" class="calculator-step">
+          <div id="tier-sections-container">
+            <!-- Marketing Hub Tier Section (Conditionally Shown) -->
+            <div id="marketing-tier-section" class="tier-section mb-8" style="display: none;">
+              <h3 class="text-center mb-4">Select Marketing Hub Tier</h3>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-tier="starter">
+                  <input type="radio" id="marketing-starter" name="marketing_tier" value="Starter" class="tier-radio">
+                  <label for="marketing-starter" class="selection-label">
+                    <h4>Starter</h4>
+                    <p>Essential marketing tools to get your inbound strategy started</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="professional">
+                  <input type="radio" id="marketing-professional" name="marketing_tier" value="Professional" class="tier-radio">
+                  <label for="marketing-professional" class="selection-label">
+                    <h4>Professional</h4>
+                    <p>Advanced marketing automation and campaign management tools</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="enterprise">
+                  <input type="radio" id="marketing-enterprise" name="marketing_tier" value="Enterprise" class="tier-radio">
+                  <label for="marketing-enterprise" class="selection-label">
+                    <h4>Enterprise</h4>
+                    <p>Sophisticated marketing tools with advanced features and customization</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Sales Hub Tier Section (Conditionally Shown) -->
+            <div id="sales-tier-section" class="tier-section mb-8" style="display: none;">
+              <h3 class="text-center mb-4">Select Sales Hub Tier</h3>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-tier="starter">
+                  <input type="radio" id="sales-starter" name="sales_tier" value="Starter" class="tier-radio">
+                  <label for="sales-starter" class="selection-label">
+                    <h4>Starter</h4>
+                    <p>Essential sales CRM tools for small teams</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="professional">
+                  <input type="radio" id="sales-professional" name="sales_tier" value="Professional" class="tier-radio">
+                  <label for="sales-professional" class="selection-label">
+                    <h4>Professional</h4>
+                    <p>Advanced sales automation and analytics tools</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="enterprise">
+                  <input type="radio" id="sales-enterprise" name="sales_tier" value="Enterprise" class="tier-radio">
+                  <label for="sales-enterprise" class="selection-label">
+                    <h4>Enterprise</h4>
+                    <p>Powerful sales tools with advanced reporting and customization</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Service Hub Tier Section (Conditionally Shown) -->
+            <div id="service-tier-section" class="tier-section mb-8" style="display: none;">
+              <h3 class="text-center mb-4">Select Service Hub Tier</h3>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-tier="starter">
+                  <input type="radio" id="service-starter" name="service_tier" value="Starter" class="tier-radio">
+                  <label for="service-starter" class="selection-label">
+                    <h4>Starter</h4>
+                    <p>Essential customer service tools for small teams</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="professional">
+                  <input type="radio" id="service-professional" name="service_tier" value="Professional" class="tier-radio">
+                  <label for="service-professional" class="selection-label">
+                    <h4>Professional</h4>
+                    <p>Advanced automation and customer feedback tools</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-tier="enterprise">
+                  <input type="radio" id="service-enterprise" name="service_tier" value="Enterprise" class="tier-radio">
+                  <label for="service-enterprise" class="selection-label">
+                    <h4>Enterprise</h4>
+                    <p>Comprehensive service tools with advanced customization</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="navigation-buttons">
+            <button id="step-2-back" class="btn btn-secondary">Back</button>
+            <button id="step-2-next" class="btn">Next: Select Service Model</button>
+          </div>
+        </div>
+        
+        <!-- Step 3: Service Model Selection -->
+        <div id="step-3" class="calculator-step">
+          <div class="selection-section mb-8">
+            <h3 class="text-center mb-4">Select Service Model for Each Hub</h3>
+            
+            <!-- Marketing Hub Service Model (Conditionally Shown) -->
+            <div id="marketing-service-section" class="service-section mb-8" style="display: none;">
+              <h4 class="mb-4">Marketing Hub - <span id="marketing-tier-display">Tier</span></h4>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-model="diy">
+                  <input type="radio" id="marketing-service-diy" name="marketing_service_model" value="Do It Yourself" class="model-radio" checked>
+                  <label for="marketing-service-diy" class="selection-label">
+                    <h4>Do It Yourself</h4>
+                    <p>We guide you through the process, providing expertise and advice, while you handle the implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="diwm">
+                  <input type="radio" id="marketing-service-diwm" name="marketing_service_model" value="Do It With Me" class="model-radio">
+                  <label for="marketing-service-diwm" class="selection-label">
+                    <h4>Do It With Me</h4>
+                    <p>A collaborative approach where we work together on implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="difm">
+                  <input type="radio" id="marketing-service-difm" name="marketing_service_model" value="Do It For Me" class="model-radio">
+                  <label for="marketing-service-difm" class="selection-label">
+                    <h4>Do It For Me</h4>
+                    <p>We handle the entire implementation for you, from setup to optimization</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Sales Hub Service Model (Conditionally Shown) -->
+            <div id="sales-service-section" class="service-section mb-8" style="display: none;">
+              <h4 class="mb-4">Sales Hub - <span id="sales-tier-display">Tier</span></h4>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-model="diy">
+                  <input type="radio" id="sales-service-diy" name="sales_service_model" value="Do It Yourself" class="model-radio" checked>
+                  <label for="sales-service-diy" class="selection-label">
+                    <h4>Do It Yourself</h4>
+                    <p>We guide you through the process, providing expertise and advice, while you handle the implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="diwm">
+                  <input type="radio" id="sales-service-diwm" name="sales_service_model" value="Do It With Me" class="model-radio">
+                  <label for="sales-service-diwm" class="selection-label">
+                    <h4>Do It With Me</h4>
+                    <p>A collaborative approach where we work together on implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="difm">
+                  <input type="radio" id="sales-service-difm" name="sales_service_model" value="Do It For Me" class="model-radio">
+                  <label for="sales-service-difm" class="selection-label">
+                    <h4>Do It For Me</h4>
+                    <p>We handle the entire implementation for you, from setup to optimization</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Service Hub Service Model (Conditionally Shown) -->
+            <div id="service-service-section" class="service-section mb-8" style="display: none;">
+              <h4 class="mb-4">Service Hub - <span id="service-tier-display">Tier</span></h4>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-model="diy">
+                  <input type="radio" id="service-service-diy" name="service_service_model" value="Do It Yourself" class="model-radio" checked>
+                  <label for="service-service-diy" class="selection-label">
+                    <h4>Do It Yourself</h4>
+                    <p>We guide you through the process, providing expertise and advice, while you handle the implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="diwm">
+                  <input type="radio" id="service-service-diwm" name="service_service_model" value="Do It With Me" class="model-radio">
+                  <label for="service-service-diwm" class="selection-label">
+                    <h4>Do It With Me</h4>
+                    <p>A collaborative approach where we work together on implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="difm">
+                  <input type="radio" id="service-service-difm" name="service_service_model" value="Do It For Me" class="model-radio">
+                  <label for="service-service-difm" class="selection-label">
+                    <h4>Do It For Me</h4>
+                    <p>We handle the entire implementation for you, from setup to optimization</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="navigation-buttons">
+            <button id="step-3-back" class="btn btn-secondary">Back</button>
+            <button id="calculate-button" class="btn">View My Package</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Results Section (step 4, hidden initially) -->
+      <div id="step-4" class="calculator-step">
+        <h3 class="mt-4 mb-4">Your HubSpot Onboarding Package</h3>
+        <p>Based on your selections, here is your detailed HubSpot onboarding package:</p>
+        
+        <div class="results-container slide-up" id="results-summary">
+          <!-- Dynamically filled with results -->
+        </div>
+        
+        <div class="results-highlight" id="total-price">€0</div>
+        
+        <div id="scope-details" class="mt-8 mb-4">
+          <!-- Package scope details will appear here -->
+        </div>
+        
+        <div class="scarcity-box" style="background-color: #f8fafc; border: 1px solid #e5e7eb; border-radius: 6px; padding: 1rem; margin: 2rem 0; text-align: center; display: none;">
+          <!-- Limited Time Offer removed -->
+        </div>
+        
+        <div class="text-center mt-8">
+          <p style="margin-bottom: 1rem; font-size: 1.1rem;"><strong>Ready to get started with your onboarding package?</strong></p>
+          <a href="https://www.leapforce.nl/contact/" target="_blank" rel="noopener" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem;">Schedule a Call Now</a>
+          <div style="margin: 1rem 0; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <span style="height: 1px; background-color: #e5e7eb; flex: 1;"></span>
+            <span style="color: #6b7280; font-size: 0.9rem;">OR</span>
+            <span style="height: 1px; background-color: #e5e7eb; flex: 1;"></span>
+          </div>
+          <a href="https://www.leapforce.nl/contact/" target="_blank" rel="noopener" class="btn btn-secondary">Contact Us With Questions</a>
+          <div style="margin-top: 1.5rem;">
+            <button class="btn btn-outline mt-4" onclick="resetCalculator()" style="font-size: 0.9rem; width: auto; max-width: 200px; margin: 0 auto; display: block;">Start Over</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- About HubSpot Hubs Section -->
