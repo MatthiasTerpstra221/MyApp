@@ -987,30 +987,95 @@
         <!-- Step 3: Service Model Selection -->
         <div id="step-3" class="calculator-step">
           <div class="selection-section mb-8">
-            <h3 class="text-center mb-4">Select Service Model</h3>
-            <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-              <div class="selection-card" data-model="diy">
-                <input type="radio" id="service-diy" name="service_model" value="Do It Yourself" class="model-radio" checked>
-                <label for="service-diy" class="selection-label">
-                  <h4>Do It Yourself</h4>
-                  <p>We guide you through the process, providing expertise and advice, while you handle the implementation</p>
-                </label>
+            <h3 class="text-center mb-4">Select Service Model for Each Hub</h3>
+            
+            <!-- Marketing Hub Service Model (Conditionally Shown) -->
+            <div id="marketing-service-section" class="service-section mb-8" style="display: none;">
+              <h4 class="mb-4">Marketing Hub - <span id="marketing-tier-display">Tier</span></h4>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-model="diy">
+                  <input type="radio" id="marketing-service-diy" name="marketing_service_model" value="Do It Yourself" class="model-radio" checked>
+                  <label for="marketing-service-diy" class="selection-label">
+                    <h4>Do It Yourself</h4>
+                    <p>We guide you through the process, providing expertise and advice, while you handle the implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="diwm">
+                  <input type="radio" id="marketing-service-diwm" name="marketing_service_model" value="Do It With Me" class="model-radio">
+                  <label for="marketing-service-diwm" class="selection-label">
+                    <h4>Do It With Me</h4>
+                    <p>A collaborative approach where we work together on implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="difm">
+                  <input type="radio" id="marketing-service-difm" name="marketing_service_model" value="Do It For Me" class="model-radio">
+                  <label for="marketing-service-difm" class="selection-label">
+                    <h4>Do It For Me</h4>
+                    <p>We handle the entire implementation for you, from setup to optimization</p>
+                  </label>
+                </div>
               </div>
-              
-              <div class="selection-card" data-model="diwm">
-                <input type="radio" id="service-diwm" name="service_model" value="Do It With Me" class="model-radio">
-                <label for="service-diwm" class="selection-label">
-                  <h4>Do It With Me</h4>
-                  <p>A collaborative approach where we work together on implementation</p>
-                </label>
+            </div>
+            
+            <!-- Sales Hub Service Model (Conditionally Shown) -->
+            <div id="sales-service-section" class="service-section mb-8" style="display: none;">
+              <h4 class="mb-4">Sales Hub - <span id="sales-tier-display">Tier</span></h4>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-model="diy">
+                  <input type="radio" id="sales-service-diy" name="sales_service_model" value="Do It Yourself" class="model-radio" checked>
+                  <label for="sales-service-diy" class="selection-label">
+                    <h4>Do It Yourself</h4>
+                    <p>We guide you through the process, providing expertise and advice, while you handle the implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="diwm">
+                  <input type="radio" id="sales-service-diwm" name="sales_service_model" value="Do It With Me" class="model-radio">
+                  <label for="sales-service-diwm" class="selection-label">
+                    <h4>Do It With Me</h4>
+                    <p>A collaborative approach where we work together on implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="difm">
+                  <input type="radio" id="sales-service-difm" name="sales_service_model" value="Do It For Me" class="model-radio">
+                  <label for="sales-service-difm" class="selection-label">
+                    <h4>Do It For Me</h4>
+                    <p>We handle the entire implementation for you, from setup to optimization</p>
+                  </label>
+                </div>
               </div>
-              
-              <div class="selection-card" data-model="difm">
-                <input type="radio" id="service-difm" name="service_model" value="Do It For Me" class="model-radio">
-                <label for="service-difm" class="selection-label">
-                  <h4>Do It For Me</h4>
-                  <p>We handle the entire implementation for you, from setup to optimization</p>
-                </label>
+            </div>
+            
+            <!-- Service Hub Service Model (Conditionally Shown) -->
+            <div id="service-service-section" class="service-section mb-8" style="display: none;">
+              <h4 class="mb-4">Service Hub - <span id="service-tier-display">Tier</span></h4>
+              <div class="selection-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="selection-card" data-model="diy">
+                  <input type="radio" id="service-service-diy" name="service_service_model" value="Do It Yourself" class="model-radio" checked>
+                  <label for="service-service-diy" class="selection-label">
+                    <h4>Do It Yourself</h4>
+                    <p>We guide you through the process, providing expertise and advice, while you handle the implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="diwm">
+                  <input type="radio" id="service-service-diwm" name="service_service_model" value="Do It With Me" class="model-radio">
+                  <label for="service-service-diwm" class="selection-label">
+                    <h4>Do It With Me</h4>
+                    <p>A collaborative approach where we work together on implementation</p>
+                  </label>
+                </div>
+                
+                <div class="selection-card" data-model="difm">
+                  <input type="radio" id="service-service-difm" name="service_service_model" value="Do It For Me" class="model-radio">
+                  <label for="service-service-difm" class="selection-label">
+                    <h4>Do It For Me</h4>
+                    <p>We handle the entire implementation for you, from setup to optimization</p>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -1059,62 +1124,6 @@
     
     <!-- About HubSpot Hubs Section -->
     <div class="card" id="about">
-      <h2 class="section-title">HubSpot Hubs Overview</h2>
-      
-      <div class="mb-8">
-        <h3>Marketing Hub</h3>
-        <p>HubSpot's Marketing Hub helps you attract the right audience, convert more visitors into customers, and run complete inbound marketing campaigns at scale.</p>
-        
-        <div class="tier-card">
-          <h4>Starter</h4>
-          <p>Basic marketing tools including email marketing, ad management, and forms. Perfect for businesses just starting with inbound marketing.</p>
-        </div>
-        
-        <div class="tier-card">
-          <h4>Professional</h4>
-          <p>Advanced marketing automation, ABM tools, and custom reporting. Ideal for growing marketing teams with sophisticated strategies.</p>
-        </div>
-        
-        <div class="tier-card">
-          <h4>Enterprise</h4>
-          <p>Enterprise-grade tools including advanced permissions, partitioning, and custom objects. Built for large teams with complex requirements.</p>
-        </div>
-      </div>
-      
-      <div class="mb-8">
-        <h3>Sales Hub</h3>
-        <p>HubSpot's Sales Hub helps your team close more deals, deepen relationships, and manage their pipeline more effectively.</p>
-        
-        <div class="tier-card">
-          <h4>Starter</h4>
-          <p>Essential sales tools including email templates, tracking, and basic deal management. Great for small sales teams.</p>
-        </div>
-        
-        <div class="tier-card">
-          <h4>Professional</h4>
-          <p>Advanced sales automation, forecasting, and team management. Perfect for growing sales teams with established processes.</p>
-        </div>
-        
-        <div class="tier-card">
-          <h4>Enterprise</h4>
-          <p>Enterprise features including playbooks, predictive lead scoring, and advanced permissions. Designed for large sales organizations.</p>
-        </div>
-      </div>
-      
-      <div>
-        <h3>Service Hub</h3>
-        <p>HubSpot's Service Hub helps you connect with customers, exceed expectations, and turn customers into promoters.</p>
-        
-        <div class="tier-card">
-          <h4>Starter</h4>
-          <p>Essential customer service tools including ticketing, live chat, and conversation inbox. Perfect for small support teams.</p>
-        </div>
-        
-        <div class="tier-card">
-          <h4>Professional</h4>
-          <p>Advanced features including automation, knowledge base, and customer feedback. Ideal for dedicated service teams.</p>
-        </div>
-        
         <div class="tier-card">
           <h4>Enterprise</h4>
           <p>Enterprise-grade tools including custom reporting, playbooks, and advanced automation. Built for large service organizations.</p>
@@ -1250,7 +1259,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2025 Leapforce. All rights reserved. <a href="https://www.leapforce.nl/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a></p>
+        <p>&copy; 2025 Leapforce. All rights reserved. <a href="https://leapforce.nl/privacybeleid" target="_blank" rel="noopener">Privacy Policy</a></p>
       </div>
     </div>
   </footer>
@@ -1304,7 +1313,9 @@
       marketing_tier: '',
       sales_tier: '',
       service_tier: '',
-      service_model: 'Do It Yourself' // Default
+      marketing_service_model: 'Do It Yourself', // Hub-specific service model
+      sales_service_model: 'Do It Yourself', // Hub-specific service model
+      service_service_model: 'Do It Yourself' // Hub-specific service model
     };
     
     // Verify all images are loading properly
@@ -1413,9 +1424,21 @@
       });
       
       // Service model selection
-      document.querySelectorAll('input[name="service_model"]').forEach(radio => {
+      document.querySelectorAll('input[name="marketing_service_model"]').forEach(radio => {
         radio.addEventListener('change', function() {
-          selections.service_model = this.value;
+          selections.marketing_service_model = this.value;
+        });
+      });
+      
+      document.querySelectorAll('input[name="sales_service_model"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          selections.sales_service_model = this.value;
+        });
+      });
+      
+      document.querySelectorAll('input[name="service_service_model"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          selections.service_service_model = this.value;
         });
       });
       
@@ -1432,6 +1455,8 @@
       
       step2Next.addEventListener('click', function() {
         if (validateStep2()) {
+          // Update service sections before going to step 3
+          updateServiceSections();
           goToStep(3);
         }
       });
@@ -1447,21 +1472,33 @@
           document.getElementById('marketing_hub_tier').value = selections.marketing_tier || '';
           document.getElementById('sales_hub_tier').value = selections.sales_tier || '';
           document.getElementById('service_hub_tier').value = selections.service_tier || '';
-          document.getElementById('service_model').value = selections.service_model;
+          
+          // Set service model field with a summary of all selected service models
+          const serviceModels = [];
+          if (selectedHubs.includes('marketing') && selections.marketing_tier) {
+            serviceModels.push(`Marketing: ${selections.marketing_service_model}`);
+          }
+          if (selectedHubs.includes('sales') && selections.sales_tier) {
+            serviceModels.push(`Sales: ${selections.sales_service_model}`);
+          }
+          if (selectedHubs.includes('service') && selections.service_tier) {
+            serviceModels.push(`Service: ${selections.service_service_model}`);
+          }
+          document.getElementById('service_model').value = serviceModels.join('; ');
           
           // Generate package keys
           const packageKeys = [];
           
           if (selectedHubs.includes('marketing') && selections.marketing_tier) {
-            packageKeys.push(generatePackageKey('marketing', selections.marketing_tier, selections.service_model));
+            packageKeys.push(generatePackageKey('marketing', selections.marketing_tier, selections.marketing_service_model));
           }
           
           if (selectedHubs.includes('sales') && selections.sales_tier) {
-            packageKeys.push(generatePackageKey('sales', selections.sales_tier, selections.service_model));
+            packageKeys.push(generatePackageKey('sales', selections.sales_tier, selections.sales_service_model));
           }
           
           if (selectedHubs.includes('service') && selections.service_tier) {
-            packageKeys.push(generatePackageKey('service', selections.service_tier, selections.service_model));
+            packageKeys.push(generatePackageKey('service', selections.service_tier, selections.service_service_model));
           }
           
           const packageKeysValue = packageKeys.join(';');
@@ -1472,7 +1509,7 @@
           console.log('Marketing Hub Tier:', selections.marketing_tier || 'Not selected');
           console.log('Sales Hub Tier:', selections.sales_tier || 'Not selected');
           console.log('Service Hub Tier:', selections.service_tier || 'Not selected');
-          console.log('Service Model:', selections.service_model);
+          console.log('Service Models:', document.getElementById('service_model').value);
           console.log('Package Keys:', packageKeysValue);
           
           // Show form popup and calculate results simultaneously
@@ -1588,6 +1625,29 @@
       marketingTierSection.style.display = selectedHubs.includes('marketing') ? 'block' : 'none';
       salesTierSection.style.display = selectedHubs.includes('sales') ? 'block' : 'none';
       serviceTierSection.style.display = selectedHubs.includes('service') ? 'block' : 'none';
+    }
+    
+    // Update service sections visibility
+    function updateServiceSections() {
+      const marketingServiceSection = document.getElementById('marketing-service-section');
+      const salesServiceSection = document.getElementById('sales-service-section');
+      const serviceServiceSection = document.getElementById('service-service-section');
+      
+      // Show/hide based on selected hubs and tiers
+      marketingServiceSection.style.display = (selectedHubs.includes('marketing') && selections.marketing_tier) ? 'block' : 'none';
+      salesServiceSection.style.display = (selectedHubs.includes('sales') && selections.sales_tier) ? 'block' : 'none';
+      serviceServiceSection.style.display = (selectedHubs.includes('service') && selections.service_tier) ? 'block' : 'none';
+      
+      // Update tier displays
+      if (selectedHubs.includes('marketing') && selections.marketing_tier) {
+        document.getElementById('marketing-tier-display').textContent = selections.marketing_tier;
+      }
+      if (selectedHubs.includes('sales') && selections.sales_tier) {
+        document.getElementById('sales-tier-display').textContent = selections.sales_tier;
+      }
+      if (selectedHubs.includes('service') && selections.service_tier) {
+        document.getElementById('service-tier-display').textContent = selections.service_tier;
+      }
     }
     
     // Step navigation
@@ -1801,23 +1861,28 @@
       if (selectedHubs.includes('marketing') && selections.marketing_tier) {
         const price = getHubPrice('marketing', selections.marketing_tier);
         const hours = getHubHours('marketing', selections.marketing_tier);
-        totalPrice += price;
+        const serviceModel = selections.marketing_service_model;
+        const multiplier = getServiceModelMultiplier(serviceModel);
+        const adjustedPrice = Math.round(price * multiplier);
+        
+        totalPrice += adjustedPrice;
         totalHours += hours;
         
         resultHtml += `
           <div class="tier-card" style="margin: 0.75rem 0;">
             <h4>Marketing Hub - ${selections.marketing_tier}</h4>
-            <p><strong>€${price}</strong> onboarding</p>
+            <p><strong>€${adjustedPrice}</strong> onboarding</p>
+            <p>Service Model: ${getServiceModelFullName(serviceModel)}</p>
             <p>Estimated implementation time: ${hours} hours</p>
           </div>
         `;
         
         // Add scope details
-        const scopeDetail = getScopeDetail('marketing', selections.marketing_tier, selections.service_model);
+        const scopeDetail = getScopeDetail('marketing', selections.marketing_tier, serviceModel);
         if (scopeDetail) {
           scopeHtml += `
             <div class="tier-card" style="margin: 1rem 0;">
-              <h4>Marketing Hub ${selections.marketing_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
+              <h4>Marketing Hub ${selections.marketing_tier} - ${getServiceModelFullName(serviceModel)}</h4>
               <p><strong>Hours:</strong> ${hours}</p>
               <p><strong>Scope:</strong> ${scopeDetail}</p>
             </div>
@@ -1829,23 +1894,28 @@
       if (selectedHubs.includes('sales') && selections.sales_tier) {
         const price = getHubPrice('sales', selections.sales_tier);
         const hours = getHubHours('sales', selections.sales_tier);
-        totalPrice += price;
+        const serviceModel = selections.sales_service_model;
+        const multiplier = getServiceModelMultiplier(serviceModel);
+        const adjustedPrice = Math.round(price * multiplier);
+        
+        totalPrice += adjustedPrice;
         totalHours += hours;
         
         resultHtml += `
           <div class="tier-card" style="margin: 0.75rem 0;">
             <h4>Sales Hub - ${selections.sales_tier}</h4>
-            <p><strong>€${price}</strong> onboarding</p>
+            <p><strong>€${adjustedPrice}</strong> onboarding</p>
+            <p>Service Model: ${getServiceModelFullName(serviceModel)}</p>
             <p>Estimated implementation time: ${hours} hours</p>
           </div>
         `;
         
         // Add scope details
-        const scopeDetail = getScopeDetail('sales', selections.sales_tier, selections.service_model);
+        const scopeDetail = getScopeDetail('sales', selections.sales_tier, serviceModel);
         if (scopeDetail) {
           scopeHtml += `
             <div class="tier-card" style="margin: 1rem 0;">
-              <h4>Sales Hub ${selections.sales_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
+              <h4>Sales Hub ${selections.sales_tier} - ${getServiceModelFullName(serviceModel)}</h4>
               <p><strong>Hours:</strong> ${hours}</p>
               <p><strong>Scope:</strong> ${scopeDetail}</p>
             </div>
@@ -1857,23 +1927,28 @@
       if (selectedHubs.includes('service') && selections.service_tier) {
         const price = getHubPrice('service', selections.service_tier);
         const hours = getHubHours('service', selections.service_tier);
-        totalPrice += price;
+        const serviceModel = selections.service_service_model;
+        const multiplier = getServiceModelMultiplier(serviceModel);
+        const adjustedPrice = Math.round(price * multiplier);
+        
+        totalPrice += adjustedPrice;
         totalHours += hours;
         
         resultHtml += `
           <div class="tier-card" style="margin: 0.75rem 0;">
             <h4>Service Hub - ${selections.service_tier}</h4>
-            <p><strong>€${price}</strong> onboarding</p>
+            <p><strong>€${adjustedPrice}</strong> onboarding</p>
+            <p>Service Model: ${getServiceModelFullName(serviceModel)}</p>
             <p>Estimated implementation time: ${hours} hours</p>
           </div>
         `;
         
         // Add scope details
-        const scopeDetail = getScopeDetail('service', selections.service_tier, selections.service_model);
+        const scopeDetail = getScopeDetail('service', selections.service_tier, serviceModel);
         if (scopeDetail) {
           scopeHtml += `
             <div class="tier-card" style="margin: 1rem 0;">
-              <h4>Service Hub ${selections.service_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
+              <h4>Service Hub ${selections.service_tier} - ${getServiceModelFullName(serviceModel)}</h4>
               <p><strong>Hours:</strong> ${hours}</p>
               <p><strong>Scope:</strong> ${scopeDetail}</p>
             </div>
@@ -1881,16 +1956,17 @@
         }
       }
       
-      // Apply service model multiplier
-      const multiplier = getServiceModelMultiplier(selections.service_model);
-      totalPrice = Math.round(totalPrice * multiplier);
-      
       // Build the results
       const resultSummary = document.getElementById('results-summary');
       if (resultSummary) {
+        const serviceModelsText = selectedHubs.map(hub => {
+          const serviceModel = selections[`${hub}_service_model`];
+          return `${hub.charAt(0).toUpperCase() + hub.slice(1)}: ${serviceModel}`;
+        }).join(', ');
+        
         resultSummary.innerHTML = `
           <p class="mb-4"><strong>Selected Hubs:</strong> ${selectedHubs.map(h => h.charAt(0).toUpperCase() + h.slice(1) + ' Hub').join(', ')}</p>
-          <p class="mb-4"><strong>Service Model:</strong> ${getServiceModelFullName(selections.service_model)}</p>
+          <p class="mb-4"><strong>Service Models:</strong> ${serviceModelsText}</p>
           ${resultHtml}
           <div style="margin-top: 1.5rem;">
             <p><strong>Estimated Implementation Time:</strong> ${totalHours} hours</p>
@@ -1929,7 +2005,9 @@
         marketing_tier: '',
         sales_tier: '',
         service_tier: '',
-        service_model: 'Do It Yourself'
+        marketing_service_model: 'Do It Yourself', // Hub-specific service model
+        sales_service_model: 'Do It Yourself', // Hub-specific service model
+        service_service_model: 'Do It Yourself' // Hub-specific service model
       };
       
       // Reset checkboxes and radio buttons
