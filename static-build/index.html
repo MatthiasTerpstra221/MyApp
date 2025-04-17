@@ -788,10 +788,18 @@
     <div class="container navbar-content">
       <div class="navbar-logo">
         <a href="https://www.leapforce.nl" target="_blank" rel="noopener" aria-label="Leapforce homepage">
-          <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" onerror="this.onerror=null; this.src='https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.png';">
+          <img src="https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.svg" alt="Leapforce Logo" style="height: 40px;" onerror="this.onerror=null; this.src='https://www.leapforce.nl/wp-content/uploads/2022/09/LeapForce-logo.png';">
+        </a>
+        <a href="https://www.hubspot.com/agencies/leapforce" target="_blank" rel="noopener" aria-label="HubSpot Platinum Partner Page" style="display: flex; align-items: center; margin-left: 15px;">
+          <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" style="height: 40px;" onerror="this.onerror=null; this.style.display='none';">
         </a>
       </div>
-      <!-- Navigation links removed as requested -->
+      <div class="navbar-menu">
+        <a href="#calculator">Calculator</a>
+        <a href="#about">About Hubs</a>
+        <a href="#reviews">Reviews</a>
+        <a href="https://www.leapforce.nl/contact/" target="_blank">Contact</a>
+      </div>
       <button class="mobile-menu-button" aria-label="Toggle mobile menu" style="display: none; background: none; border: none; cursor: pointer;">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -804,18 +812,20 @@
   
   <!-- Mobile Menu (hidden by default) -->
   <div class="mobile-menu" id="mobile-menu">
-    <!-- Mobile navigation links also removed -->
+    <a href="#calculator">Calculator</a>
+    <a href="#about">About Hubs</a>
+    <a href="#reviews">Reviews</a>
+    <a href="https://www.leapforce.nl/contact/" target="_blank">Contact</a>
   </div>
   
   <!-- Hero Section -->
   <section class="hero">
   <div class="container">
       <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
-        <img src="https://www.leapforce.nl/wp-content/uploads/2022/12/platinum-badge-color-300x297.png" alt="HubSpot Platinum Solutions Partner" style="height: 80px; margin-right: 1rem;" onerror="this.onerror=null; this.style.display='none';">
-        <div style="text-align: left; display: flex; flex-direction: column; justify-content: center;">
-      <h1>HubSpot Onboarding Calculator</h1>
+        <div style="text-align: center;">
+          <h1>HubSpot Onboarding Calculator</h1>
           <p>Find the perfect HubSpot onboarding package for your business needs</p>
-    </div>
+        </div>
       </div>
       <a href="https://www.hubspot.com/agencies/leapforce" target="_blank" rel="noopener" class="btn btn-secondary" aria-label="Visit the Leapforce HubSpot Partner Page">Visit Our HubSpot Partner Page</a>
     </div>
@@ -1753,28 +1763,19 @@
       let totalHours = 0;
       let resultHtml = '';
       let scopeHtml = '';
-      let hasEnterpriseSelection = false;
       
       // Process Marketing Hub
       if (selectedHubs.includes('marketing') && selections.marketing_tier) {
         const price = getHubPrice('marketing', selections.marketing_tier);
         const hours = getHubHours('marketing', selections.marketing_tier);
-        
-        if (selections.marketing_tier.toLowerCase() === 'enterprise') {
-          hasEnterpriseSelection = true;
-        } else if (typeof price === 'number') {
-          totalPrice += price;
-        }
-        
-        if (typeof hours === 'number') {
-          totalHours += hours;
-        }
+        totalPrice += price;
+        totalHours += hours;
         
         resultHtml += `
           <div class="tier-card" style="margin: 0.75rem 0;">
             <h4>Marketing Hub - ${selections.marketing_tier}</h4>
-            <p><strong>${typeof price === 'string' ? price : '€' + price}</strong> ${typeof price === 'string' ? '' : 'onboarding'}</p>
-            <p>Estimated implementation time: ${typeof hours === 'string' ? hours : hours + ' hours'}</p>
+            <p><strong>€${price}</strong> onboarding</p>
+            <p>Estimated implementation time: ${hours} hours</p>
           </div>
         `;
         
@@ -1784,7 +1785,7 @@
           scopeHtml += `
             <div class="tier-card" style="margin: 1rem 0;">
               <h4>Marketing Hub ${selections.marketing_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
-              <p><strong>Hours:</strong> ${typeof hours === 'string' ? hours : hours}</p>
+              <p><strong>Hours:</strong> ${hours}</p>
               <p><strong>Scope:</strong> ${scopeDetail}</p>
             </div>
           `;
@@ -1795,22 +1796,14 @@
       if (selectedHubs.includes('sales') && selections.sales_tier) {
         const price = getHubPrice('sales', selections.sales_tier);
         const hours = getHubHours('sales', selections.sales_tier);
-        
-        if (selections.sales_tier.toLowerCase() === 'enterprise') {
-          hasEnterpriseSelection = true;
-        } else if (typeof price === 'number') {
-          totalPrice += price;
-        }
-        
-        if (typeof hours === 'number') {
-          totalHours += hours;
-        }
+        totalPrice += price;
+        totalHours += hours;
         
         resultHtml += `
           <div class="tier-card" style="margin: 0.75rem 0;">
             <h4>Sales Hub - ${selections.sales_tier}</h4>
-            <p><strong>${typeof price === 'string' ? price : '€' + price}</strong> ${typeof price === 'string' ? '' : 'onboarding'}</p>
-            <p>Estimated implementation time: ${typeof hours === 'string' ? hours : hours + ' hours'}</p>
+            <p><strong>€${price}</strong> onboarding</p>
+            <p>Estimated implementation time: ${hours} hours</p>
           </div>
         `;
         
@@ -1820,7 +1813,7 @@
           scopeHtml += `
             <div class="tier-card" style="margin: 1rem 0;">
               <h4>Sales Hub ${selections.sales_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
-              <p><strong>Hours:</strong> ${typeof hours === 'string' ? hours : hours}</p>
+              <p><strong>Hours:</strong> ${hours}</p>
               <p><strong>Scope:</strong> ${scopeDetail}</p>
             </div>
           `;
@@ -1831,22 +1824,14 @@
       if (selectedHubs.includes('service') && selections.service_tier) {
         const price = getHubPrice('service', selections.service_tier);
         const hours = getHubHours('service', selections.service_tier);
-        
-        if (selections.service_tier.toLowerCase() === 'enterprise') {
-          hasEnterpriseSelection = true;
-        } else if (typeof price === 'number') {
-          totalPrice += price;
-        }
-        
-        if (typeof hours === 'number') {
-          totalHours += hours;
-        }
+        totalPrice += price;
+        totalHours += hours;
         
         resultHtml += `
           <div class="tier-card" style="margin: 0.75rem 0;">
             <h4>Service Hub - ${selections.service_tier}</h4>
-            <p><strong>${typeof price === 'string' ? price : '€' + price}</strong> ${typeof price === 'string' ? '' : 'onboarding'}</p>
-            <p>Estimated implementation time: ${typeof hours === 'string' ? hours : hours + ' hours'}</p>
+            <p><strong>€${price}</strong> onboarding</p>
+            <p>Estimated implementation time: ${hours} hours</p>
           </div>
         `;
         
@@ -1856,7 +1841,7 @@
           scopeHtml += `
             <div class="tier-card" style="margin: 1rem 0;">
               <h4>Service Hub ${selections.service_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
-              <p><strong>Hours:</strong> ${typeof hours === 'string' ? hours : hours}</p>
+              <p><strong>Hours:</strong> ${hours}</p>
               <p><strong>Scope:</strong> ${scopeDetail}</p>
             </div>
           `;
@@ -1875,7 +1860,7 @@
           <p class="mb-4"><strong>Service Model:</strong> ${getServiceModelFullName(selections.service_model)}</p>
           ${resultHtml}
           <div style="margin-top: 1.5rem;">
-            <p><strong>Estimated Implementation Time:</strong> ${hasEnterpriseSelection ? 'Contact us for details' : totalHours + ' hours'}</p>
+            <p><strong>Estimated Implementation Time:</strong> ${totalHours} hours</p>
           </div>
         `;
       }
@@ -1892,9 +1877,7 @@
       // Update total price display
       const totalPriceElement = document.getElementById('total-price');
       if (totalPriceElement) {
-        totalPriceElement.innerHTML = hasEnterpriseSelection ? 
-          `<span style="font-size: 0.7em; display: block; margin-bottom: 5px;">Contact us for Enterprise pricing</span>€${totalPrice}` : 
-          `€${totalPrice}`;
+        totalPriceElement.textContent = `€${totalPrice}`;
       }
     }
     
@@ -1946,9 +1929,9 @@
     // Get price for a hub and tier
     function getHubPrice(hub, tier) {
       const prices = {
-        marketing: { starter: 499, professional: 999, enterprise: "On request" },
-        sales: { starter: 499, professional: 999, enterprise: "On request" },
-        service: { starter: 499, professional: 999, enterprise: "On request" }
+        marketing: { starter: 499, professional: 999, enterprise: 1999 },
+        sales: { starter: 499, professional: 999, enterprise: 1999 },
+        service: { starter: 499, professional: 999, enterprise: 1999 }
       };
       
       return prices[hub] && prices[hub][tier.toLowerCase()] ? prices[hub][tier.toLowerCase()] : 0;
@@ -1957,9 +1940,9 @@
     // Get estimated hours for a hub and tier
     function getHubHours(hub, tier) {
       const hours = {
-        marketing: { starter: 10, professional: 20, enterprise: "On request" },
-        sales: { starter: 8, professional: 16, enterprise: "On request" },
-        service: { starter: 8, professional: 16, enterprise: "On request" }
+        marketing: { starter: 10, professional: 20, enterprise: 40 },
+        sales: { starter: 8, professional: 16, enterprise: 32 },
+        service: { starter: 8, professional: 16, enterprise: 32 }
       };
       
       return hours[hub] && hours[hub][tier.toLowerCase()] ? hours[hub][tier.toLowerCase()] : 0;
