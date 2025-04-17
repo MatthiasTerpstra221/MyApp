@@ -1753,19 +1753,28 @@
       let totalHours = 0;
       let resultHtml = '';
       let scopeHtml = '';
+      let hasEnterpriseSelection = false;
       
       // Process Marketing Hub
       if (selectedHubs.includes('marketing') && selections.marketing_tier) {
         const price = getHubPrice('marketing', selections.marketing_tier);
         const hours = getHubHours('marketing', selections.marketing_tier);
-        totalPrice += price;
-        totalHours += hours;
+        
+        if (selections.marketing_tier.toLowerCase() === 'enterprise') {
+          hasEnterpriseSelection = true;
+        } else if (typeof price === 'number') {
+          totalPrice += price;
+        }
+        
+        if (typeof hours === 'number') {
+          totalHours += hours;
+        }
         
         resultHtml += `
           <div class="tier-card" style="margin: 0.75rem 0;">
             <h4>Marketing Hub - ${selections.marketing_tier}</h4>
-            <p><strong>€${price}</strong> onboarding</p>
-            <p>Estimated implementation time: ${hours} hours</p>
+            <p><strong>${typeof price === 'string' ? price : '€' + price}</strong> ${typeof price === 'string' ? '' : 'onboarding'}</p>
+            <p>Estimated implementation time: ${typeof hours === 'string' ? hours : hours + ' hours'}</p>
           </div>
         `;
         
@@ -1775,7 +1784,7 @@
           scopeHtml += `
             <div class="tier-card" style="margin: 1rem 0;">
               <h4>Marketing Hub ${selections.marketing_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
-              <p><strong>Hours:</strong> ${hours}</p>
+              <p><strong>Hours:</strong> ${typeof hours === 'string' ? hours : hours}</p>
               <p><strong>Scope:</strong> ${scopeDetail}</p>
             </div>
           `;
@@ -1786,14 +1795,22 @@
       if (selectedHubs.includes('sales') && selections.sales_tier) {
         const price = getHubPrice('sales', selections.sales_tier);
         const hours = getHubHours('sales', selections.sales_tier);
-        totalPrice += price;
-        totalHours += hours;
+        
+        if (selections.sales_tier.toLowerCase() === 'enterprise') {
+          hasEnterpriseSelection = true;
+        } else if (typeof price === 'number') {
+          totalPrice += price;
+        }
+        
+        if (typeof hours === 'number') {
+          totalHours += hours;
+        }
         
         resultHtml += `
           <div class="tier-card" style="margin: 0.75rem 0;">
             <h4>Sales Hub - ${selections.sales_tier}</h4>
-            <p><strong>€${price}</strong> onboarding</p>
-            <p>Estimated implementation time: ${hours} hours</p>
+            <p><strong>${typeof price === 'string' ? price : '€' + price}</strong> ${typeof price === 'string' ? '' : 'onboarding'}</p>
+            <p>Estimated implementation time: ${typeof hours === 'string' ? hours : hours + ' hours'}</p>
           </div>
         `;
         
@@ -1803,7 +1820,7 @@
           scopeHtml += `
             <div class="tier-card" style="margin: 1rem 0;">
               <h4>Sales Hub ${selections.sales_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
-              <p><strong>Hours:</strong> ${hours}</p>
+              <p><strong>Hours:</strong> ${typeof hours === 'string' ? hours : hours}</p>
               <p><strong>Scope:</strong> ${scopeDetail}</p>
             </div>
           `;
@@ -1814,14 +1831,22 @@
       if (selectedHubs.includes('service') && selections.service_tier) {
         const price = getHubPrice('service', selections.service_tier);
         const hours = getHubHours('service', selections.service_tier);
-        totalPrice += price;
-        totalHours += hours;
+        
+        if (selections.service_tier.toLowerCase() === 'enterprise') {
+          hasEnterpriseSelection = true;
+        } else if (typeof price === 'number') {
+          totalPrice += price;
+        }
+        
+        if (typeof hours === 'number') {
+          totalHours += hours;
+        }
         
         resultHtml += `
           <div class="tier-card" style="margin: 0.75rem 0;">
             <h4>Service Hub - ${selections.service_tier}</h4>
-            <p><strong>€${price}</strong> onboarding</p>
-            <p>Estimated implementation time: ${hours} hours</p>
+            <p><strong>${typeof price === 'string' ? price : '€' + price}</strong> ${typeof price === 'string' ? '' : 'onboarding'}</p>
+            <p>Estimated implementation time: ${typeof hours === 'string' ? hours : hours + ' hours'}</p>
           </div>
         `;
         
@@ -1831,7 +1856,7 @@
           scopeHtml += `
             <div class="tier-card" style="margin: 1rem 0;">
               <h4>Service Hub ${selections.service_tier} - ${getServiceModelFullName(selections.service_model)}</h4>
-              <p><strong>Hours:</strong> ${hours}</p>
+              <p><strong>Hours:</strong> ${typeof hours === 'string' ? hours : hours}</p>
               <p><strong>Scope:</strong> ${scopeDetail}</p>
             </div>
           `;
@@ -1850,7 +1875,7 @@
           <p class="mb-4"><strong>Service Model:</strong> ${getServiceModelFullName(selections.service_model)}</p>
           ${resultHtml}
           <div style="margin-top: 1.5rem;">
-            <p><strong>Estimated Implementation Time:</strong> ${totalHours} hours</p>
+            <p><strong>Estimated Implementation Time:</strong> ${hasEnterpriseSelection ? 'Contact us for details' : totalHours + ' hours'}</p>
           </div>
         `;
       }
@@ -1867,7 +1892,9 @@
       // Update total price display
       const totalPriceElement = document.getElementById('total-price');
       if (totalPriceElement) {
-        totalPriceElement.textContent = `€${totalPrice}`;
+        totalPriceElement.innerHTML = hasEnterpriseSelection ? 
+          `<span style="font-size: 0.7em; display: block; margin-bottom: 5px;">Contact us for Enterprise pricing</span>€${totalPrice}` : 
+          `€${totalPrice}`;
       }
     }
     
@@ -1919,9 +1946,9 @@
     // Get price for a hub and tier
     function getHubPrice(hub, tier) {
       const prices = {
-        marketing: { starter: 499, professional: 999, enterprise: 1999 },
-        sales: { starter: 499, professional: 999, enterprise: 1999 },
-        service: { starter: 499, professional: 999, enterprise: 1999 }
+        marketing: { starter: 499, professional: 999, enterprise: "On request" },
+        sales: { starter: 499, professional: 999, enterprise: "On request" },
+        service: { starter: 499, professional: 999, enterprise: "On request" }
       };
       
       return prices[hub] && prices[hub][tier.toLowerCase()] ? prices[hub][tier.toLowerCase()] : 0;
@@ -1930,9 +1957,9 @@
     // Get estimated hours for a hub and tier
     function getHubHours(hub, tier) {
       const hours = {
-        marketing: { starter: 10, professional: 20, enterprise: 40 },
-        sales: { starter: 8, professional: 16, enterprise: 32 },
-        service: { starter: 8, professional: 16, enterprise: 32 }
+        marketing: { starter: 10, professional: 20, enterprise: "On request" },
+        sales: { starter: 8, professional: 16, enterprise: "On request" },
+        service: { starter: 8, professional: 16, enterprise: "On request" }
       };
       
       return hours[hub] && hours[hub][tier.toLowerCase()] ? hours[hub][tier.toLowerCase()] : 0;
