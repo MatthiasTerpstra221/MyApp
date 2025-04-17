@@ -689,12 +689,71 @@
             onFormSubmit: function($form, data) {
               console.log("Form submitted with data:", data);
               
-              // Process form data and show results
-              calculateResults(data);
+              // Extract hub and tier selections from form
+              const hubSelections = [];
+              const serviceModel = getServiceModelFromForm(data);
               
-              // Return false to prevent the form from being submitted to HubSpot's servers
-              // Comment this line if you want to actually submit the form to HubSpot
-              // return false;
+              // Process Marketing Hub selection
+              if (data.marketing_hub_tier) {
+                hubSelections.push({
+                  name: 'Marketing',
+                  tier: data.marketing_hub_tier
+                });
+              }
+              
+              // Process Sales Hub selection
+              if (data.sales_hub_tier) {
+                hubSelections.push({
+                  name: 'Sales',
+                  tier: data.sales_hub_tier
+                });
+              }
+              
+              // Process Service Hub selection
+              if (data.service_hub_tier) {
+                hubSelections.push({
+                  name: 'Service',
+                  tier: data.service_hub_tier
+                });
+              }
+              
+              // Generate package keys for hidden field
+              const packageKeys = hubSelections.map(hub => 
+                generatePackageKey(hub.name, hub.tier, serviceModel)
+              );
+              
+              // Update the hidden field with package keys (semicolon-separated)
+              if (packageKeys.length > 0) {
+                const hiddenField = $form.find('input[name="hubspot_standard_onboarding_key"]');
+                if (hiddenField.length) {
+                  hiddenField.val(packageKeys.join(';'));
+                  console.log("Updated hidden field with keys:", packageKeys.join(';'));
+                } else {
+                  console.error("Hidden field 'hubspot_standard_onboarding_key' not found in form");
+                }
+              }
+              
+              // Process form data and prepare to show results after submission
+              const hubsWithPricing = hubSelections.map(hub => ({
+                ...hub,
+                price: getHubPrice(hub.name, hub.tier)
+              }));
+              
+              // Store the data for use after form submission
+              window.calculatorData = {
+                hubs: hubsWithPricing,
+                serviceModel: serviceModel
+              };
+            },
+            onFormSubmitted: function() {
+              // Show results using the stored data
+              if (window.calculatorData) {
+                calculateResults(
+                  window.calculatorData.hubs, 
+                  window.calculatorData.serviceModel
+                );
+                showResults();
+              }
             }
           });
         } else {
@@ -716,6 +775,40 @@
           '</div>';
       }
     });
+    
+    // Generate standard package key in format: [hub]_hub_[tier]_[service_model]
+    function generatePackageKey(hub, tier, serviceModel) {
+      // Lowercase and normalize hub name
+      const hubLower = hub.toLowerCase();
+      
+      // Lowercase and normalize tier name
+      const tierLower = tier.toLowerCase();
+      
+      // Get service model abbreviation
+      let serviceAbbr = '';
+      switch (serviceModel) {
+        case 'Do It Yourself':
+          serviceAbbr = 'diy';
+          break;
+        case 'Do It With Me':
+          serviceAbbr = 'diwme';
+          break;
+        case 'Do It For Me':
+          serviceAbbr = 'difme';
+          break;
+        default:
+          serviceAbbr = 'diwme'; // Default to DIWM if unspecified
+      }
+      
+      // Generate key in format from spreadsheet: marketing_hub_starter_diy
+      return `${hubLower}_hub_${tierLower}_${serviceAbbr}`;
+    }
+    
+    // Extract service model from form data
+    function getServiceModelFromForm(data) {
+      // Default to "Do It With Me" if not specified
+      return data.service_model || 'Do It With Me';
+    }
 
     // Add animation keyframes
     document.head.insertAdjacentHTML('beforeend', `
